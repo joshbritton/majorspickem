@@ -220,9 +220,12 @@ function isDone() { return picks.length >= SNAKE.length; }
 function currentSlot() { return SNAKE[picks.length]; }
 
 async function callAPI(params) {
-  const url = API + '?' + new URLSearchParams({...params, tab: TAB, t: Date.now()});
+  const p = {...params, tab: TAB, t: Date.now()};
+  const parts = Object.entries(p).map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v));
+  const url = API + '?' + parts.join('&');
   const res = await fetch(url);
-  return res.json();
+  const text = await res.text();
+  try { return JSON.parse(text); } catch(e) { return {error: text}; }
 }
 
 async function loadPicks() {
@@ -233,7 +236,7 @@ async function loadPicks() {
     if (d.data) {
       picks = d.data
         .filter(r => r.overall && r.player && r.golfer)
-        .map(r => ({overall: parseInt(r.overall), player: String(r.player), golfer: String(r.golfer)}))
+        .map(r => ({overall: parseInt(r.overall), player: String(r.player).trim(), golfer: String(r.golfer).trim()}))
         .sort((a, b) => a.overall - b.overall);
     }
     const now = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
@@ -251,31 +254,53 @@ async function confirmPick() {
   if (!selectedGolfer || isDone()) return;
   const slot = currentSlot();
   const btn = document.getElementById('draft-btn');
-  btn.textContent = 'Drafting...';
-  btn.className = 'draft-btn disabled';
+
+  // Optimistic UI — show pick immediately, sync in background
+  const optimisticPick = {overall: slot.overall, player: slot.player, golfer: selectedGolfer};
+  picks.push(optimisticPick);
+  const draftedName = selectedGolfer;
+  selectedGolfer = null;
+  document.getElementById('search').value = '';
+  document.getElementById('selected-bar').textContent = 'No golfer selected';
+  document.getElementById('selected-bar').className = 'selected-bar no-pick';
+  render();
+
   try {
-    await callAPI({action: 'addPick', overall: slot.overall, player: slot.player, golfer: encodeURIComponent(selectedGolfer)});
-    selectedGolfer = null;
-    document.getElementById('search').value = '';
+    btn.textContent = 'Saving...';
+    btn.className = 'draft-btn disabled';
+    const result = await callAPI({action: 'addPick', overall: slot.overall, player: slot.player, golfer: draftedName});
+    if (result.error) throw new Error(result.error);
+    // Sync from sheet to confirm
     await loadPicks();
   } catch(e) {
-    btn.textContent = 'Error — try again';
-    btn.className = 'draft-btn ready';
+    // Rollback optimistic pick
+    picks = picks.filter(p => !(p.overall === slot.overall && p.golfer === draftedName));
+    document.getElementById('status-dot').className = 'dot warn';
+    document.getElementById('status-txt').textContent = 'Save failed — pick was not saved. Try again.';
+    render();
   }
 }
 
 async function undoPick() {
   if (picks.length === 0) return;
-  if (!confirm('Undo the last pick (' + picks[picks.length-1].golfer + ')?')) return;
-  await callAPI({action: 'undoPick'});
-  await loadPicks();
+  const last = picks[picks.length - 1];
+  if (!confirm('Undo ' + last.player + "'s pick (" + last.golfer + ')?')) return;
+  picks.pop();
+  render();
+  try {
+    await callAPI({action: 'undoPick'});
+    await loadPicks();
+  } catch(e) {
+    document.getElementById('status-txt').textContent = 'Undo failed — please try again.';
+  }
 }
 
 async function confirmClear() {
   if (!confirm('Reset the entire draft? This cannot be undone.')) return;
-  await callAPI({action: 'clearAll'});
   picks = [];
   selectedGolfer = null;
+  render();
+  await callAPI({action: 'clearAll'});
   await loadPicks();
 }
 
