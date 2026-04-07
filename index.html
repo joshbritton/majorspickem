@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2025 Majors Pick 'Em</title>
+<title>2026 Majors Pick 'Em</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f3;color:#1a1a1a;min-height:100vh}
@@ -123,18 +123,25 @@
 <body>
 <div class="page">
 
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+    <span style="font-size:12px;padding:4px 12px;border-radius:20px;background:#1a5c2e;color:#fff;font-weight:600">2026</span>
+    <a href="2025.html" style="font-size:12px;padding:4px 12px;border-radius:20px;background:#eee;color:#888;text-decoration:none;border:1px solid #ddd">2025</a>
+  </div>
+
   <div class="header">
     <div class="header-left">
-      <div class="title">2025 Majors <span>Pick 'Em</span></div>
-      <div class="tagline" id="tagline">Loading tournament data...</div>
+      <div class="title">2026 Majors <span>Pick 'Em</span></div>
+      <div class="tagline" id="tagline">Masters 2026</div>
     </div>
     <div class="header-right">
       <select id="t-select" onchange="switchTournament(this.value)">
-        <option value="masters">Masters 2025</option>
-        <option value="pga">PGA Championship 2025</option>
-        <option value="usopen" selected>US Open 2025</option>
-        <option value="open">The Open 2025</option>
+        <option value="masters2026" selected>Masters 2026</option>
+        <option disabled>── Coming soon ──</option>
+        <option disabled>PGA Championship 2026</option>
+        <option disabled>US Open 2026</option>
+        <option disabled>The Open 2026</option>
       </select>
+      <a href="draft.html" class="btn" style="text-decoration:none">Draft board</a>
       <button class="btn btn-primary" onclick="refresh()">
         <span id="spin" style="display:inline-block">↻</span> Refresh
       </button>
@@ -191,6 +198,17 @@
 const API = 'https://script.google.com/macros/s/AKfycbx6K5iGgN9tcgayAvgqpfKqubtK3MLBqpPLtrjwCjVI31xYHdAbNXvAUNgsJuyV39vf/exec';
 
 const TEAMS = {
+  masters2026:[
+    {name:'Steve',   color:'#7a1a7a', picks:['Scottie Scheffler','','','']},
+    {name:'Austin',  color:'#1a5c4a', picks:['Rory McIlroy','','','']},
+    {name:'Noah',    color:'#1a4a7a', picks:['','','','']},
+    {name:'Tom',     color:'#1a3a5c', picks:['','','','']},
+    {name:'Brian',   color:'#5a3a7a', picks:['','','','']},
+    {name:'Jeremiah',color:'#8b2020', picks:['','','','']},
+    {name:'Josh',    color:'#2d6a2d', picks:['','','','']},
+    {name:'Bobby',   color:'#7a4a1a', picks:['','','','']},
+    {name:'Ben',     color:'#7a6a1a', picks:['','','','']},
+  ],
   usopen:[
     {name:'Tom',   color:'#1a3a5c', picks:['Scottie Scheffler','Harris English','Tony Finau','Tom Kim']},
     {name:'Josh',  color:'#2d6a2d', picks:['Bryson DeChambeau','Ben Griffin','Corey Conners','Tyrrell Hatton']},
@@ -238,6 +256,7 @@ const TEAMS = {
 };
 
 const T_NAMES = {
+  masters2026:'Masters 2026',
   masters:'Masters 2025',
   pga:'PGA Championship 2025',
   usopen:'US Open 2025',
@@ -246,7 +265,7 @@ const T_NAMES = {
 
 const RANK_COLORS = ['#b8860b','#888','#7a5c2e','#4a7a9b','#6a4a8a','#4a8a6a','#8a6a4a','#4a4a8a','#8a4a4a'];
 
-let currentT = 'usopen';
+let currentT = 'masters2026';
 let scoreMap = {};
 let rawData = [];
 let dataMode = 'none';
