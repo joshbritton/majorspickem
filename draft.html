@@ -3,398 +3,561 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 Masters Draft Board</title>
+<title>2026 Majors Pick 'Em</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f3;color:#1a1a1a;min-height:100vh}
-  .page{max-width:1100px;margin:0 auto;padding:20px 16px}
+  a{color:inherit;text-decoration:none}
+
+  /* Layout */
+  .page{max-width:1200px;margin:0 auto;padding:24px 16px}
 
   /* Header */
-  .header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
-  .title{font-size:24px;font-weight:600;color:#1a1a1a}
+  .header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+  .header-left{}
+  .title{font-size:26px;font-weight:600;color:#1a1a1a;letter-spacing:-0.3px}
   .title span{color:#1a5c2e}
-  .subtitle{font-size:13px;color:#888;margin-top:3px}
-  .header-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .btn{padding:8px 16px;border:1px solid #ddd;border-radius:8px;font-size:13px;background:#fff;color:#555;cursor:pointer;transition:all 0.15s}
-  .btn:hover{background:#f0f0ee;border-color:#aaa}
-  .btn-green{background:#1a5c2e;color:#fff;border-color:#1a5c2e}
-  .btn-green:hover{background:#174f27}
-  .btn-red{background:#c0392b;color:#fff;border-color:#c0392b}
-  .btn-red:hover{background:#a93226}
+  .tagline{font-size:13px;color:#666;margin-top:3px}
+  .header-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 
-  /* Status */
-  .status-bar{display:flex;align-items:center;gap:8px;font-size:12px;color:#888;margin-bottom:16px;padding:9px 14px;background:#fff;border-radius:8px;border:1px solid #eee}
-  .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-  .dot.live{background:#27ae60}
+  /* Controls */
+  select{padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;background:#fff;color:#1a1a1a;cursor:pointer;outline:none}
+  select:hover{border-color:#aaa}
+  .btn{padding:8px 16px;border:1px solid #ddd;border-radius:8px;font-size:13px;background:#fff;color:#555;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all 0.15s}
+  .btn:hover{background:#f0f0ee;border-color:#aaa}
+  .btn:active{transform:scale(0.98)}
+  .btn-primary{background:#1a5c2e;color:#fff;border-color:#1a5c2e}
+  .btn-primary:hover{background:#174f27;border-color:#174f27}
+
+  /* Status bar */
+  .status-bar{display:flex;align-items:center;gap:8px;font-size:12px;color:#888;margin-bottom:16px;padding:10px 14px;background:#fff;border-radius:8px;border:1px solid #eee}
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .dot.live{background:#27ae60;box-shadow:0 0 0 3px #27ae6020}
   .dot.warn{background:#e67e22}
   .dot.off{background:#ccc}
 
-  /* Clock banner */
-  .clock{background:#1a5c2e;color:#fff;border-radius:10px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-  .clock-name{font-size:20px;font-weight:600}
-  .clock-meta{font-size:13px;opacity:0.8;margin-top:2px}
-  .clock-next{font-size:13px;background:rgba(255,255,255,0.15);padding:5px 14px;border-radius:20px}
-  .clock.done{background:#2c7873}
+  /* Metric cards */
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px}
+  .metric{background:#fff;border-radius:10px;padding:14px 16px;border:1px solid #eee}
+  .metric-label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:5px}
+  .metric-val{font-size:22px;font-weight:600;color:#1a1a1a}
+  .metric-sub{font-size:12px;color:#888;margin-top:2px}
 
-  /* Layout */
-  .layout{display:grid;grid-template-columns:1fr 300px;gap:16px}
-  @media(max-width:720px){.layout{grid-template-columns:1fr}}
+  /* View tabs */
+  .tabs{display:flex;gap:4px;margin-bottom:20px;background:#fff;padding:4px;border-radius:10px;border:1px solid #eee;width:fit-content;flex-wrap:wrap}
+  .tab{padding:7px 18px;border-radius:7px;font-size:13px;cursor:pointer;color:#666;border:none;background:transparent;transition:all 0.15s;white-space:nowrap}
+  .tab.active{background:#1a5c2e;color:#fff;font-weight:500}
+  .tab:hover:not(.active){background:#f0f0ee;color:#1a1a1a}
 
-  /* Board */
-  .board{background:#fff;border-radius:12px;border:1px solid #eee;overflow:hidden}
-  .board-head{display:grid;grid-template-columns:22px 110px 1fr 1fr 1fr;gap:6px;padding:10px 14px;background:#f9f9f7;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #eee}
-  .board-row{display:grid;grid-template-columns:22px 110px 1fr 1fr 1fr;gap:6px;padding:10px 14px;border-top:1px solid #f5f5f3;align-items:center;font-size:13px;transition:background 0.1s}
-  .board-row.on-clock{background:#f0f8f3}
-  .board-row:hover{background:#fafaf8}
-  .pick-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-  .player-name{font-weight:600}
-  .pick-cell{color:#1a1a1a}
-  .pick-empty{color:#ccc;font-style:italic;font-size:12px}
-  .pick-clock{color:#1a5c2e;font-weight:600;font-size:12px}
+  /* Team cards */
+  .teams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  .card{background:#fff;border-radius:12px;border:1px solid #eee;overflow:hidden;transition:box-shadow 0.15s}
+  .card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08)}
+  .card-head{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f0ee}
+  .card-left{display:flex;align-items:center;gap:10px}
+  .avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+  .owner-name{font-size:15px;font-weight:600;color:#1a1a1a}
+  .owner-earn{font-size:12px;color:#888;margin-top:1px}
+  .card-right{display:flex;align-items:center;gap:8px}
+  .rank-badge{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0}
+  .team-total{font-size:15px;font-weight:600}
 
-  /* Right column */
-  .right{display:flex;flex-direction:column;gap:14px}
-  .card{background:#fff;border-radius:12px;border:1px solid #eee;overflow:hidden}
-  .card-head{padding:10px 14px;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;background:#f9f9f7;border-bottom:1px solid #eee}
-  .search{width:100%;padding:9px 14px;border:none;border-bottom:1px solid #eee;font-size:13px;background:#fff;color:#1a1a1a;outline:none}
-  .search:focus{background:#fafaf8}
-  .selected-bar{padding:10px 14px;font-size:13px;border-bottom:1px solid #eee;min-height:40px;display:flex;align-items:center}
-  .selected-bar.has-pick{color:#1a5c2e;font-weight:600}
-  .selected-bar.no-pick{color:#bbb}
-  .golfer-list{max-height:260px;overflow-y:auto}
-  .golfer-row{padding:8px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f5f5f3;transition:background 0.1s}
-  .golfer-row:first-child{border-top:none}
-  .golfer-row:hover:not(.taken){background:#f0f8f3}
-  .golfer-row.taken{color:#ccc;cursor:default}
-  .golfer-row.selected-row{background:#e8f5ee}
-  .golfer-odds{font-size:11px;color:#bbb}
-  .draft-btn{width:100%;padding:11px;font-size:13px;font-weight:600;cursor:pointer;border:none;border-top:1px solid #eee;transition:all 0.15s}
-  .draft-btn.ready{background:#1a5c2e;color:#fff}
-  .draft-btn.ready:hover{background:#174f27}
-  .draft-btn.disabled{background:#f5f5f3;color:#bbb;cursor:default}
+  /* Pick rows */
+  .pick-row{display:grid;grid-template-columns:20px 1fr 38px 44px 74px;align-items:center;gap:4px;padding:8px 16px;border-top:1px solid #f7f7f5;font-size:13px}
+  .pick-num{font-size:11px;color:#bbb;font-weight:500}
+  .pick-name{color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pick-name.mc{text-decoration:line-through;color:#bbb}
+  .pick-pos{font-size:12px;color:#888;text-align:right}
+  .pick-score{font-size:13px;font-weight:600;text-align:right}
+  .pick-earn{font-size:11px;color:#888;text-align:right}
 
-  /* Rosters */
-  .roster-row{padding:9px 14px;border-top:1px solid #f5f5f3;display:flex;align-items:center;justify-content:space-between;gap:8px}
-  .roster-row:first-child{border-top:none}
-  .roster-name{font-size:13px;font-weight:600;min-width:70px}
-  .roster-picks{font-size:11px;color:#888;flex:1}
-  .roster-count{font-size:11px;color:#bbb;white-space:nowrap}
+  /* Score colors */
+  .red{color:#c0392b}
+  .green{color:#27ae60}
+  .even{color:#888}
 
-  /* Complete */
-  .complete-box{background:#f0f8f3;border:1px solid #a8d5b5;border-radius:10px;padding:20px;text-align:center;margin-bottom:20px}
-  .complete-box h2{font-size:18px;color:#1a5c2e;margin-bottom:6px}
-  .complete-box p{font-size:13px;color:#555}
+  /* Leaderboard / standings */
+  .table-wrap{background:#fff;border-radius:12px;border:1px solid #eee;overflow:hidden}
+  .lb-head{display:grid;gap:4px;padding:10px 16px;background:#f9f9f7;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #eee}
+  .lb-row{display:grid;gap:4px;padding:10px 16px;border-top:1px solid #f7f7f5;font-size:13px;align-items:center}
+  .lb-row:hover{background:#fafaf8}
+  .lb-name{font-weight:500;color:#1a1a1a}
+  .lb-sub{font-size:11px;color:#aaa;margin-top:1px}
+  .lb-pos{color:#888;font-size:12px}
 
-  /* Sync indicator */
-  .spin{display:inline-block}
-  .spin.go{animation:spin 1s linear infinite}
+  /* Field leaderboard columns */
+  .field-grid{grid-template-columns:36px 1fr 50px 55px 60px 90px}
+  .ta-c{text-align:center}
+  .ta-r{text-align:right}
+
+  /* Standings columns */
+  .standings-grid{grid-template-columns:36px 160px 1fr 70px 100px}
+
+  /* Tee times */
+  .tee-grid{grid-template-columns:1fr 110px 160px}
+
+  /* Picked highlight */
+  .picked-row{background:#f0f8f3}
+  .pick-tag{display:inline-flex;align-items:center;padding:2px 8px;background:#e0f0e8;color:#1a5c2e;border-radius:20px;font-size:10px;font-weight:600;margin-left:6px}
+
+  /* Empty state */
+  .empty{padding:32px 16px;text-align:center;color:#aaa;font-size:14px}
+
+  /* Auto-refresh indicator */
+  .spinning{animation:spin 1s linear infinite;display:inline-block}
   @keyframes spin{to{transform:rotate(360deg)}}
 
-  /* Admin bar */
-  .admin-bar{display:flex;gap:8px;margin-bottom:16px;padding:12px 14px;background:#fff;border-radius:10px;border:1px solid #eee;align-items:center;flex-wrap:wrap}
-  .admin-label{font-size:12px;color:#888;margin-right:4px}
+  /* Footer */
+  .footer{margin-top:32px;text-align:center;font-size:12px;color:#bbb;padding-bottom:24px}
+
+  /* Responsive */
+  @media(max-width:600px){
+    .title{font-size:20px}
+    .teams-grid{grid-template-columns:1fr}
+    .standings-grid{grid-template-columns:28px 120px 1fr 60px 80px}
+    .field-grid{grid-template-columns:30px 1fr 40px 45px 50px 70px}
+    .metrics{grid-template-columns:repeat(2,1fr)}
+  }
 </style>
 </head>
 <body>
 <div class="page">
 
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+    <span style="font-size:12px;padding:4px 12px;border-radius:20px;background:#1a5c2e;color:#fff;font-weight:600">2026</span>
+    <a href="2025.html" style="font-size:12px;padding:4px 12px;border-radius:20px;background:#eee;color:#888;text-decoration:none;border:1px solid #ddd">2025</a>
+  </div>
+
   <div class="header">
-    <div>
-      <div class="title">2026 Masters <span>Draft Board</span></div>
-      <div class="subtitle">Snake draft · 3 rounds · 9 players · Live sync</div>
+    <div class="header-left">
+      <div class="title">2026 Majors <span>Pick 'Em</span></div>
+      <div class="tagline" id="tagline">Masters 2026</div>
     </div>
     <div class="header-right">
-      <span class="spin" id="sync-spin" style="display:inline-block;color:#888;font-size:16px">↻</span>
-      <button class="btn" onclick="loadPicks()">Refresh</button>
-      <button class="btn btn-red" onclick="confirmClear()">Reset draft</button>
+      <select id="t-select" onchange="switchTournament(this.value)">
+        <option value="masters2026" selected>Masters 2026</option>
+        <option disabled>── Coming soon ──</option>
+        <option disabled>PGA Championship 2026</option>
+        <option disabled>US Open 2026</option>
+        <option disabled>The Open 2026</option>
+      </select>
+      <a href="draft.html" class="btn" style="text-decoration:none">Draft board</a>
+      <button class="btn btn-primary" onclick="refresh()">
+        <span id="spin" style="display:inline-block">↻</span> Refresh
+      </button>
     </div>
   </div>
 
   <div class="status-bar">
     <span class="dot off" id="status-dot"></span>
-    <span id="status-txt">Connecting to live sheet...</span>
+    <span id="status-txt">Connecting to live data...</span>
   </div>
 
-  <div id="complete-box" class="complete-box" style="display:none">
-    <h2>Draft complete!</h2>
-    <p>All 27 picks have been made. Good luck at Augusta!</p>
+  <div class="metrics" id="metrics"></div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="setView('teams',this)">Teams</button>
+    <button class="tab" onclick="setView('standings',this)">Standings</button>
+    <button class="tab" onclick="setView('field',this)">Field leaderboard</button>
+    <button class="tab" onclick="setView('teetimes',this)">Tee times</button>
   </div>
 
-  <div id="clock-banner" class="clock">
-    <div>
-      <div class="clock-name" id="clock-name">Loading...</div>
-      <div class="clock-meta" id="clock-meta"></div>
-    </div>
-    <div class="clock-next" id="clock-next"></div>
-  </div>
+  <div id="view-teams"><div class="teams-grid" id="teams-grid"></div></div>
 
-  <div class="layout">
-    <div class="board">
-      <div class="board-head">
-        <span></span><span>Player</span><span>Round 1</span><span>Round 2</span><span>Round 3</span>
+  <div id="view-standings" style="display:none">
+    <div class="table-wrap">
+      <div class="lb-head standings-grid lb-head">
+        <span>#</span><span>Player</span><span>Picks</span><span>Score</span><span style="text-align:right">Earnings</span>
       </div>
-      <div id="board-rows"></div>
-    </div>
-
-    <div class="right">
-      <div class="card">
-        <div class="card-head" id="pick-label">Make a pick</div>
-        <input class="search" id="search" type="text" placeholder="Search golfer..." oninput="filterGolfers()" />
-        <div class="selected-bar no-pick" id="selected-bar">No golfer selected</div>
-        <div class="golfer-list" id="golfer-list"></div>
-        <button class="draft-btn disabled" id="draft-btn" onclick="confirmPick()">Select a golfer to draft</button>
-      </div>
-
-      <div class="card">
-        <div class="card-head">Rosters</div>
-        <div id="roster-rows"></div>
-      </div>
+      <div id="standings-rows"></div>
     </div>
   </div>
 
+  <div id="view-field" style="display:none">
+    <div class="table-wrap">
+      <div class="lb-head field-grid">
+        <span>Pos</span><span>Golfer</span><span class="ta-c">Thru</span><span class="ta-c">Today</span><span class="ta-r">Total</span><span class="ta-r">Earnings</span>
+      </div>
+      <div id="field-rows"></div>
+    </div>
+  </div>
+
+  <div id="view-teetimes" style="display:none">
+    <div class="table-wrap">
+      <div class="lb-head tee-grid">
+        <span>Player</span><span>Tee time</span><span>Owned by</span>
+      </div>
+      <div id="tee-rows"></div>
+    </div>
+  </div>
+
+  <div class="footer">Updated automatically every 60 seconds &middot; Data from your Google Sheet</div>
 </div>
 
 <script>
-const API = 'https://script.google.com/macros/s/AKfycbzaTb9krKVEbF-6PJ4uVRslFGNWu1qw7xXoIp79CJTU4OTLwzlWKiabKKGaTn176KgN/exec';
-const TAB = 'Masters 26';
+const API = 'https://script.google.com/macros/s/AKfycbx6K5iGgN9tcgayAvgqpfKqubtK3MLBqpPLtrjwCjVI31xYHdAbNXvAUNgsJuyV39vf/exec';
 
-const PLAYERS = [
-  {name:'Steve',   color:'#7a1a7a'},
-  {name:'Austin',  color:'#1a5c4a'},
-  {name:'Noah',    color:'#1a4a7a'},
-  {name:'Tom',     color:'#1a3a5c'},
-  {name:'Brian',   color:'#5a3a7a'},
-  {name:'Jeremiah',color:'#8b2020'},
-  {name:'Josh',    color:'#2d6a2d'},
-  {name:'Bobby',   color:'#7a4a1a'},
-  {name:'Ben',     color:'#7a6a1a'},
-];
+const TEAMS = {
+  masters2026:[
+    {name:'Steve',   color:'#7a1a7a', picks:['Scottie Scheffler','','','']},
+    {name:'Austin',  color:'#1a5c4a', picks:['Rory McIlroy','','','']},
+    {name:'Noah',    color:'#1a4a7a', picks:['','','','']},
+    {name:'Tom',     color:'#1a3a5c', picks:['','','','']},
+    {name:'Brian',   color:'#5a3a7a', picks:['','','','']},
+    {name:'Jeremiah',color:'#8b2020', picks:['','','','']},
+    {name:'Josh',    color:'#2d6a2d', picks:['','','','']},
+    {name:'Bobby',   color:'#7a4a1a', picks:['','','','']},
+    {name:'Ben',     color:'#7a6a1a', picks:['','','','']},
+  ],
+  usopen:[
+    {name:'Tom',   color:'#1a3a5c', picks:['Scottie Scheffler','Harris English','Tony Finau','Tom Kim']},
+    {name:'Josh',  color:'#2d6a2d', picks:['Bryson DeChambeau','Ben Griffin','Corey Conners','Tyrrell Hatton']},
+    {name:'Bobby', color:'#6b2020', picks:['Rory McIlroy','Patrick Cantlay','Robert MacIntyre','Patrick Reed']},
+    {name:'Brian', color:'#5a3a7a', picks:['Jon Rahm','Tommy Fleetwood','Justin Rose','Daniel Berger']},
+    {name:'Austin',color:'#1a5c4a', picks:['Xander Schauffele','Brooks Koepka','Jordan Spieth','Phil Mickelson']},
+    {name:'Ben',   color:'#7a5a1a', picks:['Ludvig Åberg','Justin Thomas','Matt Fitzpatrick','Dustin Johnson']},
+    {name:'Noah',  color:'#1a4a7a', picks:['Joaquin Niemann','Sam Burns','Sepp Straka','Akshay Bhatia']},
+    {name:'Steve', color:'#5a1a5a', picks:['Collin Morikawa','Viktor Hovland','Jason Day','Adam Scott']},
+    {name:'Miah',  color:'#2a5a2a', picks:['Shane Lowry','Hideki Matsuyama','Aaron Rai','Keegan Bradley']},
+  ],
+  masters:[
+    {name:'Jeremiah',color:'#1a3a5c', picks:['Scottie Scheffler','Jason Day','Tom Kim','Adam Scott']},
+    {name:'Brian',   color:'#6b2020', picks:['Rory McIlroy','Tommy Fleetwood','Justin Rose','Corey Conners']},
+    {name:'Austin',  color:'#2d6a2d', picks:['Bryson DeChambeau','Jordan Spieth','Tony Finau','Shane Lowry']},
+    {name:'Tom',     color:'#5a3a7a', picks:['Collin Morikawa','Hideki Matsuyama','Viktor Hovland','Phil Mickelson']},
+    {name:'Josh',    color:'#1a5c4a', picks:['Ludvig Åberg','Justin Thomas','Will Zalatoris','Patrick Reed']},
+    {name:'Ben',     color:'#7a5a1a', picks:['Brooks Koepka','Justin Thomas','Dustin Johnson','Keegan Bradley']},
+    {name:'Bobby',   color:'#1a4a7a', picks:['Jon Rahm','Wyndham Clark','Robert MacIntyre','Sahith Theegala']},
+    {name:'Noah',    color:'#5a1a5a', picks:['Xander Schauffele','Justin Rose','Russell Henley','Sepp Straka']},
+    {name:'Steve',   color:'#2a5a2a', picks:['Joaquin Niemann','Sam Burns','Cameron Smith','']},
+  ],
+  pga:[
+    {name:'Bobby',   color:'#1a3a5c', picks:['Scottie Scheffler','Patrick Cantlay','Wyndham Clark','']},
+    {name:'Jeremiah',color:'#2d6a2d', picks:['Rory McIlroy','Joaquin Niemann','Corey Conners','']},
+    {name:'Steve',   color:'#6b2020', picks:['Jon Rahm','Cameron Smith','Sam Burns','']},
+    {name:'Austin',  color:'#5a3a7a', picks:['Bryson DeChambeau','Shane Lowry','Sepp Straka','']},
+    {name:'Ben',     color:'#1a5c4a', picks:['Robert MacIntyre','Matt Fitzpatrick','Brooks Koepka','']},
+    {name:'Noah',    color:'#7a5a1a', picks:['Xander Schauffele','Tom Kim','Keegan Bradley','']},
+    {name:'Brian',   color:'#1a4a7a', picks:['Ludvig Åberg','Tyrrell Hatton','Maverick McNealy','']},
+    {name:'Tom',     color:'#5a1a5a', picks:['Collin Morikawa','Justin Rose','Jason Day','']},
+    {name:'Josh',    color:'#2a5a2a', picks:['Justin Thomas','Russell Henley','','']},
+  ],
+  open:[
+    {name:'Bobby',   color:'#1a3a5c', picks:['Scottie Scheffler','Patrick Cantlay','Wyndham Clark','']},
+    {name:'Jeremiah',color:'#2d6a2d', picks:['Rory McIlroy','Joaquin Niemann','Corey Conners','']},
+    {name:'Steve',   color:'#6b2020', picks:['Jon Rahm','Cameron Smith','Sam Burns','']},
+    {name:'Austin',  color:'#5a3a7a', picks:['Bryson DeChambeau','Shane Lowry','Sepp Straka','']},
+    {name:'Ben',     color:'#1a5c4a', picks:['Robert MacIntyre','Matt Fitzpatrick','Brooks Koepka','']},
+    {name:'Noah',    color:'#7a5a1a', picks:['Xander Schauffele','Tom Kim','Keegan Bradley','']},
+    {name:'Brian',   color:'#1a4a7a', picks:['Ludvig Åberg','Tyrrell Hatton','Maverick McNealy','']},
+    {name:'Tom',     color:'#5a1a5a', picks:['Collin Morikawa','Justin Rose','Jason Day','']},
+    {name:'Josh',    color:'#2a5a2a', picks:['Rory McIlroy','Justin Thomas','Russell Henley','']},
+  ]
+};
 
-const GOLFERS = [
-  {name:'Scottie Scheffler',odds:'400'},{name:'Rory McIlroy',odds:'600'},
-  {name:'Jon Rahm',odds:'800'},{name:'Ludvig Åberg',odds:'900'},
-  {name:'Xander Schauffele',odds:'1000'},{name:'Collin Morikawa',odds:'1200'},
-  {name:'Bryson DeChambeau',odds:'1400'},{name:'Tommy Fleetwood',odds:'1600'},
-  {name:'Viktor Hovland',odds:'1800'},{name:'Brooks Koepka',odds:'2000'},
-  {name:'Patrick Cantlay',odds:'2200'},{name:'Justin Thomas',odds:'2500'},
-  {name:'Hideki Matsuyama',odds:'2500'},{name:'Shane Lowry',odds:'2800'},
-  {name:'Tyrrell Hatton',odds:'2800'},{name:'Robert MacIntyre',odds:'3000'},
-  {name:'Jordan Spieth',odds:'3000'},{name:'Tony Finau',odds:'3500'},
-  {name:'Sepp Straka',odds:'3500'},{name:'Corey Conners',odds:'4000'},
-  {name:'Adam Scott',odds:'4000'},{name:'Justin Rose',odds:'4500'},
-  {name:'Russell Henley',odds:'4500'},{name:'Keegan Bradley',odds:'5000'},
-  {name:'Matt Fitzpatrick',odds:'5000'},{name:'Dustin Johnson',odds:'5500'},
-  {name:'Jason Day',odds:'5500'},{name:'Patrick Reed',odds:'6000'},
-  {name:'Sam Burns',odds:'6000'},{name:'Joaquin Niemann',odds:'6000'},
-  {name:'Tom Kim',odds:'6500'},{name:'Harris English',odds:'7000'},
-  {name:'Cameron Smith',odds:'7000'},{name:'Wyndham Clark',odds:'7000'},
-  {name:'Akshay Bhatia',odds:'7500'},{name:'Min Woo Lee',odds:'8000'},
-  {name:'Aaron Rai',odds:'8000'},{name:'Maverick McNealy',odds:'8000'},
-  {name:'Daniel Berger',odds:'8000'},{name:'Ben Griffin',odds:'8000'},
-  {name:'Phil Mickelson',odds:'10000'},{name:'Will Zalatoris',odds:'10000'},
-  {name:'Cameron Young',odds:'10000'},{name:'Sungjae Im',odds:'10000'},
-  {name:'Sahith Theegala',odds:'11000'},{name:'Si Woo Kim',odds:'11000'},
-  {name:'J.J. Spaun',odds:'12000'},{name:'Dustin Johnson',odds:'12000'},
-];
+const T_NAMES = {
+  masters2026:'Masters 2026',
+  masters:'Masters 2025',
+  pga:'PGA Championship 2025',
+  usopen:'US Open 2025',
+  open:'The Open Championship 2025'
+};
 
-function buildSnake(players, rounds) {
-  const order = [];
-  for (let r = 0; r < rounds; r++) {
-    const row = r % 2 === 0 ? [...players] : [...players].reverse();
-    row.forEach((p, i) => order.push({
-      overall: r * players.length + i + 1,
-      player: p.name,
-      round: r + 1
-    }));
-  }
-  return order;
+const RANK_COLORS = ['#b8860b','#888','#7a5c2e','#4a7a9b','#6a4a8a','#4a8a6a','#8a6a4a','#4a4a8a','#8a4a4a'];
+
+let currentT = 'masters2026';
+let scoreMap = {};
+let rawData = [];
+let dataMode = 'none';
+let currentView = 'teams';
+
+/* ---- Formatting helpers ---- */
+function fmtScore(s) {
+  if (s === null || s === undefined || s === '') return '—';
+  const n = parseInt(s);
+  if (isNaN(n)) return String(s);
+  if (n === 0) return 'E';
+  return n > 0 ? '+' + n : '' + n;
 }
-
-const SNAKE = buildSnake(PLAYERS, 3);
-let picks = [];
-let selectedGolfer = null;
-let pollTimer = null;
-
-function taken() { return new Set(picks.map(p => p.golfer)); }
-function isDone() { return picks.length >= SNAKE.length; }
-function currentSlot() { return SNAKE[picks.length]; }
-
-async function callAPI(params) {
-  const p = {...params, tab: TAB, t: Date.now()};
-  const parts = Object.entries(p).map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v));
-  const url = API + '?' + parts.join('&');
-  const res = await fetch(url);
-  const text = await res.text();
-  try { return JSON.parse(text); } catch(e) { return {error: text}; }
+function scoreClass(s) {
+  const n = parseInt(s);
+  if (isNaN(n)) return 'even';
+  return n < 0 ? 'red' : n > 0 ? 'green' : 'even';
 }
-
-async function loadPicks() {
-  const spin = document.getElementById('sync-spin');
-  spin.classList.add('go');
+function fmtMoney(n) {
+  if (!n || n === 0) return '—';
+  if (n >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
+  if (n >= 1000) return '$' + Math.round(n / 1000) + 'K';
+  return '$' + n;
+}
+function fmtTime(v) {
+  if (!v) return '—';
+  if (typeof v === 'string' && v.includes(':')) return v;
   try {
-    const d = await callAPI({action: 'read'});
-    if (d.data) {
-      picks = d.data
-        .filter(r => r.overall && r.player && r.golfer)
-        .map(r => ({overall: parseInt(r.overall), player: String(r.player).trim(), golfer: String(r.golfer).trim()}))
-        .sort((a, b) => a.overall - b.overall);
-    }
-    const now = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    const d = new Date(v);
+    if (isNaN(d)) return String(v);
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } catch(e) { return String(v); }
+}
+function initials(name) {
+  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+}
+
+/* ---- Data detection ---- */
+function detectMode(rows) {
+  if (!rows || rows.length === 0) return 'none';
+  const keys = Object.keys(rows[0]).map(k => k.toUpperCase());
+  if (keys.some(k => k.includes('SCORE') || k.includes('TOTAL') || k.includes('POS'))) return 'scores';
+  if (keys.some(k => k.includes('TEE') || k.includes('TIME'))) return 'teetimes';
+  return 'unknown';
+}
+
+function parseScores(rows) {
+  const map = {};
+  rows.forEach(r => {
+    const keys = Object.keys(r);
+    const nameKey  = keys.find(k => /PLAYER|GOLFER|NAME/i.test(k)) || keys[0];
+    const posKey   = keys.find(k => /^POS/i.test(k));
+    const scoreKey = keys.find(k => /TOTAL|^SCORE/i.test(k));
+    const todayKey = keys.find(k => /TODAY|^RD|^R\d/i.test(k));
+    const thruKey  = keys.find(k => /THRU/i.test(k));
+    const earnKey  = keys.find(k => /EARN|MONEY|PRIZE/i.test(k));
+    const name = r[nameKey];
+    if (!name) return;
+    const pos = posKey ? r[posKey] : '';
+    const isMC = pos && String(pos).toUpperCase() === 'MC';
+    map[String(name).trim()] = {
+      name: String(name).trim(),
+      pos: pos || 'TBD',
+      score: scoreKey ? r[scoreKey] : 0,
+      today: todayKey ? r[todayKey] : 0,
+      thru: thruKey ? r[thruKey] : '',
+      earnings: earnKey ? parseFloat(r[earnKey]) || 0 : 0,
+      madeCut: !isMC
+    };
+  });
+  return map;
+}
+
+function getPlayer(name) {
+  return scoreMap[name] || { name, pos: 'TBD', score: 0, today: 0, thru: '—', earnings: 0, madeCut: true };
+}
+
+/* ---- Data fetch ---- */
+async function fetchData() {
+  const spinEl = document.getElementById('spin');
+  spinEl.classList.add('spinning');
+  document.getElementById('status-dot').className = 'dot warn';
+  document.getElementById('status-txt').textContent = 'Fetching live data...';
+  try {
+    const res = await fetch(API + '?t=' + Date.now());
+    const json = await res.json();
+    rawData = json.data || [];
+    dataMode = detectMode(rawData);
+    if (dataMode === 'scores') scoreMap = parseScores(rawData);
+    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     document.getElementById('status-dot').className = 'dot live';
-    document.getElementById('status-txt').textContent = 'Live · ' + picks.length + ' picks made · Updated ' + now;
+    document.getElementById('status-txt').textContent =
+      T_NAMES[currentT] + ' · ' + (dataMode === 'scores' ? 'Live scores' : dataMode === 'teetimes' ? 'Tee times loaded' : 'Data loaded') + ' · Updated ' + now;
+    document.getElementById('tagline').textContent = T_NAMES[currentT];
   } catch(e) {
     document.getElementById('status-dot').className = 'dot off';
-    document.getElementById('status-txt').textContent = 'Connection error — retrying...';
+    document.getElementById('status-txt').textContent = 'Could not reach live data — check your connection';
   }
-  spin.classList.remove('go');
-  render();
+  spinEl.classList.remove('spinning');
+  renderAll();
 }
 
-async function confirmPick() {
-  if (!selectedGolfer || isDone()) return;
-  const slot = currentSlot();
-  const btn = document.getElementById('draft-btn');
+function refresh() { fetchData(); }
 
-  // Optimistic UI — show pick immediately, sync in background
-  const optimisticPick = {overall: slot.overall, player: slot.player, golfer: selectedGolfer};
-  picks.push(optimisticPick);
-  const draftedName = selectedGolfer;
-  selectedGolfer = null;
-  document.getElementById('search').value = '';
-  document.getElementById('selected-bar').textContent = 'No golfer selected';
-  document.getElementById('selected-bar').className = 'selected-bar no-pick';
-  render();
-
-  try {
-    btn.textContent = 'Saving...';
-    btn.className = 'draft-btn disabled';
-    const result = await callAPI({action: 'addPick', overall: slot.overall, player: slot.player, golfer: draftedName});
-    if (result.error) throw new Error(result.error);
-    // Sync from sheet to confirm
-    await loadPicks();
-  } catch(e) {
-    // Rollback optimistic pick
-    picks = picks.filter(p => !(p.overall === slot.overall && p.golfer === draftedName));
-    document.getElementById('status-dot').className = 'dot warn';
-    document.getElementById('status-txt').textContent = 'Save failed — pick was not saved. Try again.';
-    render();
-  }
+function switchTournament(t) {
+  currentT = t;
+  document.getElementById('tagline').textContent = T_NAMES[t];
+  renderAll();
 }
 
-async function undoPick() {
-  if (picks.length === 0) return;
-  const last = picks[picks.length - 1];
-  if (!confirm('Undo ' + last.player + "'s pick (" + last.golfer + ')?')) return;
-  picks.pop();
-  render();
-  try {
-    await callAPI({action: 'undoPick'});
-    await loadPicks();
-  } catch(e) {
-    document.getElementById('status-txt').textContent = 'Undo failed — please try again.';
-  }
+function setView(v, btn) {
+  currentView = v;
+  ['teams', 'standings', 'field', 'teetimes'].forEach(x => {
+    document.getElementById('view-' + x).style.display = x === v ? '' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
 }
 
-async function confirmClear() {
-  if (!confirm('Reset the entire draft? This cannot be undone.')) return;
-  picks = [];
-  selectedGolfer = null;
-  render();
-  await callAPI({action: 'clearAll'});
-  await loadPicks();
+/* ---- Team helpers ---- */
+function teamEarnings(team) {
+  return team.picks.filter(Boolean).reduce((s, p) => s + (getPlayer(p).earnings || 0), 0);
+}
+function teamScore(team) {
+  return team.picks.filter(Boolean).reduce((s, p) => {
+    const pl = getPlayer(p);
+    return s + (pl.madeCut ? parseInt(pl.score) || 0 : 0);
+  }, 0);
 }
 
-function render() {
-  renderClock();
-  renderBoard();
-  renderGolferList();
-  renderRosters();
+/* ---- Render all ---- */
+function renderAll() {
+  renderMetrics();
+  renderTeams();
+  renderStandings();
+  renderField();
+  renderTeeTimes();
 }
 
-function renderClock() {
-  const banner = document.getElementById('clock-banner');
-  const completeBox = document.getElementById('complete-box');
-  if (isDone()) {
-    banner.style.display = 'none';
-    completeBox.style.display = '';
-    document.getElementById('pick-label').textContent = 'Draft complete';
-    document.getElementById('draft-btn').className = 'draft-btn disabled';
-    document.getElementById('draft-btn').textContent = 'Draft is complete';
+function renderMetrics() {
+  const teams = TEAMS[currentT];
+  const sorted = [...teams].sort((a, b) => teamEarnings(b) - teamEarnings(a));
+  const leader = sorted[0];
+  const allPicks = [...new Set(teams.flatMap(t => t.picks).filter(Boolean))];
+  const active = allPicks.filter(p => getPlayer(p).madeCut).length;
+  const totalEarned = teams.reduce((s, t) => s + teamEarnings(t), 0);
+  document.getElementById('metrics').innerHTML = `
+    <div class="metric">
+      <div class="metric-label">Leading</div>
+      <div class="metric-val">${leader.name}</div>
+      <div class="metric-sub">${fmtMoney(teamEarnings(leader))}</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">2nd place</div>
+      <div class="metric-val">${sorted[1].name}</div>
+      <div class="metric-sub">${fmtMoney(teamEarnings(sorted[1]))}</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Golfers active</div>
+      <div class="metric-val">${active}<span style="font-size:14px;color:#aaa"> / ${allPicks.length}</span></div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Total earned</div>
+      <div class="metric-val">${fmtMoney(totalEarned)}</div>
+    </div>
+  `;
+}
+
+function renderTeams() {
+  const teams = TEAMS[currentT];
+  const sorted = [...teams]
+    .map(t => ({ ...t, total: teamEarnings(t), score: teamScore(t) }))
+    .sort((a, b) => b.total - a.total);
+
+  document.getElementById('teams-grid').innerHTML = sorted.map((team, idx) => {
+    const rc = RANK_COLORS[idx] || '#888';
+    const rows = team.picks.filter(Boolean).map((p, i) => {
+      const pl = getPlayer(p);
+      const mc = !pl.madeCut;
+      return `<div class="pick-row">
+        <span class="pick-num">${i + 1}</span>
+        <span class="pick-name${mc ? ' mc' : ''}">${p}</span>
+        <span class="pick-pos">${pl.pos || 'TBD'}</span>
+        <span class="pick-score ${scoreClass(pl.score)}">${pl.pos === 'TBD' ? '—' : fmtScore(pl.score)}</span>
+        <span class="pick-earn">${pl.earnings ? fmtMoney(pl.earnings) : '—'}</span>
+      </div>`;
+    }).join('');
+
+    return `<div class="card">
+      <div class="card-head" style="background:${team.color}12;border-bottom:1px solid ${team.color}25">
+        <div class="card-left">
+          <div class="avatar" style="background:${team.color}22;color:${team.color}">${initials(team.name)}</div>
+          <div>
+            <div class="owner-name">${team.name}</div>
+            <div class="owner-earn">${team.total ? fmtMoney(team.total) + ' earned' : 'No earnings yet'}</div>
+          </div>
+        </div>
+        <div class="card-right">
+          <div class="rank-badge" style="background:${rc}">${idx + 1}</div>
+          <div class="team-total ${scoreClass(team.score)}">${fmtScore(team.score)}</div>
+        </div>
+      </div>
+      ${rows}
+    </div>`;
+  }).join('');
+}
+
+function renderStandings() {
+  const teams = TEAMS[currentT];
+  const sorted = [...teams]
+    .map(t => ({ ...t, total: teamEarnings(t), score: teamScore(t) }))
+    .sort((a, b) => b.total - a.total);
+
+  document.getElementById('standings-rows').innerHTML = sorted.map((t, i) => {
+    const rc = RANK_COLORS[i] || '#888';
+    return `<div class="lb-row standings-grid">
+      <span><span class="rank-badge" style="background:${rc};color:#fff">${i + 1}</span></span>
+      <span class="lb-name">${t.name}</span>
+      <span style="font-size:12px;color:#888">${t.picks.filter(Boolean).join(', ')}</span>
+      <span class="${scoreClass(t.score)}" style="font-weight:600">${fmtScore(t.score)}</span>
+      <span style="font-weight:600;text-align:right">${fmtMoney(t.total)}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderField() {
+  const teams = TEAMS[currentT];
+  const allPicks = [...new Set(teams.flatMap(t => t.picks).filter(Boolean))];
+  const ownerMap = {};
+  teams.forEach(t => t.picks.filter(Boolean).forEach(p => {
+    ownerMap[p] = ownerMap[p] || [];
+    ownerMap[p].push(t.name);
+  }));
+
+  if (dataMode !== 'scores') {
+    document.getElementById('field-rows').innerHTML =
+      '<div class="empty">Live scores not available yet — check back when the tournament begins.</div>';
     return;
   }
-  banner.style.display = '';
-  completeBox.style.display = 'none';
-  const slot = currentSlot();
-  const next = SNAKE[picks.length + 1];
-  const player = PLAYERS.find(p => p.name === slot.player);
-  document.getElementById('clock-name').textContent = slot.player + ' is on the clock';
-  document.getElementById('clock-meta').textContent = 'Pick ' + slot.overall + ' of ' + SNAKE.length + ' · Round ' + slot.round;
-  document.getElementById('clock-next').textContent = next ? 'Up next: ' + next.player : 'Last pick!';
-  document.getElementById('pick-label').textContent = 'Pick for ' + slot.player;
-  if (player) banner.style.background = player.color;
-}
 
-function renderBoard() {
-  document.getElementById('board-rows').innerHTML = PLAYERS.map(pl => {
-    const slots = SNAKE.filter(s => s.player === pl.name);
-    const cells = slots.map(slot => {
-      const pick = picks.find(pk => pk.overall === slot.overall);
-      const isClock = !isDone() && slot.overall === picks.length + 1;
-      if (pick) return `<span class="pick-cell">${pick.golfer}</span>`;
-      if (isClock) return `<span class="pick-clock">on the clock...</span>`;
-      return `<span class="pick-empty">—</span>`;
-    });
-    const isClock = !isDone() && slots.some(s => s.overall === picks.length + 1);
-    return `<div class="board-row${isClock ? ' on-clock' : ''}">
-      <span><div class="pick-dot" style="background:${pl.color}"></div></span>
-      <span class="player-name" style="color:${pl.color}">${pl.name}</span>
-      ${cells.join('')}
+  const players = allPicks.map(p => getPlayer(p))
+    .sort((a, b) => (parseInt(a.score) || 999) - (parseInt(b.score) || 999));
+
+  document.getElementById('field-rows').innerHTML = players.map(pl => {
+    const owners = (ownerMap[pl.name] || []).join(', ');
+    return `<div class="lb-row field-grid">
+      <span class="lb-pos">${pl.pos || '—'}</span>
+      <span>
+        <div class="lb-name">${pl.name}</div>
+        <div class="lb-sub">${owners}</div>
+      </span>
+      <span class="ta-c" style="color:#888;font-size:12px">${pl.thru || '—'}</span>
+      <span class="ta-c ${scoreClass(pl.today)}" style="font-weight:600">${fmtScore(pl.today)}</span>
+      <span class="ta-r ${scoreClass(pl.score)}" style="font-weight:600">${fmtScore(pl.score)}</span>
+      <span class="ta-r" style="font-size:12px;color:#888">${fmtMoney(pl.earnings)}</span>
     </div>`;
   }).join('');
 }
 
-function filterGolfers() { renderGolferList(); }
+function renderTeeTimes() {
+  if (dataMode !== 'teetimes') {
+    document.getElementById('tee-rows').innerHTML =
+      '<div class="empty">Tee time data not currently loaded in your sheet.</div>';
+    return;
+  }
+  const teams = TEAMS[currentT];
+  const ownerMap = {};
+  teams.forEach(t => t.picks.filter(Boolean).forEach(p => {
+    ownerMap[p] = ownerMap[p] || [];
+    ownerMap[p].push(t.name);
+  }));
+  const r0 = rawData[0] || {};
+  const nameKey = Object.keys(r0).find(k => /PLAYER|GOLFER/i.test(k)) || Object.keys(r0)[1] || 'PLAYER';
+  const timeKey = Object.keys(r0).find(k => /TEE|TIME/i.test(k));
 
-function renderGolferList() {
-  const tk = taken();
-  const q = document.getElementById('search').value.toLowerCase();
-  const list = GOLFERS.filter(g => g.name.toLowerCase().includes(q));
-  document.getElementById('golfer-list').innerHTML = list.map(g => {
-    const isTaken = tk.has(g.name);
-    const isSel = selectedGolfer === g.name;
-    return `<div class="golfer-row${isTaken?' taken':''}${isSel?' selected-row':''}" onclick="${isTaken?'':'selectGolfer(\''+g.name.replace(/'/g,"\\'")+'\')'} ">
-      <span>${g.name}</span>
-      <span class="golfer-odds">${isTaken ? 'taken' : g.odds}</span>
+  document.getElementById('tee-rows').innerHTML = rawData.map(r => {
+    const name = String(r[nameKey] || '').trim();
+    if (!name) return '';
+    const time = timeKey ? fmtTime(r[timeKey]) : '—';
+    const owners = ownerMap[name] || [];
+    const isPicked = owners.length > 0;
+    return `<div class="lb-row tee-grid${isPicked ? ' picked-row' : ''}">
+      <span class="lb-name">${name}${isPicked ? `<span class="pick-tag">picked</span>` : ''}</span>
+      <span style="color:#888;font-size:13px">${time}</span>
+      <span style="font-size:12px;color:#1a5c2e;font-weight:${isPicked ? 500 : 400}">${owners.join(', ') || '—'}</span>
     </div>`;
   }).join('');
 }
 
-function selectGolfer(name) {
-  if (taken().has(name) || isDone()) return;
-  selectedGolfer = name;
-  const bar = document.getElementById('selected-bar');
-  bar.textContent = name + ' selected';
-  bar.className = 'selected-bar has-pick';
-  const btn = document.getElementById('draft-btn');
-  const slot = currentSlot();
-  btn.textContent = 'Draft ' + name + ' for ' + slot.player;
-  btn.className = 'draft-btn ready';
-  renderGolferList();
-}
-
-function renderRosters() {
-  document.getElementById('roster-rows').innerHTML = PLAYERS.map(pl => {
-    const myPicks = picks.filter(p => p.player === pl.name).map(p => p.golfer);
-    return `<div class="roster-row">
-      <div class="roster-name" style="color:${pl.color}">${pl.name}</div>
-      <div class="roster-picks">${myPicks.length ? myPicks.join(', ') : 'No picks yet'}</div>
-      <div class="roster-count">${myPicks.length}/3</div>
-    </div>`;
-  }).join('');
-}
-
-pollTimer = setInterval(loadPicks, 10000);
-loadPicks();
+/* ---- Boot ---- */
+setInterval(fetchData, 60000);
+fetchData();
 </script>
 </body>
 </html>
