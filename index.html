@@ -195,19 +195,19 @@
 </div>
 
 <script>
-const API = 'https://script.google.com/macros/s/AKfycbx6K5iGgN9tcgayAvgqpfKqubtK3MLBqpPLtrjwCjVI31xYHdAbNXvAUNgsJuyV39vf/exec';
+const API = 'https://script.google.com/macros/s/AKfycbyHjBWpr1e_0O0AWo0enl4EWL81ebVHz-RkdjIyHLUHudP45IaEl65nZkBfTKvs6TOG/exec';
 
 const TEAMS = {
   masters2026:[
-    {name:'Steve',   color:'#7a1a7a', picks:['Scottie Scheffler','','','']},
-    {name:'Austin',  color:'#1a5c4a', picks:['Rory McIlroy','','','']},
-    {name:'Noah',    color:'#1a4a7a', picks:['','','','']},
-    {name:'Tom',     color:'#1a3a5c', picks:['','','','']},
-    {name:'Brian',   color:'#5a3a7a', picks:['','','','']},
-    {name:'Jeremiah',color:'#8b2020', picks:['','','','']},
-    {name:'Josh',    color:'#2d6a2d', picks:['','','','']},
-    {name:'Bobby',   color:'#7a4a1a', picks:['','','','']},
-    {name:'Ben',     color:'#7a6a1a', picks:['','','','']},
+    {name:'Steve',   color:'#7a1a7a', picks:['Scottie Scheffler','Jordan Spieth','Jake Knapp']},
+    {name:'Austin',  color:'#1a5c4a', picks:['Rory McIlroy','Patrick Cantlay','Tyrrell Hatton']},
+    {name:'Noah',    color:'#1a4a7a', picks:['Xander Schauffele','Si Woo Kim','Akshay Bhatia']},
+    {name:'Tom',     color:'#1a3a5c', picks:['Ludvig Åberg','Brooks Koepka','Harris English']},
+    {name:'Brian',   color:'#5a3a7a', picks:['Jon Rahm','Hideki Matsuyama','Chris Gotterup']},
+    {name:'Jeremiah',color:'#8b2020', picks:['Bryson DeChambeau','Cameron Young','Sungjae Im']},
+    {name:'Josh',    color:'#2d6a2d', picks:['Collin Morikawa','Justin Rose','Patrick Reed']},
+    {name:'Bobby',   color:'#7a4a1a', picks:['Justin Thomas','Viktor Hovland','Wyndham Clark']},
+    {name:'Ben',     color:'#7a6a1a', picks:['Tommy Fleetwood','Matt Fitzpatrick','Adam Scott']},
   ],
   usopen:[
     {name:'Tom',   color:'#1a3a5c', picks:['Scottie Scheffler','Harris English','Tony Finau','Tom Kim']},
@@ -350,7 +350,7 @@ async function fetchData() {
   document.getElementById('status-dot').className = 'dot warn';
   document.getElementById('status-txt').textContent = 'Fetching live data...';
   try {
-    const res = await fetch(API + '?t=' + Date.now());
+    const res = await fetch(API + '?action=read&tab=LiveScoringData&t=' + Date.now());
     const json = await res.json();
     rawData = json.data || [];
     dataMode = detectMode(rawData);
