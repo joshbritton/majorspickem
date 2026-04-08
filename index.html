@@ -312,8 +312,41 @@ function detectMode(rows) {
   return 'unknown';
 }
 
+/* ---- Payout table (2025 Masters percentages, $21M purse) ---- */
+const TOTAL_PURSE = 21000000;
+const PAYOUT_PCT = [
+  0.200,0.108,0.068,0.048,0.040,0.036,0.0335,0.031,0.029,0.027,
+  0.025,0.023,0.021,0.019,0.018,0.0168,0.0157,0.0147,0.0137,0.0128,
+  0.0119,0.0110,0.0102,0.0095,0.0088,0.0082,0.0077,0.0072,0.0067,0.0063,
+  0.0059,0.0055,0.0052,0.0049,0.0046,0.0043,0.0041,0.0039,0.0037,0.0035,
+  0.0033,0.0031,0.0029,0.0028,0.0027,0.0026,0.0025,0.0025,0.0025,0.0025
+];
+const MC_PAYOUT = 25000;
+
+function calcEarnings(players) {
+  const posGroups = {};
+  players.forEach(p => {
+    if (p.madeCut === false) { p.earnings = MC_PAYOUT; return; }
+    const pos = parseInt(String(p.pos).replace(/\D/g,''));
+    if (isNaN(pos) || pos > 50) { p.earnings = p.earnings || 0; return; }
+    if (!posGroups[pos]) posGroups[pos] = [];
+    posGroups[pos].push(p);
+  });
+  Object.keys(posGroups).forEach(startPos => {
+    const group = posGroups[startPos];
+    const n = group.length;
+    const start = parseInt(startPos) - 1;
+    let total = 0;
+    for (let i = start; i < start + n && i < PAYOUT_PCT.length; i++) total += PAYOUT_PCT[i] * TOTAL_PURSE;
+    const split = Math.round(total / n);
+    group.forEach(p => { if (!p.earnings) p.earnings = split; });
+  });
+  return players;
+}
+
 function parseScores(rows) {
   const map = {};
+  const players = [];
   rows.forEach(r => {
     const keys = Object.keys(r);
     const nameKey  = keys.find(k => /PLAYER|GOLFER|NAME/i.test(k)) || keys[0];
@@ -324,18 +357,23 @@ function parseScores(rows) {
     const earnKey  = keys.find(k => /EARN|MONEY|PRIZE/i.test(k));
     const name = r[nameKey];
     if (!name) return;
-    const pos = posKey ? r[posKey] : '';
-    const isMC = pos && String(pos).toUpperCase() === 'MC';
-    map[String(name).trim()] = {
+    const pos = posKey ? String(r[posKey]) : '';
+    const isMC = pos.toUpperCase() === 'MC' || pos.toUpperCase() === 'WD';
+    const espnEarnings = earnKey ? parseFloat(r[earnKey]) || 0 : 0;
+    const player = {
       name: String(name).trim(),
       pos: pos || 'TBD',
       score: scoreKey ? r[scoreKey] : 0,
       today: todayKey ? r[todayKey] : 0,
-      thru: thruKey ? r[thruKey] : '',
-      earnings: earnKey ? parseFloat(r[earnKey]) || 0 : 0,
+      thru: thruKey ? String(r[thruKey]) : '',
+      earnings: espnEarnings,
       madeCut: !isMC
     };
+    players.push(player);
+    map[player.name] = player;
   });
+  // Apply payout table fallback for anyone without ESPN earnings
+  calcEarnings(players);
   return map;
 }
 
@@ -410,11 +448,18 @@ function renderMetrics() {
   const sorted = [...teams].sort((a, b) => teamEarnings(b) - teamEarnings(a));
   const leader = sorted[0];
   const allPicks = [...new Set(teams.flatMap(t => t.picks).filter(Boolean))];
-  const active = allPicks.filter(p => getPlayer(p).madeCut).length;
-  const totalEarned = teams.reduce((s, t) => s + teamEarnings(t), 0);
+  const surviving = allPicks.filter(p => getPlayer(p).madeCut).length;
+
+  // Overall tournament leader from full field
+  const allPlayers = Object.values(scoreMap);
+  const scored = allPlayers.filter(p => p.pos !== 'TBD' && p.madeCut !== false);
+  const tourneyLeader = scored.length
+    ? scored.reduce((best, p) => (parseInt(p.score)||999) < (parseInt(best.score)||999) ? p : best, scored[0])
+    : null;
+
   document.getElementById('metrics').innerHTML = `
     <div class="metric">
-      <div class="metric-label">Leading</div>
+      <div class="metric-label">Leading team</div>
       <div class="metric-val">${leader.name}</div>
       <div class="metric-sub">${fmtMoney(teamEarnings(leader))}</div>
     </div>
@@ -424,12 +469,13 @@ function renderMetrics() {
       <div class="metric-sub">${fmtMoney(teamEarnings(sorted[1]))}</div>
     </div>
     <div class="metric">
-      <div class="metric-label">Golfers active</div>
-      <div class="metric-val">${active}<span style="font-size:14px;color:#aaa"> / ${allPicks.length}</span></div>
+      <div class="metric-label">Picks surviving</div>
+      <div class="metric-val">${surviving}<span style="font-size:14px;color:#aaa"> / ${allPicks.length}</span></div>
     </div>
     <div class="metric">
-      <div class="metric-label">Total earned</div>
-      <div class="metric-val">${fmtMoney(totalEarned)}</div>
+      <div class="metric-label">Tournament leader</div>
+      <div class="metric-val" style="font-size:16px">${tourneyLeader ? tourneyLeader.name.split(' ').pop() : '—'}</div>
+      <div class="metric-sub">${tourneyLeader ? fmtScore(tourneyLeader.score) + (tourneyLeader.thru === 'F' ? ' · Final' : tourneyLeader.thru !== '—' ? ' · Thru ' + tourneyLeader.thru : '') : 'Scores pending'}</div>
     </div>
   `;
 }
@@ -493,7 +539,6 @@ function renderStandings() {
 
 function renderField() {
   const teams = TEAMS[currentT];
-  const allPicks = [...new Set(teams.flatMap(t => t.picks).filter(Boolean))];
   const ownerMap = {};
   teams.forEach(t => t.picks.filter(Boolean).forEach(p => {
     ownerMap[p] = ownerMap[p] || [];
@@ -506,16 +551,22 @@ function renderField() {
     return;
   }
 
-  const players = allPicks.map(p => getPlayer(p))
-    .sort((a, b) => (parseInt(a.score) || 999) - (parseInt(b.score) || 999));
+  // Show full field sorted by position
+  const allPlayers = Object.values(scoreMap).sort((a, b) => {
+    const pa = parseInt(String(a.pos).replace(/\D/g,'')) || 999;
+    const pb = parseInt(String(b.pos).replace(/\D/g,'')) || 999;
+    if (!a.madeCut && b.madeCut) return 1;
+    if (a.madeCut && !b.madeCut) return -1;
+    return pa - pb;
+  });
 
-  document.getElementById('field-rows').innerHTML = players.map(pl => {
-    const owners = (ownerMap[pl.name] || []).join(', ');
-    return `<div class="lb-row field-grid">
+  document.getElementById('field-rows').innerHTML = allPlayers.map(pl => {
+    const owners = ownerMap[pl.name] || [];
+    const isPicked = owners.length > 0;
+    return `<div class="lb-row field-grid" style="${isPicked ? 'background:#f0f8f3' : ''}">
       <span class="lb-pos">${pl.pos || '—'}</span>
       <span>
-        <div class="lb-name">${pl.name}</div>
-        <div class="lb-sub">${owners}</div>
+        <div class="lb-name">${pl.name}${isPicked ? `<span class="pick-tag">${owners.join(', ')}</span>` : ''}</div>
       </span>
       <span class="ta-c" style="color:#888;font-size:12px">${pl.thru || '—'}</span>
       <span class="ta-c ${scoreClass(pl.today)}" style="font-weight:600">${fmtScore(pl.today)}</span>
