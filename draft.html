@@ -155,7 +155,7 @@
 </div>
 
 <script>
-const API = 'https://script.google.com/macros/s/AKfycbzaTb9krKVEbF-6PJ4uVRslFGNWu1qw7xXoIp79CJTU4OTLwzlWKiabKKGaTn176KgN/exec';
+const API = 'https://script.google.com/macros/s/AKfycbyHjBWpr1e_0O0AWo0enl4EWL81ebVHz-RkdjIyHLUHudP45IaEl65nZkBfTKvs6TOG/exec';
 const TAB = 'Masters 26';
 
 const PLAYERS = [
@@ -215,6 +215,7 @@ let picks = [];
 let selectedGolfer = null;
 let pollTimer = null;
 let draftingLock = false;
+let isSaving = false;
 
 function taken() { return new Set(picks.map(p => p.golfer)); }
 function isDone() { return picks.length >= SNAKE.length; }
@@ -222,11 +223,14 @@ function currentSlot() { return SNAKE[picks.length]; }
 
 async function callAPI(params) {
   const p = {...params, tab: TAB, t: Date.now()};
-  const parts = Object.entries(p).map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v));
+  const parts = Object.entries(p).map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(String(v)));
   const url = API + '?' + parts.join('&');
   const res = await fetch(url);
   const text = await res.text();
-  try { return JSON.parse(text); } catch(e) { return {error: text}; }
+  try {
+    const clean = text.replace(/^\)\]\}\'/, '');
+    return JSON.parse(clean);
+  } catch(e) { return {error: text}; }
 }
 
 async function loadPicks() {
@@ -253,37 +257,44 @@ async function loadPicks() {
 }
 
 async function confirmPick() {
-  if (!selectedGolfer || isDone()) return;
+  if (!selectedGolfer || isDone() || isSaving) return;
+  isSaving = true;
   const slot = currentSlot();
+  const draftedName = selectedGolfer;
 
   // Show pick instantly
-  const draftedName = selectedGolfer;
   picks.push({overall: slot.overall, player: slot.player, golfer: draftedName});
   selectedGolfer = null;
   document.getElementById('search').value = '';
   document.getElementById('selected-bar').textContent = 'No golfer selected';
   document.getElementById('selected-bar').className = 'selected-bar no-pick';
+  document.getElementById('draft-btn').className = 'draft-btn disabled';
+  document.getElementById('draft-btn').textContent = 'Saving...';
   render();
 
-  // Lock auto-poll for 20 seconds so Google has time to save
+  // Lock auto-poll for 20 seconds
   draftingLock = true;
   setTimeout(() => { draftingLock = false; }, 20000);
 
   try {
-    const result = await callAPI({action: 'addPick', overall: slot.overall, player: slot.player, golfer: draftedName});
+    const result = await callAPI({
+      action: 'addPick',
+      overall: slot.overall,
+      player: slot.player,
+      golfer: draftedName
+    });
     if (result.error) throw new Error(result.error);
     document.getElementById('status-dot').className = 'dot live';
     document.getElementById('status-txt').textContent = 'Saved · ' + picks.length + ' picks made';
-    // Wait 6 seconds then do one silent sync to confirm
-    setTimeout(loadPicksSilent, 6000);
+    setTimeout(loadPicksSilent, 8000);
   } catch(e) {
-    // Rollback
     picks = picks.filter(p => !(p.overall === slot.overall && p.golfer === draftedName));
     draftingLock = false;
     document.getElementById('status-dot').className = 'dot warn';
     document.getElementById('status-txt').textContent = 'Save failed — try again.';
     render();
   }
+  isSaving = false;
 }
 
 async function loadPicksSilent() {
