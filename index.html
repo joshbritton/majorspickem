@@ -80,7 +80,7 @@
   .ticker-wrap{background:#1a5c2e;overflow:hidden;display:flex;align-items:center;margin:-0px -16px 20px;position:relative}
   .ticker-label{background:#143f22;color:#f5c842;font-size:11px;font-weight:700;padding:10px 14px;white-space:nowrap;letter-spacing:0.8px;text-transform:uppercase;z-index:2;flex-shrink:0}
   .ticker-scroll{overflow:hidden;flex:1;position:relative;height:38px}
-  .ticker-track{display:flex;align-items:center;height:100%;white-space:nowrap;animation:ticker-move 40s linear infinite}
+  .ticker-track{display:flex;align-items:center;height:100%;white-space:nowrap;animation:ticker-move 20s linear infinite}
   .ticker-track:hover{animation-play-state:paused}
   @keyframes ticker-move{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
   .ticker-item{display:inline-flex;align-items:center;gap:6px;padding:0 20px;font-size:13px;color:#fff}
@@ -130,7 +130,7 @@
   /* Masters branding */
   .masters-header{background:#1a5c2e;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;margin:-24px -16px 24px;flex-wrap:wrap;gap:10px}
   .masters-logo{display:flex;align-items:center;gap:12px}
-  .masters-logo-circle{width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+  .masters-logo-circle{width:48px;height:48px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;padding:4px}
   .masters-logo-flag{width:36px;height:36px}
   .masters-logo-text{color:#fff}
   .masters-logo-title{font-size:18px;font-weight:700;letter-spacing:0.5px}
@@ -178,7 +178,7 @@
   <div class="masters-header">
     <div class="masters-logo">
       <div class="masters-logo-circle">
-        <img src="data:image/png;base64,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" style="width:44px;height:44px;object-fit:contain" alt="Masters" />
+        <img src="https://joshbritton.github.io/Majorspickem/masters-logo.png" style="width:38px;height:38px;object-fit:contain;display:block" alt="Masters" />
       </div>
       <div class="masters-logo-text">
         <div class="masters-logo-title">2026 Majors Pick 'Em</div>
@@ -274,7 +274,7 @@
 </div>
 
 <script>
-const API = 'https://script.google.com/macros/s/AKfycbxv-b5ixdQSbIxHOpMKjru48Qcdxq42JBMjJMNDxawaaeD_pz412tSRCJfPiBxmMn1Y/exec';
+const API = 'https://script.google.com/macros/s/AKfycbyUTHXRdAP0tknksbCjAbpqF8eWTYzmOiVnFFpipoFIGJV2HgMg_eUdOfwDTHL3FZ1k/exec';
 
 const TEAMS = {
   masters2026:[
@@ -477,7 +477,7 @@ async function fetchData() {
     dataMode = detectMode(rawData);
     if (dataMode === 'scores') {
       scoreMap = parseScores(rawData);
-      updateFeed();
+      if (feedOpen) loadActivityLog();
     }
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const scoreCount = Object.keys(scoreMap).length;
@@ -547,7 +547,7 @@ function renderTicker() {
 
   // Adjust animation speed based on content length
   const itemCount = allPlayers.length;
-  const duration = Math.max(15, itemCount * 2);
+  const duration = Math.max(8, itemCount * 1.2);
   track.style.animationDuration = duration + 's';
 }
 
@@ -726,7 +726,6 @@ function renderTeeTimes() {
 /* ---- Activity Feed ---- */
 let feedOpen = false;
 let feedItems = [];
-let prevScores = {};
 
 function toggleFeed() {
   feedOpen = !feedOpen;
@@ -734,80 +733,42 @@ function toggleFeed() {
   const toggle = document.getElementById('feed-toggle');
   body.classList.toggle('open', feedOpen);
   toggle.classList.toggle('open', feedOpen);
+  if (feedOpen && feedItems.length === 0) loadActivityLog();
 }
 
-function fmtTime() {
-  return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-}
-
-function updateFeed() {
-  if (dataMode !== 'scores') return;
-  const teams = TEAMS[currentT];
-  const ownerMap = {};
-  teams.forEach(t => t.picks.filter(Boolean).forEach(p => {
-    ownerMap[p] = ownerMap[p] || [];
-    ownerMap[p].push(t.name);
-  }));
-
-  const newItems = [];
-  const allPlayers = Object.values(scoreMap);
-
-  allPlayers.forEach(p => {
-    const prev = prevScores[p.name];
-    if (!prev) return;
-
-    // Position change
-    const prevPos = parseInt(String(prev.pos).replace(/\D/g,'')) || 999;
-    const currPos = parseInt(String(p.pos).replace(/\D/g,'')) || 999;
-    const owners = ownerMap[p.name] || [];
-    const ownerStr = owners.length ? ' (' + owners.join(', ') + ')' : '';
-
-    if (currPos < prevPos && currPos <= 10 && p.madeCut) {
-      newItems.push({ time: fmtTime(), msg: p.name + ownerStr + ' moved up to ' + p.pos + ' · ' + fmtScore(p.score) });
+async function loadActivityLog() {
+  try {
+    const res = await fetch(API + '?action=read&tab=ActivityLog&t=' + Date.now());
+    const json = await res.json();
+    if (json.data && json.data.length > 0) {
+      feedItems = json.data.reverse().slice(0, 50);
+      renderFeed();
     }
-    if (!prev.madeCut === false && p.madeCut === false) {
-      newItems.push({ time: fmtTime(), msg: p.name + ownerStr + ' missed the cut' });
-    }
-    // Hole-in-one / eagle detection (score improved by 2+ in one update)
-    const prevScore = parseInt(prev.score) || 0;
-    const currScore = parseInt(p.score) || 0;
-    if (currScore - prevScore <= -2 && p.thru !== 'F' && owners.length) {
-      newItems.push({ time: fmtTime(), msg: p.name + ownerStr + ' on fire — just went ' + fmtScore(currScore - prevScore) + ' on the hole!' });
-    }
-  });
-
-  // Check for team lead changes
-  const teams2 = TEAMS[currentT];
-  const sorted = [...teams2].map(t => ({name:t.name, earn:teamEarnings(t)})).sort((a,b)=>b.earn-a.earn);
-  if (window._prevLeader && window._prevLeader !== sorted[0].name && sorted[0].earn > 0) {
-    newItems.push({ time: fmtTime(), msg: sorted[0].name + ' takes the lead with ' + fmtMoney(sorted[0].earn) });
+  } catch(e) {
+    console.log('Activity log error:', e);
   }
-  window._prevLeader = sorted[0].name;
-
-  if (newItems.length) {
-    feedItems = [...newItems, ...feedItems].slice(0, 50);
-    renderFeed();
-  }
-
-  // Save current scores for next comparison
-  allPlayers.forEach(p => { prevScores[p.name] = {...p}; });
 }
 
 function renderFeed() {
   const container = document.getElementById('feed-items');
   const empty = document.getElementById('feed-empty');
-  if (feedItems.length === 0) {
+  if (!feedItems || feedItems.length === 0) {
     empty.style.display = '';
     container.innerHTML = '';
     return;
   }
   empty.style.display = 'none';
-  container.innerHTML = feedItems.map(item =>
-    `<div class="feed-item">
-      <span class="feed-time">${item.time}</span>
-      <span class="feed-msg">${item.msg}</span>
-    </div>`
-  ).join('');
+  const icons = {lead: '🏆', move: '↑', mc: '✂', hot: '🔥', '': '•'};
+  container.innerHTML = feedItems.map(item => {
+    const time = item['TIME'] || item.TIME || '';
+    const msg = item['EVENT'] || item.EVENT || '';
+    const type = item['TYPE'] || item.TYPE || '';
+    const icon = icons[type] || '•';
+    return `<div class="feed-item">
+      <span class="feed-time">${time}</span>
+      <span class="feed-msg">${icon} ${msg}</span>
+    </div>`;
+  }).join('');
 }
 
 /* ---- Boot ---- */
