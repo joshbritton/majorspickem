@@ -274,7 +274,7 @@
 </div>
 
 <script>
-const API = 'https://script.google.com/macros/s/AKfycbwC423sZbYbof5vo43vG78o7JO9Rsnchi60Z-7aeA7K6G7eWTK_Ck2cBSu5aTAMoQ/exec';
+const API = 'https://script.google.com/macros/s/AKfycbwWjVx6EKKThZ5VoA09f72hc1aI-T8GMySq8Fvun4MedRVz36m0lnURhO-dNL4obTNT/exec';
 
 const TEAMS = {
   masters2026:[
@@ -477,6 +477,7 @@ async function fetchData() {
     dataMode = detectMode(rawData);
     if (dataMode === 'scores') {
       scoreMap = parseScores(rawData);
+      detectAndLogChanges();
       if (feedOpen) loadActivityLog();
     }
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -726,6 +727,7 @@ function renderTeeTimes() {
 /* ---- Activity Feed ---- */
 let feedOpen = false;
 let feedItems = [];
+let prevScoreMap = {};
 
 function toggleFeed() {
   feedOpen = !feedOpen;
@@ -733,7 +735,7 @@ function toggleFeed() {
   const toggle = document.getElementById('feed-toggle');
   body.classList.toggle('open', feedOpen);
   toggle.classList.toggle('open', feedOpen);
-  if (feedOpen && feedItems.length === 0) loadActivityLog();
+  if (feedOpen) loadActivityLog();
 }
 
 async function loadActivityLog() {
@@ -744,9 +746,35 @@ async function loadActivityLog() {
       feedItems = json.data.reverse().slice(0, 50);
       renderFeed();
     }
-  } catch(e) {
-    console.log('Activity log error:', e);
+  } catch(e) {}
+}
+
+function detectAndLogChanges() {
+  if (dataMode !== 'scores' || Object.keys(prevScoreMap).length === 0) {
+    Object.assign(prevScoreMap, scoreMap);
+    return;
   }
+  const now = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  const events = [];
+  Object.values(scoreMap).forEach(p => {
+    const prev = prevScoreMap[p.name];
+    if (!prev) return;
+    const prevPos = parseInt(String(prev.pos).replace(/\D/g,'')) || 999;
+    const currPos = parseInt(String(p.pos).replace(/\D/g,'')) || 999;
+    if (currPos === 1 && prevPos !== 1 && !p.madeCut)
+      events.push({msg: p.name + ' takes the lead (' + fmtScore(p.score) + ')', type: 'lead'});
+    else if (currPos <= 5 && prevPos > 5 && !p.madeCut)
+      events.push({msg: p.name + ' moves into top 5 (' + p.pos + ', ' + fmtScore(p.score) + ')', type: 'move'});
+    else if (currPos <= 10 && prevPos > 10 && !p.madeCut)
+      events.push({msg: p.name + ' moves into top 10 (' + p.pos + ', ' + fmtScore(p.score) + ')', type: 'move'});
+    if (p.madeCut === false && prev.madeCut !== false)
+      events.push({msg: p.name + ' misses the cut', type: 'mc'});
+  });
+  events.forEach(ev => {
+    fetch(API + '?action=logEvent&time=' + encodeURIComponent(now) + '&msg=' + encodeURIComponent(ev.msg) + '&type=' + ev.type);
+  });
+  if (events.length > 0 && feedOpen) setTimeout(loadActivityLog, 2000);
+  Object.assign(prevScoreMap, JSON.parse(JSON.stringify(scoreMap)));
 }
 
 function renderFeed() {
@@ -758,16 +786,10 @@ function renderFeed() {
     return;
   }
   empty.style.display = 'none';
-  const icons = {lead: '🏆', move: '↑', mc: '✂', hot: '🔥', '': '•'};
-  container.innerHTML = feedItems.map(item => {
+  container.innerHTML = feedItems.map(function(item) {
     const time = item['TIME'] || item.TIME || '';
     const msg = item['EVENT'] || item.EVENT || '';
-    const type = item['TYPE'] || item.TYPE || '';
-    const icon = icons[type] || '•';
-    return `<div class="feed-item">
-      <span class="feed-time">${time}</span>
-      <span class="feed-msg">${icon} ${msg}</span>
-    </div>`;
+    return '<div class="feed-item"><span class="feed-time">' + time + '</span><span class="feed-msg">' + msg + '</span></div>';
   }).join('');
 }
 
