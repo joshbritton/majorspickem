@@ -344,47 +344,33 @@ function calcEarnings(players) {
   return players;
 }
 
+function parseVal(v) {
+  if (v === null || v === undefined || v === '' || v === '--') return 0;
+  const s = String(v).trim();
+  if (s.toUpperCase() === 'E') return 0;
+  return parseInt(s) || 0;
+}
+
 function parseScores(rows) {
   const map = {};
   const players = [];
   rows.forEach(r => {
-    const keys = Object.keys(r);
-    // Handle both our clean format and IMPORTHTML format (POS PLAYER SCORE TODAY THRU R1 R2 R3 R4 TOT)
-    const nameKey  = keys.find(k => /^PLAYER$|^GOLFER$|^NAME$/i.test(k))
-                  || keys.find(k => /PLAYER|GOLFER|NAME/i.test(k))
-                  || keys[1]; // IMPORTHTML puts POS first, PLAYER second
-    const posKey   = keys.find(k => /^POS$/i.test(k)) || keys.find(k => /^POS/i.test(k));
-    const scoreKey = keys.find(k => /^SCORE$/i.test(k))
-                  || keys.find(k => /^TOT$|^TOTAL$/i.test(k))
-                  || keys.find(k => /SCORE|TOTAL/i.test(k));
-    const todayKey = keys.find(k => /^TODAY$/i.test(k))
-                  || keys.find(k => /^R1$/i.test(k))
-                  || keys.find(k => /TODAY/i.test(k));
-    const thruKey  = keys.find(k => /^THRU$/i.test(k));
-    const earnKey  = keys.find(k => /EARN|MONEY|PRIZE/i.test(k));
-
-    const name = nameKey ? r[nameKey] : null;
+    // Exact column names from sheet: (empty) | POS | PLAYER | SCORE | TODAY | THRU | R1 | R2 | R3 | R4 | TOT
+    const name = r['PLAYER'] || r['Player'] || r['player'];
     if (!name || String(name).trim() === '') return;
-    const pos = posKey ? String(r[posKey]).trim() : '';
-    const isMC = pos.toUpperCase() === 'MC' || pos.toUpperCase() === 'WD' || pos.toUpperCase() === 'CUT';
-    const espnEarnings = earnKey ? parseFloat(r[earnKey]) || 0 : 0;
-
-    // Score — handle 'E' for even par
-    let scoreVal = scoreKey ? r[scoreKey] : 0;
-    if (String(scoreVal).trim().toUpperCase() === 'E') scoreVal = 0;
-    else scoreVal = parseInt(scoreVal) || 0;
-
-    let todayVal = todayKey ? r[todayKey] : 0;
-    if (String(todayVal).trim().toUpperCase() === 'E') todayVal = 0;
-    else todayVal = parseInt(todayVal) || 0;
-
+    const pos = String(r['POS'] || r['Pos'] || r['pos'] || '').trim();
+    const isMC = ['MC','WD','CUT','DQ'].includes(pos.toUpperCase());
+    const score = parseVal(r['SCORE'] || r['Score'] || r['score']);
+    const today = parseVal(r['TODAY'] || r['Today'] || r['today']);
+    const thru  = String(r['THRU'] || r['Thru'] || r['thru'] || '').trim();
+    const earnings = parseFloat(r['EARNINGS'] || r['Earnings'] || r['earnings'] || 0) || 0;
     const player = {
       name: String(name).trim(),
       pos: pos || 'TBD',
-      score: scoreVal,
-      today: todayVal,
-      thru: thruKey ? String(r[thruKey]) : '',
-      earnings: espnEarnings,
+      score,
+      today,
+      thru,
+      earnings,
       madeCut: !isMC
     };
     players.push(player);
