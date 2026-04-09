@@ -306,8 +306,9 @@ function initials(name) {
 /* ---- Data detection ---- */
 function detectMode(rows) {
   if (!rows || rows.length === 0) return 'none';
-  const keys = Object.keys(rows[0]).map(k => k.toUpperCase());
-  if (keys.some(k => k.includes('SCORE') || k.includes('TOTAL') || k.includes('POS'))) return 'scores';
+  const keys = Object.keys(rows[0]).map(k => k.toUpperCase().trim()).filter(k => k !== '');
+  if (keys.includes('PLAYER') && (keys.includes('POS') || keys.includes('SCORE'))) return 'scores';
+  if (keys.some(k => k.includes('SCORE') || k.includes('POS'))) return 'scores';
   if (keys.some(k => k.includes('TEE') || k.includes('TIME'))) return 'teetimes';
   return 'unknown';
 }
@@ -397,9 +398,10 @@ async function fetchData() {
     dataMode = detectMode(rawData);
     if (dataMode === 'scores') scoreMap = parseScores(rawData);
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const scoreCount = Object.keys(scoreMap).length;
     document.getElementById('status-dot').className = 'dot live';
     document.getElementById('status-txt').textContent =
-      T_NAMES[currentT] + ' · ' + (dataMode === 'scores' ? 'Live scores' : dataMode === 'teetimes' ? 'Tee times loaded' : 'Data loaded') + ' · Updated ' + now;
+      T_NAMES[currentT] + ' · ' + (dataMode === 'scores' ? 'Live scores · ' + scoreCount + ' players' : dataMode === 'teetimes' ? 'Tee times loaded' : 'Data loaded') + ' · Updated ' + now;
     document.getElementById('tagline').textContent = T_NAMES[currentT];
   } catch(e) {
     document.getElementById('status-dot').className = 'dot off';
