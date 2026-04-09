@@ -71,10 +71,27 @@
   .pick-score{font-size:13px;font-weight:600;text-align:right}
   .pick-earn{font-size:11px;color:#888;text-align:right}
 
-  /* Score colors */
   .red{color:#c0392b}
   .green{color:#27ae60}
+  .over{color:#1a1a1a}
   .even{color:#888}
+
+  /* Scrolling ticker */
+  .ticker-wrap{background:#1a5c2e;overflow:hidden;display:flex;align-items:center;margin:-0px -16px 20px;position:relative}
+  .ticker-label{background:#143f22;color:#f5c842;font-size:11px;font-weight:700;padding:10px 14px;white-space:nowrap;letter-spacing:0.8px;text-transform:uppercase;z-index:2;flex-shrink:0}
+  .ticker-scroll{overflow:hidden;flex:1;position:relative;height:38px}
+  .ticker-track{display:flex;align-items:center;height:100%;white-space:nowrap;animation:ticker-move 40s linear infinite}
+  .ticker-track:hover{animation-play-state:paused}
+  @keyframes ticker-move{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  .ticker-item{display:inline-flex;align-items:center;gap:6px;padding:0 20px;font-size:13px;color:#fff}
+  .ticker-pos{color:#f5c842;font-weight:700;font-size:12px}
+  .ticker-name{font-weight:500}
+  .ticker-score{font-weight:700}
+  .ticker-score.red{color:#ff6b6b}
+  .ticker-score.over{color:#fff}
+  .ticker-score.even{color:#aaa}
+  .ticker-sep{color:#f5c842;font-size:8px;margin:0 4px}
+  .ticker-show-more{background:transparent;border:none;color:#f5c842;font-size:11px;cursor:pointer;padding:0 14px;white-space:nowrap;flex-shrink:0;text-decoration:underline}
 
   /* Leaderboard / standings */
   .table-wrap{background:#fff;border-radius:12px;border:1px solid #eee;overflow:hidden}
@@ -110,42 +127,90 @@
   /* Footer */
   .footer{margin-top:32px;text-align:center;font-size:12px;color:#bbb;padding-bottom:24px}
 
+  /* Masters branding */
+  .masters-header{background:#1a5c2e;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;margin:-24px -16px 24px;flex-wrap:wrap;gap:10px}
+  .masters-logo{display:flex;align-items:center;gap:12px}
+  .masters-logo-circle{width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+  .masters-logo-flag{width:36px;height:36px}
+  .masters-logo-text{color:#fff}
+  .masters-logo-title{font-size:18px;font-weight:700;letter-spacing:0.5px}
+  .masters-logo-sub{font-size:12px;opacity:0.8;margin-top:1px}
+  .masters-header-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .masters-select{padding:7px 12px;border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-size:13px;background:rgba(255,255,255,0.15);color:#fff;cursor:pointer;outline:none}
+  .masters-select option{background:#1a5c2e;color:#fff}
+  .masters-btn{padding:7px 14px;border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-size:13px;background:rgba(255,255,255,0.15);color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:5px;text-decoration:none;transition:all 0.15s}
+  .masters-btn:hover{background:rgba(255,255,255,0.25)}
+  .masters-btn-white{background:#fff;color:#1a5c2e;border-color:#fff}
+  .masters-btn-white:hover{background:#f0f8f3;color:#1a5c2e}
+  .year-pills{display:flex;gap:8px;margin-bottom:0}
+  .pill-on{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.25);color:#fff;font-weight:600}
+  .pill-off{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);text-decoration:none;border:1px solid rgba(255,255,255,0.2)}
+
   /* Responsive */
   @media(max-width:600px){
-    .title{font-size:20px}
+    .masters-header{padding:12px 16px}
+    .masters-logo-title{font-size:15px}
     .teams-grid{grid-template-columns:1fr}
     .standings-grid{grid-template-columns:28px 120px 1fr 60px 80px}
     .field-grid{grid-template-columns:30px 1fr 40px 45px 50px 70px}
     .metrics{grid-template-columns:repeat(2,1fr)}
   }
+  .feed-wrap{background:#fff;border-radius:12px;border:1px solid #eee;margin-bottom:20px;overflow:hidden}
+  .feed-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid #eee}
+  .feed-header:hover{background:#fafaf8}
+  .feed-title{font-size:13px;font-weight:600;color:#1a1a1a;display:flex;align-items:center;gap:8px}
+  .feed-live-dot{width:7px;height:7px;border-radius:50%;background:#27ae60;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  .feed-toggle{font-size:12px;color:#888;transition:transform 0.2s}
+  .feed-toggle.open{transform:rotate(180deg)}
+  .feed-body{max-height:0;overflow:hidden;transition:max-height 0.3s ease}
+  .feed-body.open{max-height:300px;overflow-y:auto}
+  .feed-item{padding:10px 16px;border-top:1px solid #f7f7f5;font-size:13px;display:flex;align-items:flex-start;gap:10px}
+  .feed-item:first-child{border-top:none}
+  .feed-time{font-size:11px;color:#aaa;white-space:nowrap;margin-top:1px;min-width:48px}
+  .feed-msg{color:#1a1a1a;flex:1;line-height:1.4}
+  .feed-empty{padding:16px;text-align:center;color:#aaa;font-size:13px}
 </style>
 </head>
 <body>
 <div class="page">
 
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-    <span style="font-size:12px;padding:4px 12px;border-radius:20px;background:#1a5c2e;color:#fff;font-weight:600">2026</span>
-    <a href="2025.html" style="font-size:12px;padding:4px 12px;border-radius:20px;background:#eee;color:#888;text-decoration:none;border:1px solid #ddd">2025</a>
-  </div>
-
-  <div class="header">
-    <div class="header-left">
-      <div class="title">2026 Majors <span>Pick 'Em</span></div>
-      <div class="tagline" id="tagline">Masters 2026</div>
+  <div class="masters-header">
+    <div class="masters-logo">
+      <div class="masters-logo-circle">
+        <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADhAOEDASIAAhEBAxEB/8QAHQABAAMAAwEBAQAAAAAAAAAAAAYHCAMEBQECCf/EAEoQAAEDAwIDBAQKBggEBwAAAAEAAgMEBREGBxIhMQgTQWEiUXGBFBcyN1JXdZOz00JicpGhsRYjJDZzdILRFTVkkjNDg6KjssH/xAAcAQEAAgIDAQAAAAAAAAAAAAAABQYDBAECBwj/xAA8EQACAQIDBAYGCAYDAAAAAAAAAQIDEQQFIQYSMWETQVFxgZEHFJKhsdEVIjRCUlNy8CMyNbLB4WJzs//aAAwDAQACEQMRAD8A2WiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAi4JqykgpJKyaqgjpo2lz5nyAMaB1JceQCpDcjtFWi1SvoNG0kd7qW8nVkri2laf1celJ7sN9TisdSrCmryZvYHLcVj57lCF/gu98C66C6WyvqKunobjSVU1HJ3VVHDM17oH/ReActPkV21m/sb1k1x1Nr64ThjZauWmnkDAQ0Oe+occAk8sk45laQXdO6uRdCo6kLtWd2vJtBERcmYIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCxt2gNw79qDWt5sMV0nhsVDUvpGUkLixkpjPC8yY5vy8O5HIwBgeJ1/d66G2WqsuVSQ2CkgfPIScYaxpcf4BfzxnqJ6yolrKk5qKiR00p9b3Eud/ElaGOm0lFdZeNicHCrVqV5q+7ZLvfWuenvOIRxhnAGNDc8WMcs+tfpF8c5rBxOcGj1k4UYelcTQfYk/5prP9mj/nOtMrM3Yj/wCaaz/Zo/5zrTKsEf5UfOmF/kf6pf3MIiLsbIREQBERAEREAREQBERAEREAREQBERAEREAREQBERAQLtB1VXS7P39tDTT1FRVQtpGxwxl7iJXtjdyHP5LnLOOhti9dalY2pqqaOwUThkSXAESu9kQ9L/u4fetloterh41J70mT2XbQV8uw0qNCKu3e716l1cOrruZlHZhuorI2nWNE6m/TeLe4PHkG94QfblW/t7tPo3RbGS0NuFbcAPSr60CSbP6vLDB+yB55U7Rcww9ODukYcZn+YYyHR1amnKyv32tcz72WvnJ3R+0mfj1S0Es+9lr5yd0ftJn49UtBLhGjl32dd7+LCIulfbtbrFZ6q73erjo6GljMk00h5NH8yScAAcySAOa5N1tJXZ3UVJO3/dWPfPYNutT3W2gkNq2xFoeAcEtAa7+efXhWNtrrmya9sBu1mdNGY5DDU007eGWnkAzwuHTocgjIPtBAxwrU5ycYyTa468O8xQxFOo7RfH393aSdERZDMEREAREQBERAEVT653mNi1tV6WsukLhqOpoidBFqJh4Y8Y6dTxEbNlz7zqnAAAOSQF4XJsNSfVDqL7w/lrWq43DUpbtSpFPsbSMHrNO7Su+5N/BF2oqS+PDUn1Q6i+8P5afHhqT6odRfeH8tY/pLB/nR9pfMesQ7H7MvkXaipL48NSfVDqL7w/lp8eGpPqh1F94fy0+ksH+dH2l8x6xDsfsyeRdqKkvjw1J9UOovvD+Wn0lg/zo+0vmPWIdj9mXyLtRUl8eGpPqh1F94fy1+Jd+brRsNTdNq9SUlFH6U0wJd3bfE4LAP3kDzXMcxwkmlGrFv9S+Zw8TBK7v5P5F4IvJ0hqO0as09S32yVIqKKpaS12MOaQcOa4eBBII6LqrgcqZrpWTZiqu3jqJERF4EEREAREQBERAQrZ673eNGulrRdaqGhs13xcLU+Z4ZGyQ+i6ME8hyA4R/hDxcuPXV1pdy976C2UExFXp7S8Qwn8W4eBUGh7JD+ZvLh9Z7Bj2k+S8LU+kdOamnz4+Pjxj2wdBv3LivNftJvzKF2o7LqewZSiisrW9Xm5HenVG2eqqtP7Y1OrK+p7/VtRLKT3JlJHdRO9bBgefPDlsBdMmuNM0mrKnRt5rYKC7NiM1OJ3ART8IC5jXHkHDI5nI5HODgHoLbpinqwHUdZURRHrFGW94z9h3E38F5FHJ83wz1w9NWkqc57rW9FLelx9f3XOFY6pFKDcbtXV9V2r4dpcqLxNA6wtmsLTLW200z2wyGGQTQlhD27eFzXAlrm4cCMFXcvWpzp1HCa0aPOq0qlGbhNWa6iWQiIqiQiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAi4JqykgpJKyaqgjpo2lz5nyAMaB1JceQCpDcjtFWi1SvoNG0kd7qW8nVkri2laf1celJ7sN9TisdSrCmryZvYHLcVj57lCF/gu98C66C6WyvqKunobjSVU1HJ3VVHDM17oH/ReActPkV21m/sb1k1x1Nr64ThjZauWmnkDAQ0Oe+occAk8sk45laQXdO6uRdCo6kLtWd2vJtBERcmYIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCxt2gNw79qDWt5sMV0nhsVDUvpGUkLixkpjPC8yY5vy8O5HIwBgeJ1/d66G2WqsuVSQ2CkgfPIScYaxpcf4BfzxnqJ6yolrKk5qKiR00p9b3Eud/ElaGOm0lFdZeNicHCrVqV5q+7ZLvfWuenvOIRxhnAGNDc8WMcs+tfpF8c5rBxOcGj1k4UYelcTQfYk/5prP9mj/nOtMrM3Yj/wCaaz/Zo/5zrTKsEf5UfOmF/kf6pf3MIiLsbIREQBERAEREAREQBERAEREAREQBERAEREAREQBERAQLtB1VXS7P39tDTT1FRVQtpGxwxl7iJXtjdyHP5LnLOOhti9dalY2pqqaOwUThkSXAESu9kQ9L/u4fetloterh41J70mT2XbQV8uw0qNCKu3e716l1cOrruZlHZhuorI2nWNE6m/TeLe4PHkG94QfblW/t7tPo3RbGS0NuFbcAPSr60CSbP6vLDB+yB55U7Rcww9ODukYcZn+YYyHR1amnKyv32tcz72WvnJ3R+0mfj1S0Es+9lr5yd0ftJn49UtBLhGjl32dd7+LCIulfbtbrFZ6q73erjo6GljMk00h5NH8yScAAcySAOa5N1tJXZ3UVJO3/dWPfPYNutT3W2gkNq2xFoeAcEtAa7+efXhWNtrrmya9sBu1mdNGY5DDU007eGWnkAzwuHTocgjIPtBAxwrU5ycYyTa468O8xQxFOo7RfH393aSdERZDMEREAREQBERAEVT653mNi1tV6WsukLhqOpoidBFqJh4Y8Y6dTxEbNlz7zqnAAAOSQF4XJsNSfVDqL7w/lrWq43DUpbtSpFPsbSMHrNO7Su+5N/BF2oqS+PDUn1Q6i+8P5afHhqT6odRfeH8tY/pLB/nR9pfMesQ7H7MvkXaipL48NSfVDqL7w/lp8eGpPqh1F94fy0+ksH+dH2l8x6xDsfsyeRdqKkvjw1J9UOovvD+Wn0lg/zo+0vmPWIdj9mXyLtRUl8eGpPqh1F94fy1+Jd+brRsNTdNq9SUlFH6U0wJd3bfE4LAP3kDzXMcxwkmlGrFv9S+Zw8TBK7v5P5F4IvJ0hqO0as09S32yVIqKKpaS12MOaQcOa4eBBII6LqrgcqZrpWTZiqu3jqJERF4EEREAREQBERAQrZ673eNGulrRdaqGhs13xcLU+Z4ZGyQ+i6ME8hyA4R/hDxcuPXV1pdy976C2UExFXp7S8Qwn8W4eBUGh7JD+ZvLh9Z7Bj2k+S8LU+kdOamnz4+Pjxj2wdBv3LivNftJvzKF2o7LqewZSiisrW9Xm5HenVG2eqqtP7Y1OrK+p7/VtRLKT3JlJHdRO9bBgefPDlsBdMmuNM0mrKnRt5rYKC7NiM1OJ3ART8IC5jXHkHDI5nI5HODgHoLbpinqwHUdZURRHrFGW94z9h3E38F5FHJ83wz1w9NWkqc57rW9FLelx9f3XOFY6pFKDcbtXV9V2r4dpcqLxNA6wtmsLTLW200z2wyGGQTQlhD27eFzXAlrm4cCMFXcvWpzp1HCa0aPOq0qlGbhNWa6iWQiIqiQiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiA" style="width:44px;height:44px;object-fit:contain" alt="Masters" />
+      </div>
+      <div class="masters-logo-text">
+        <div class="masters-logo-title">2026 Majors Pick 'Em</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:3px">
+          <span class="pill-on">2026</span>
+          <a href="2025.html" class="pill-off">2025</a>
+        </div>
+      </div>
     </div>
-    <div class="header-right">
-      <select id="t-select" onchange="switchTournament(this.value)">
+    <div class="masters-header-right">
+      <select id="t-select" class="masters-select" onchange="switchTournament(this.value)">
         <option value="masters2026" selected>Masters 2026</option>
         <option disabled>── Coming soon ──</option>
         <option disabled>PGA Championship 2026</option>
         <option disabled>US Open 2026</option>
         <option disabled>The Open 2026</option>
       </select>
-      <a href="draft.html" class="btn" style="text-decoration:none">Draft board</a>
-      <button class="btn btn-primary" onclick="refresh()">
+      <a href="draft.html" class="masters-btn" style="text-decoration:none">Draft board</a>
+      <button class="masters-btn masters-btn-white" onclick="refresh()">
         <span id="spin" style="display:inline-block">↻</span> Refresh
       </button>
     </div>
+  </div>
+
+  <div class="ticker-wrap" id="ticker-wrap">
+    <div class="ticker-label">Tournament Leaderboard</div>
+    <div class="ticker-scroll">
+      <div class="ticker-track" id="ticker-track">
+        <span class="ticker-item" style="color:#aaa;font-style:italic">Loading scores...</span>
+      </div>
+    </div>
+    <button class="ticker-show-more" onclick="setView('field', document.querySelectorAll('.tab')[2])">Show more ▼</button>
   </div>
 
   <div class="status-bar">
@@ -154,6 +219,21 @@
   </div>
 
   <div class="metrics" id="metrics"></div>
+
+  <!-- Activity Feed -->
+  <div class="feed-wrap">
+    <div class="feed-header" onclick="toggleFeed()">
+      <div class="feed-title">
+        <span class="feed-live-dot"></span>
+        Live activity feed
+      </div>
+      <span class="feed-toggle" id="feed-toggle">▼</span>
+    </div>
+    <div class="feed-body" id="feed-body">
+      <div class="feed-empty" id="feed-empty">Activity updates will appear here as scores change</div>
+      <div id="feed-items"></div>
+    </div>
+  </div>
 
   <div class="tabs">
     <button class="tab active" onclick="setView('teams',this)">Teams</button>
@@ -282,7 +362,7 @@ function fmtScore(s) {
 function scoreClass(s) {
   const n = parseInt(s);
   if (isNaN(n)) return 'even';
-  return n < 0 ? 'red' : n > 0 ? 'green' : 'even';
+  return n < 0 ? 'red' : n > 0 ? 'over' : 'even';
 }
 function fmtMoney(n) {
   if (!n || n === 0) return '—';
@@ -396,13 +476,15 @@ async function fetchData() {
     const json = await res.json();
     rawData = json.data || [];
     dataMode = detectMode(rawData);
-    if (dataMode === 'scores') scoreMap = parseScores(rawData);
+    if (dataMode === 'scores') {
+      scoreMap = parseScores(rawData);
+      updateFeed();
+    }
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const scoreCount = Object.keys(scoreMap).length;
     document.getElementById('status-dot').className = 'dot live';
     document.getElementById('status-txt').textContent =
       T_NAMES[currentT] + ' · ' + (dataMode === 'scores' ? 'Live scores · ' + scoreCount + ' players' : dataMode === 'teetimes' ? 'Tee times loaded' : 'Data loaded') + ' · Updated ' + now;
-    document.getElementById('tagline').textContent = T_NAMES[currentT];
   } catch(e) {
     document.getElementById('status-dot').className = 'dot off';
     document.getElementById('status-txt').textContent = 'Could not reach live data — check your connection';
@@ -440,7 +522,47 @@ function teamScore(team) {
 }
 
 /* ---- Render all ---- */
+function renderTicker() {
+  if (dataMode !== 'scores') return;
+  const allPlayers = Object.values(scoreMap)
+    .filter(p => p.madeCut !== false && p.pos !== 'TBD')
+    .sort((a, b) => (parseInt(String(a.pos).replace(/\D/g,'')) || 999) - (parseInt(String(b.pos).replace(/\D/g,'')) || 999))
+    .slice(0, 20);
+
+  if (allPlayers.length === 0) return;
+
+  const teams = TEAMS[currentT];
+  const ownerMap = {};
+  teams.forEach(t => t.picks.filter(Boolean).forEach(p => {
+    ownerMap[p] = ownerMap[p] || [];
+    ownerMap[p].push(t.name);
+  }));
+
+  const items = allPlayers.map(p => {
+    const sc = parseInt(p.score) || 0;
+    const scoreClass = sc < 0 ? 'red' : sc > 0 ? 'over' : 'even';
+    const isPicked = ownerMap[p.name] && ownerMap[p.name].length > 0;
+    const nameStyle = isPicked ? 'color:#f5c842;font-weight:700' : '';
+    return `<span class="ticker-item">
+      <span class="ticker-pos">${p.pos}</span>
+      <span class="ticker-name" style="${nameStyle}">${p.name}</span>
+      <span class="ticker-score ${scoreClass}">${fmtScore(p.score)}</span>
+      <span class="ticker-sep">&#9830;</span>
+    </span>`;
+  }).join('');
+
+  // Duplicate for seamless loop
+  const track = document.getElementById('ticker-track');
+  track.innerHTML = items + items;
+
+  // Adjust animation speed based on content length
+  const itemCount = allPlayers.length;
+  const duration = Math.max(20, itemCount * 3);
+  track.style.animationDuration = duration + 's';
+}
+
 function renderAll() {
+  renderTicker();
   renderMetrics();
   renderTeams();
   renderStandings();
@@ -609,6 +731,93 @@ function renderTeeTimes() {
       <span style="font-size:12px;color:#1a5c2e;font-weight:${isPicked ? 500 : 400}">${owners.join(', ') || '—'}</span>
     </div>`;
   }).join('');
+}
+
+/* ---- Activity Feed ---- */
+let feedOpen = false;
+let feedItems = [];
+let prevScores = {};
+
+function toggleFeed() {
+  feedOpen = !feedOpen;
+  const body = document.getElementById('feed-body');
+  const toggle = document.getElementById('feed-toggle');
+  body.classList.toggle('open', feedOpen);
+  toggle.classList.toggle('open', feedOpen);
+}
+
+function fmtTime() {
+  return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+function updateFeed() {
+  if (dataMode !== 'scores') return;
+  const teams = TEAMS[currentT];
+  const ownerMap = {};
+  teams.forEach(t => t.picks.filter(Boolean).forEach(p => {
+    ownerMap[p] = ownerMap[p] || [];
+    ownerMap[p].push(t.name);
+  }));
+
+  const newItems = [];
+  const allPlayers = Object.values(scoreMap);
+
+  allPlayers.forEach(p => {
+    const prev = prevScores[p.name];
+    if (!prev) return;
+
+    // Position change
+    const prevPos = parseInt(String(prev.pos).replace(/\D/g,'')) || 999;
+    const currPos = parseInt(String(p.pos).replace(/\D/g,'')) || 999;
+    const owners = ownerMap[p.name] || [];
+    const ownerStr = owners.length ? ' (' + owners.join(', ') + ')' : '';
+
+    if (currPos < prevPos && currPos <= 10 && p.madeCut) {
+      newItems.push({ time: fmtTime(), msg: p.name + ownerStr + ' moved up to ' + p.pos + ' · ' + fmtScore(p.score) });
+    }
+    if (!prev.madeCut === false && p.madeCut === false) {
+      newItems.push({ time: fmtTime(), msg: p.name + ownerStr + ' missed the cut' });
+    }
+    // Hole-in-one / eagle detection (score improved by 2+ in one update)
+    const prevScore = parseInt(prev.score) || 0;
+    const currScore = parseInt(p.score) || 0;
+    if (currScore - prevScore <= -2 && p.thru !== 'F' && owners.length) {
+      newItems.push({ time: fmtTime(), msg: p.name + ownerStr + ' on fire — just went ' + fmtScore(currScore - prevScore) + ' on the hole!' });
+    }
+  });
+
+  // Check for team lead changes
+  const teams2 = TEAMS[currentT];
+  const sorted = [...teams2].map(t => ({name:t.name, earn:teamEarnings(t)})).sort((a,b)=>b.earn-a.earn);
+  if (window._prevLeader && window._prevLeader !== sorted[0].name && sorted[0].earn > 0) {
+    newItems.push({ time: fmtTime(), msg: sorted[0].name + ' takes the lead with ' + fmtMoney(sorted[0].earn) });
+  }
+  window._prevLeader = sorted[0].name;
+
+  if (newItems.length) {
+    feedItems = [...newItems, ...feedItems].slice(0, 50);
+    renderFeed();
+  }
+
+  // Save current scores for next comparison
+  allPlayers.forEach(p => { prevScores[p.name] = {...p}; });
+}
+
+function renderFeed() {
+  const container = document.getElementById('feed-items');
+  const empty = document.getElementById('feed-empty');
+  if (feedItems.length === 0) {
+    empty.style.display = '';
+    container.innerHTML = '';
+    return;
+  }
+  empty.style.display = 'none';
+  container.innerHTML = feedItems.map(item =>
+    `<div class="feed-item">
+      <span class="feed-time">${item.time}</span>
+      <span class="feed-msg">${item.msg}</span>
+    </div>`
+  ).join('');
 }
 
 /* ---- Boot ---- */
