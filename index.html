@@ -210,7 +210,6 @@
         <span class="ticker-item" style="color:#aaa;font-style:italic">Loading scores...</span>
       </div>
     </div>
-    <button class="ticker-show-more" onclick="setView('field', document.querySelectorAll('.tab')[2])">Show more ▼</button>
   </div>
 
   <div class="status-bar">
@@ -531,21 +530,12 @@ function renderTicker() {
 
   if (allPlayers.length === 0) return;
 
-  const teams = TEAMS[currentT];
-  const ownerMap = {};
-  teams.forEach(t => t.picks.filter(Boolean).forEach(p => {
-    ownerMap[p] = ownerMap[p] || [];
-    ownerMap[p].push(t.name);
-  }));
-
   const items = allPlayers.map(p => {
     const sc = parseInt(p.score) || 0;
     const scoreClass = sc < 0 ? 'red' : sc > 0 ? 'over' : 'even';
-    const isPicked = ownerMap[p.name] && ownerMap[p.name].length > 0;
-    const nameStyle = isPicked ? 'color:#f5c842;font-weight:700' : '';
     return `<span class="ticker-item">
       <span class="ticker-pos">${p.pos}</span>
-      <span class="ticker-name" style="${nameStyle}">${p.name}</span>
+      <span class="ticker-name">${p.name}</span>
       <span class="ticker-score ${scoreClass}">${fmtScore(p.score)}</span>
       <span class="ticker-sep">&#9830;</span>
     </span>`;
@@ -557,7 +547,7 @@ function renderTicker() {
 
   // Adjust animation speed based on content length
   const itemCount = allPlayers.length;
-  const duration = Math.max(20, itemCount * 3);
+  const duration = Math.max(15, itemCount * 2);
   track.style.animationDuration = duration + 's';
 }
 
