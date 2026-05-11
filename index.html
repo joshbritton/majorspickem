@@ -4,207 +4,200 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2026 Majors Pick 'Em</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f3;color:#1a1a1a;min-height:100vh}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
+  body{background:#eeecea;color:#1a1a1a;min-height:100vh}
   a{color:inherit;text-decoration:none}
 
-  /* Layout */
-  .page{max-width:1200px;margin:0 auto;padding:24px 16px}
+  /* Page */
+  .page{max-width:1200px;margin:0 auto}
 
   /* Header */
-  .header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
-  .header-left{}
-  .title{font-size:26px;font-weight:600;color:#1a1a1a;letter-spacing:-0.3px}
-  .title span{color:#1a5c2e}
-  .tagline{font-size:13px;color:#666;margin-top:3px}
-  .header-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .main-header{background:#1a5c2e;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;transition:background 0.3s}
+  .logo-wrap{display:flex;align-items:center;gap:10px}
+  .logo-badge{width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#1a1a1a;text-align:center;line-height:1.2;letter-spacing:0.5px;background:#f5c842;flex-shrink:0;overflow:hidden}
+  .logo-badge img{width:34px;height:34px;object-fit:contain}
+  .logo-title{font-size:15px;font-weight:600;color:#fff;letter-spacing:-0.2px}
+  .logo-sub{display:flex;align-items:center;gap:5px;margin-top:3px}
+  .badge-on{font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.25);color:#fff;font-weight:700}
+  .badge-off{font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-weight:500}
+  .hcontrols{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .hsel{padding:5px 10px;border:1px solid rgba(255,255,255,0.25);border-radius:6px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.12);color:#fff;outline:none;cursor:pointer;font-family:'Inter',sans-serif}
+  .hsel option{background:#1a5c2e;color:#fff}
+  .hbtn{padding:5px 12px;border:1px solid rgba(255,255,255,0.25);border-radius:6px;font-size:11px;font-weight:500;background:transparent;color:rgba(255,255,255,0.8);cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+  .hbtn-accent{background:rgba(255,255,255,0.9);color:#1a5c2e;border-color:transparent;font-weight:700}
 
-  /* Controls */
-  select{padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;background:#fff;color:#1a1a1a;cursor:pointer;outline:none}
-  select:hover{border-color:#aaa}
-  .btn{padding:8px 16px;border:1px solid #ddd;border-radius:8px;font-size:13px;background:#fff;color:#555;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all 0.15s}
-  .btn:hover{background:#f0f0ee;border-color:#aaa}
-  .btn:active{transform:scale(0.98)}
-  .btn-primary{background:#1a5c2e;color:#fff;border-color:#1a5c2e}
-  .btn-primary:hover{background:#174f27;border-color:#174f27}
-
-  /* Status bar */
-  .status-bar{display:flex;align-items:center;gap:8px;font-size:12px;color:#888;margin-bottom:16px;padding:10px 14px;background:#fff;border-radius:8px;border:1px solid #eee}
-  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-  .dot.live{background:#27ae60;box-shadow:0 0 0 3px #27ae6020}
-  .dot.warn{background:#e67e22}
-  .dot.off{background:#ccc}
-
-  /* Metric cards */
-  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px}
-  .metric{background:#fff;border-radius:10px;padding:14px 16px;border:1px solid #eee}
-  .metric-label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:5px}
-  .metric-val{font-size:22px;font-weight:600;color:#1a1a1a}
-  .metric-sub{font-size:12px;color:#888;margin-top:2px}
-
-  /* View tabs */
-  .tabs{display:flex;gap:4px;margin-bottom:20px;background:#fff;padding:4px;border-radius:10px;border:1px solid #eee;width:fit-content;flex-wrap:wrap}
-  .tab{padding:7px 18px;border-radius:7px;font-size:13px;cursor:pointer;color:#666;border:none;background:transparent;transition:all 0.15s;white-space:nowrap}
-  .tab.active{background:#1a5c2e;color:#fff;font-weight:500}
-  .tab:hover:not(.active){background:#f0f0ee;color:#1a1a1a}
-
-  /* Team cards */
-  .teams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
-  .card{background:#fff;border-radius:12px;border:1px solid #eee;overflow:hidden;transition:box-shadow 0.15s}
-  .card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08)}
-  .card-head{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f0ee}
-  .card-left{display:flex;align-items:center;gap:10px}
-  .avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
-  .owner-name{font-size:15px;font-weight:600;color:#1a1a1a}
-  .owner-earn{font-size:12px;color:#888;margin-top:1px}
-  .card-right{display:flex;align-items:center;gap:8px}
-  .rank-badge{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0}
-  .team-total{font-size:15px;font-weight:600}
-
-  /* Pick rows */
-  .pick-row{display:grid;grid-template-columns:20px 1fr 38px 44px 74px;align-items:center;gap:4px;padding:8px 16px;border-top:1px solid #f7f7f5;font-size:13px}
-  .pick-num{font-size:11px;color:#bbb;font-weight:500}
-  .pick-name{color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .pick-name.mc{text-decoration:line-through;color:#bbb}
-  .pick-pos{font-size:12px;color:#888;text-align:right}
-  .pick-score{font-size:13px;font-weight:600;text-align:right}
-  .pick-earn{font-size:11px;color:#888;text-align:right}
-
-  .red{color:#c0392b}
-  .green{color:#27ae60}
-  .over{color:#1a1a1a}
-  .even{color:#888}
-
-  /* Scrolling ticker */
-  .ticker-wrap{background:#1a5c2e;overflow:hidden;display:flex;align-items:center;margin:-0px -16px 20px;position:relative}
-  .ticker-label{background:#143f22;color:#f5c842;font-size:11px;font-weight:700;padding:10px 14px;white-space:nowrap;letter-spacing:0.8px;text-transform:uppercase;z-index:2;flex-shrink:0}
-  .ticker-scroll{overflow:hidden;flex:1;position:relative;height:38px}
-  .ticker-track{display:flex;align-items:center;height:100%;white-space:nowrap;animation:ticker-move 20s linear infinite}
+  /* Ticker */
+  .ticker-wrap{background:#143f22;overflow:hidden;display:flex;align-items:center;height:27px;border-top:1px solid rgba(245,200,66,0.15);transition:background 0.3s}
+  .ticker-label{font-size:9px;font-weight:800;padding:0 12px;height:100%;display:flex;align-items:center;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;background:rgba(0,0,0,0.2);color:#f5c842}
+  .ticker-scroll{overflow:hidden;flex:1;height:100%}
+  .ticker-track{display:flex;align-items:center;height:100%;white-space:nowrap;animation:ticker-move 9s linear infinite}
   .ticker-track:hover{animation-play-state:paused}
   @keyframes ticker-move{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-  .ticker-item{display:inline-flex;align-items:center;gap:6px;padding:0 20px;font-size:13px;color:#fff}
-  .ticker-pos{color:#f5c842;font-weight:700;font-size:12px}
-  .ticker-name{font-weight:500}
+  .ticker-item{display:inline-flex;align-items:center;gap:4px;padding:0 12px;font-size:11px}
+  .ticker-pos{font-weight:700;font-size:10px;min-width:20px;color:#f5c842}
+  .ticker-name{color:#e2e8f0;font-weight:400}
   .ticker-score{font-weight:700}
-  .ticker-score.red{color:#ff6b6b}
-  .ticker-score.over{color:#fff}
-  .ticker-score.even{color:#aaa}
-  .ticker-sep{color:#f5c842;font-size:8px;margin:0 4px}
-  .ticker-show-more{background:transparent;border:none;color:#f5c842;font-size:11px;cursor:pointer;padding:0 14px;white-space:nowrap;flex-shrink:0;text-decoration:underline}
+  .ticker-score.red{color:#f87171}
+  .ticker-score.over{color:#e5e7eb}
+  .ticker-score.even{color:#6b7280}
+  .ticker-sep{color:#374151;font-size:5px;padding:0 2px}
 
-  /* Leaderboard / standings */
-  .table-wrap{background:#fff;border-radius:12px;border:1px solid #eee;overflow:hidden}
-  .lb-head{display:grid;gap:4px;padding:10px 16px;background:#f9f9f7;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #eee}
-  .lb-row{display:grid;gap:4px;padding:10px 16px;border-top:1px solid #f7f7f5;font-size:13px;align-items:center}
+  /* Body content */
+  .content{padding:12px 20px}
+
+  /* Weather */
+  .wx-strip{border-radius:7px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:12px;transition:background 0.3s;background:#143f22}
+  .wx-now{display:flex;align-items:center;gap:7px;flex-shrink:0}
+  .wx-icon{font-size:18px;line-height:1}
+  .wx-loc{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:1px;color:#f5c842}
+  .wx-temp{font-size:16px;font-weight:700;color:#fff;line-height:1}
+  .wx-cond{font-size:9px;font-weight:400;color:rgba(255,255,255,0.4);margin-top:1px}
+  .wx-div{width:1px;height:28px;background:rgba(255,255,255,0.08);flex-shrink:0}
+  .wx-days{display:flex;gap:0;flex:1;justify-content:space-around}
+  .wx-day{text-align:center;padding:2px 6px;border-radius:5px}
+  .wx-day.now{background:rgba(245,200,66,0.12)}
+  .wd-l{font-size:9px;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:1px}
+  .wd-i{font-size:11px;line-height:1;margin-bottom:1px}
+  .wd-t{font-size:10px;font-weight:600;color:#fff}
+  .wd-r{font-size:9px;font-weight:500;color:#60a5fa}
+
+  /* Status line */
+  .status-line{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .sl-left{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:400;color:#888}
+  .sl-dot{width:6px;height:6px;border-radius:50%;background:#ccc;flex-shrink:0}
+  .sl-dot.live{background:#22c55e}
+  .sl-dot.warn{background:#f59e0b}
+  .sl-right{font-size:10px;font-weight:400;color:#bbb}
+
+  /* Stats */
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+  .stat{background:#fff;border-radius:7px;padding:8px 11px;position:relative;overflow:hidden}
+  .stat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;background:#1a5c2e}
+  .stat.accent::before{background:#c9a84c}
+  .stat-lbl{font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:2px}
+  .stat-val{font-size:16px;font-weight:700;color:#1a1a1a;line-height:1}
+  .stat-sub{font-size:10px;font-weight:400;color:#bbb;margin-top:2px}
+
+  /* C3 Tabs */
+  .tabs{display:flex;gap:0;margin-bottom:10px;background:#ccc9c4;padding:2px;border-radius:5px;width:fit-content}
+  .tab{padding:3px 10px;font-size:10px;font-weight:600;color:#888;cursor:pointer;border:none;background:transparent;border-radius:4px;letter-spacing:0.2px;position:relative;transition:color 0.15s}
+  .tab.active{background:#1a5c2e;color:#f5c842}
+  .tab.active::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:10px;height:1.5px;background:#f5c842;border-radius:2px}
+
+  /* Team cards */
+  .teams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:8px}
+  .card{background:#fff;border-radius:8px;border:1px solid #e4e2de;overflow:hidden}
+  .card-head{padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0eeea}
+  .card-left{display:flex;align-items:center;gap:8px}
+  .avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+  .owner-name{font-size:13px;font-weight:700;color:#1a1a1a;line-height:1}
+  .owner-earn{font-size:10px;font-weight:400;color:#bbb;margin-top:1px}
+  .card-right{display:flex;align-items:center;gap:5px}
+  .rank-badge{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0}
+  .team-total{font-size:13px;font-weight:700}
+
+  /* Pick rows */
+  .pick-row{display:grid;grid-template-columns:12px 1fr 28px 34px 58px;align-items:center;gap:2px;padding:5px 12px;font-size:12px}
+  .pick-row+.pick-row{border-top:1px solid #f8f7f5}
+  .pick-num{font-size:9px;color:#d1d5db;font-weight:400}
+  .pick-name{color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+  .pick-name.mc{text-decoration:line-through;color:#ccc}
+  .pick-pos{font-size:10px;color:#9ca3af;text-align:right;font-weight:400}
+  .pick-score{font-size:12px;font-weight:700;text-align:right}
+  .pick-earn{font-size:10px;color:#bbb;text-align:right;font-weight:400}
+  .card-footer{padding:5px 12px;background:#fafaf9;border-top:1px solid #f0eeea;display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:500;color:#bbb}
+
+  /* Score colors */
+  .red{color:#dc2626}
+  .over{color:#1a1a1a}
+  .even{color:#9ca3af}
+
+  /* Leaderboard */
+  .table-wrap{background:#fff;border-radius:8px;border:1px solid #e4e2de;overflow:hidden}
+  .lb-head{display:grid;gap:4px;padding:9px 14px;background:#f9f9f7;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #eee}
+  .lb-row{display:grid;gap:4px;padding:9px 14px;border-top:1px solid #f5f5f3;font-size:12px;align-items:center}
   .lb-row:hover{background:#fafaf8}
   .lb-name{font-weight:500;color:#1a1a1a}
-  .lb-sub{font-size:11px;color:#aaa;margin-top:1px}
-  .lb-pos{color:#888;font-size:12px}
-
-  /* Field leaderboard columns */
+  .lb-sub{font-size:10px;color:#bbb;margin-top:1px}
+  .lb-pos{color:#888;font-size:11px}
   .field-grid{grid-template-columns:36px 1fr 50px 55px 60px 90px}
+  .standings-grid{grid-template-columns:36px 160px 1fr 70px 100px}
+  .tee-grid{grid-template-columns:1fr 110px 160px}
   .ta-c{text-align:center}
   .ta-r{text-align:right}
-
-  /* Standings columns */
-  .standings-grid{grid-template-columns:36px 160px 1fr 70px 100px}
-
-  /* Tee times */
-  .tee-grid{grid-template-columns:1fr 110px 160px}
-
-  /* Picked highlight */
   .picked-row{background:#f0f8f3}
-  .pick-tag{display:inline-flex;align-items:center;padding:2px 8px;background:#e0f0e8;color:#1a5c2e;border-radius:20px;font-size:10px;font-weight:600;margin-left:6px}
+  .pick-tag{display:inline-flex;align-items:center;padding:2px 7px;background:#e0f0e8;color:#1a5c2e;border-radius:20px;font-size:10px;font-weight:600;margin-left:5px}
+  .empty{padding:28px 14px;text-align:center;color:#aaa;font-size:13px}
 
-  /* Empty state */
-  .empty{padding:32px 16px;text-align:center;color:#aaa;font-size:14px}
+  /* Activity feed */
+  .feed-wrap{background:#fff;border-radius:8px;border:1px solid #e4e2de;margin-bottom:10px;overflow:hidden}
+  .feed-header{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+  .feed-header:hover{background:#fafaf8}
+  .feed-title{font-size:11px;font-weight:600;color:#1a1a1a;display:flex;align-items:center;gap:7px}
+  .feed-live-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  .feed-toggle{font-size:11px;color:#aaa;transition:transform 0.2s}
+  .feed-toggle.open{transform:rotate(180deg)}
+  .feed-body{max-height:0;overflow:hidden;transition:max-height 0.3s ease}
+  .feed-body.open{max-height:280px;overflow-y:auto}
+  .feed-item{padding:9px 14px;border-top:1px solid #f5f5f3;font-size:12px;display:flex;align-items:flex-start;gap:10px}
+  .feed-time{font-size:10px;color:#bbb;white-space:nowrap;margin-top:1px;min-width:44px}
+  .feed-msg{color:#1a1a1a;flex:1;line-height:1.4;font-weight:400}
+  .feed-empty{padding:14px;text-align:center;color:#bbb;font-size:12px}
 
-  /* Auto-refresh indicator */
+  /* Spinner */
   .spinning{animation:spin 1s linear infinite;display:inline-block}
   @keyframes spin{to{transform:rotate(360deg)}}
 
   /* Footer */
-  .footer{margin-top:32px;text-align:center;font-size:12px;color:#bbb;padding-bottom:24px}
+  .footer{margin-top:24px;text-align:center;font-size:11px;color:#bbb;padding-bottom:20px}
 
-  /* Masters branding */
-  .masters-header{background:#1a5c2e;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;margin:-24px -16px 24px;flex-wrap:wrap;gap:10px}
-  .masters-logo{display:flex;align-items:center;gap:12px}
-  .masters-logo-circle{width:48px;height:48px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;padding:4px}
-  .masters-logo-flag{width:36px;height:36px}
-  .masters-logo-text{color:#fff}
-  .masters-logo-title{font-size:18px;font-weight:700;letter-spacing:0.5px}
-  .masters-logo-sub{font-size:12px;opacity:0.8;margin-top:1px}
-  .masters-header-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .masters-select{padding:7px 12px;border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-size:13px;background:rgba(255,255,255,0.15);color:#fff;cursor:pointer;outline:none}
-  .masters-select option{background:#1a5c2e;color:#fff}
-  .masters-btn{padding:7px 14px;border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-size:13px;background:rgba(255,255,255,0.15);color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:5px;text-decoration:none;transition:all 0.15s}
-  .masters-btn:hover{background:rgba(255,255,255,0.25)}
-  .masters-btn-white{background:#fff;color:#1a5c2e;border-color:#fff}
-  .masters-btn-white:hover{background:#f0f8f3;color:#1a5c2e}
-  .year-pills{display:flex;gap:8px;margin-bottom:0}
-  .pill-on{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.25);color:#fff;font-weight:600}
-  .pill-off{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);text-decoration:none;border:1px solid rgba(255,255,255,0.2)}
-
-  /* Responsive */
   @media(max-width:600px){
-    .masters-header{padding:12px 16px}
-    .masters-logo-title{font-size:15px}
+    .content{padding:10px 12px}
     .teams-grid{grid-template-columns:1fr}
-    .standings-grid{grid-template-columns:28px 120px 1fr 60px 80px}
-    .field-grid{grid-template-columns:30px 1fr 40px 45px 50px 70px}
-    .metrics{grid-template-columns:repeat(2,1fr)}
+    .stats-row{grid-template-columns:repeat(2,1fr)}
+    .standings-grid{grid-template-columns:28px 110px 1fr 55px 75px}
+    .field-grid{grid-template-columns:30px 1fr 38px 42px 48px 65px}
+    .wx-days{gap:0}
+    .main-header{padding:10px 12px}
   }
-  .feed-wrap{background:#fff;border-radius:12px;border:1px solid #eee;margin-bottom:20px;overflow:hidden}
-  .feed-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid #eee}
-  .feed-header:hover{background:#fafaf8}
-  .feed-title{font-size:13px;font-weight:600;color:#1a1a1a;display:flex;align-items:center;gap:8px}
-  .feed-live-dot{width:7px;height:7px;border-radius:50%;background:#27ae60;animation:pulse 2s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-  .feed-toggle{font-size:12px;color:#888;transition:transform 0.2s}
-  .feed-toggle.open{transform:rotate(180deg)}
-  .feed-body{max-height:0;overflow:hidden;transition:max-height 0.3s ease}
-  .feed-body.open{max-height:300px;overflow-y:auto}
-  .feed-item{padding:10px 16px;border-top:1px solid #f7f7f5;font-size:13px;display:flex;align-items:flex-start;gap:10px}
-  .feed-item:first-child{border-top:none}
-  .feed-time{font-size:11px;color:#aaa;white-space:nowrap;margin-top:1px;min-width:48px}
-  .feed-msg{color:#1a1a1a;flex:1;line-height:1.4}
-  .feed-empty{padding:16px;text-align:center;color:#aaa;font-size:13px}
 </style>
 </head>
 <body>
 <div class="page">
 
-  <div class="masters-header">
-    <div class="masters-logo">
-      <div>
-        <img src="https://joshbritton.github.io/majorspickem/masters-logo.png" style="width:52px;height:auto;display:block" alt="Masters" />
+  <div class="main-header" id="main-header">
+    <div class="logo-wrap">
+      <div class="logo-badge">
+        <img src="https://joshbritton.github.io/majorspickem/masters-logo.png" alt="Masters" />
       </div>
-      <div class="masters-logo-text">
-        <div class="masters-logo-title">2026 Majors Pick 'Em</div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:3px">
-          <span class="pill-on">2026</span>
-          <a href="2025.html" class="pill-off">2025</a>
+      <div>
+        <div class="logo-title">2026 Majors Pick 'Em</div>
+        <div class="logo-sub">
+          <span class="badge-on">2026</span>
+          <a href="2025.html" class="badge-off">2025</a>
         </div>
       </div>
     </div>
-    <div class="masters-header-right">
-      <select id="t-select" class="masters-select" onchange="switchTournament(this.value)">
+    <div class="hcontrols">
+      <select id="t-select" class="hsel" onchange="switchTournament(this.value)">
         <option value="masters2026" selected>Masters 2026</option>
         <option value="pga2026">PGA Championship 2026</option>
         <option disabled>── Coming soon ──</option>
         <option disabled>US Open 2026</option>
         <option disabled>The Open 2026</option>
       </select>
-      <a href="draft.html" class="masters-btn" style="text-decoration:none">Draft board</a>
-      <button class="masters-btn masters-btn-white" onclick="refresh()">
+      <a href="draft.html" class="hbtn">Draft board</a>
+      <button class="hbtn hbtn-accent" onclick="refresh()">
         <span id="spin" style="display:inline-block">↻</span> Refresh
       </button>
     </div>
   </div>
 
   <div class="ticker-wrap" id="ticker-wrap">
-    <div class="ticker-label">Tournament Leaderboard</div>
+    <div class="ticker-label" id="ticker-label">Live</div>
     <div class="ticker-scroll">
       <div class="ticker-track" id="ticker-track">
         <span class="ticker-item" style="color:#aaa;font-style:italic">Loading scores...</span>
@@ -212,14 +205,16 @@
     </div>
   </div>
 
-  <div class="status-bar">
-    <span class="dot off" id="status-dot"></span>
-    <span id="status-txt">Connecting to live data...</span>
-  </div>
+  <div class="content">
 
-  <div id="weather-bar" style="display:none;margin-bottom:14px;padding:10px 14px;background:#fff;border-radius:8px;border:1px solid #eee"></div>
+    <div class="wx-strip" id="wx-strip" style="display:none"></div>
 
-  <div class="metrics" id="metrics"></div>
+    <div class="status-line">
+      <div class="sl-left"><span class="sl-dot" id="status-dot"></span><span id="status-txt">Connecting to live data...</span></div>
+      <div class="sl-right">Auto-refreshes every 60s</div>
+    </div>
+
+    <div class="stats-row" id="metrics"></div>
 
   <!-- Activity Feed -->
   <div class="feed-wrap">
@@ -239,15 +234,16 @@
   <div class="tabs">
     <button class="tab active" onclick="setView('teams',this)">Teams</button>
     <button class="tab" onclick="setView('standings',this)">Standings</button>
-    <button class="tab" onclick="setView('field',this)">Field leaderboard</button>
+    <button class="tab" onclick="setView('field',this)">Field</button>
     <button class="tab" onclick="setView('teetimes',this)">Tee times</button>
+    <button class="tab" onclick="setView('activity',this)">Activity</button>
   </div>
 
   <div id="view-teams"><div class="teams-grid" id="teams-grid"></div></div>
 
   <div id="view-standings" style="display:none">
     <div class="table-wrap">
-      <div class="lb-head standings-grid lb-head">
+      <div class="lb-head standings-grid">
         <span>#</span><span>Player</span><span>Picks</span><span>Score</span><span style="text-align:right">Earnings</span>
       </div>
       <div id="standings-rows"></div>
@@ -272,8 +268,18 @@
     </div>
   </div>
 
+  <div id="view-activity" style="display:none">
+    <div class="feed-wrap" style="margin-bottom:0">
+      <div class="feed-body open" id="activity-body" style="max-height:400px">
+        <div class="feed-empty" id="activity-empty">No activity yet — updates appear here as scores change</div>
+        <div id="activity-items"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="footer">Updated automatically every 60 seconds &middot; Data from your Google Sheet</div>
-</div>
+  </div><!-- end content -->
+</div><!-- end page -->
 
 <script>
 const API = 'https://script.google.com/macros/s/AKfycbwWjVx6EKKThZ5VoA09f72hc1aI-T8GMySq8Fvun4MedRVz36m0lnURhO-dNL4obTNT/exec';
@@ -495,11 +501,11 @@ async function fetchData() {
     }
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const scoreCount = Object.keys(scoreMap).length;
-    document.getElementById('status-dot').className = 'dot live';
+    document.getElementById('status-dot').className = 'sl-dot live';
     document.getElementById('status-txt').textContent =
       T_NAMES[currentT] + ' · ' + (dataMode === 'scores' ? 'Live scores · ' + scoreCount + ' players' : dataMode === 'teetimes' ? 'Tee times loaded' : 'Data loaded') + ' · Updated ' + now;
   } catch(e) {
-    document.getElementById('status-dot').className = 'dot off';
+    document.getElementById('status-dot').className = 'sl-dot warn';
     document.getElementById('status-txt').textContent = 'Could not reach live data — check your connection';
   }
   spinEl.classList.remove('spinning');
@@ -511,50 +517,68 @@ function refresh() { fetchData(); }
 function switchTournament(t) {
   currentT = t;
   const isPGA = t === 'pga2026';
-  // Update header color scheme
-  const header = document.querySelector('.masters-header');
+  const header = document.getElementById('main-header');
   const ticker = document.getElementById('ticker-wrap');
+  const wxStrip = document.getElementById('wx-strip');
+  const tickerLabel = document.getElementById('ticker-label');
   if (isPGA) {
     header.style.background = '#1a2a4a';
-    ticker.style.background = '#1a2a4a';
-    document.querySelector('.ticker-label').style.background = '#0f1a30';
-    document.querySelector('.ticker-label').style.color = '#c9a84c';
+    ticker.style.background = '#0d1828';
+    ticker.style.borderTopColor = 'rgba(201,168,76,0.15)';
+    tickerLabel.style.background = 'rgba(0,0,0,0.3)';
+    tickerLabel.style.color = '#c9a84c';
+    document.querySelectorAll('.tab.active').forEach(t => t.style.background = '#1a2a4a');
   } else {
     header.style.background = '#1a5c2e';
-    ticker.style.background = '#1a5c2e';
-    document.querySelector('.ticker-label').style.background = '#143f22';
-    document.querySelector('.ticker-label').style.color = '#f5c842';
+    ticker.style.background = '#143f22';
+    ticker.style.borderTopColor = 'rgba(245,200,66,0.15)';
+    tickerLabel.style.background = 'rgba(0,0,0,0.2)';
+    tickerLabel.style.color = '#f5c842';
+    document.querySelectorAll('.tab.active').forEach(t => t.style.background = '#1a5c2e');
   }
-  // Update weather
   renderWeather(t);
   renderAll();
 }
 
 const WEATHER = {
   masters2026: null,
-  pga2026: [
-    {day:'Thu', high:62, rain:45, icon:'🌧'},
-    {day:'Fri', high:65, rain:25, icon:'⛅'},
-    {day:'Sat', high:68, rain:15, icon:'☀️'},
-    {day:'Sun', high:70, rain:10, icon:'☀️'},
-  ]
+  pga2026: {
+    icon: '⛅', location: 'Aronimink GC · Newtown Square PA',
+    temp: '62°F', cond: 'Partly cloudy · 45% rain · WNW 8mph',
+    days: [
+      {label:'Thu R1', icon:'🌧', temp:'62°', rain:'45%'},
+      {label:'Fri R2', icon:'⛅', temp:'65°', rain:'25%'},
+      {label:'Sat R3', icon:'🌤', temp:'68°', rain:''},
+      {label:'Sun R4', icon:'☀️', temp:'70°', rain:''},
+    ]
+  }
 };
 
 function renderWeather(t) {
-  const data = WEATHER[t];
-  const el = document.getElementById('weather-bar');
+  const el = document.getElementById('wx-strip');
   if (!el) return;
+  const data = WEATHER[t];
   if (!data) { el.style.display = 'none'; return; }
-  el.style.display = '';
+  el.style.display = 'flex';
+  const isPGA = t === 'pga2026';
+  el.style.background = isPGA ? '#0d1828' : '#143f22';
   el.innerHTML = `
-    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-      <span style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;margin-right:4px">Aronimink forecast</span>
-      ${data.map(d => `
-        <div style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#f9f9f7;border-radius:20px;font-size:12px">
-          <span>${d.icon}</span>
-          <span style="font-weight:500">${d.day}</span>
-          <span style="color:#888">${d.high}°F</span>
-          ${d.rain > 20 ? `<span style="color:#3498db">${d.rain}% 🌧</span>` : ''}
+    <div class="wx-now">
+      <div class="wx-icon">${data.icon}</div>
+      <div>
+        <div class="wx-loc">${data.location}</div>
+        <div class="wx-temp">${data.temp}</div>
+        <div class="wx-cond">${data.cond}</div>
+      </div>
+    </div>
+    <div class="wx-div"></div>
+    <div class="wx-days">
+      ${data.days.map((d, i) => `
+        <div class="wx-day${i === 0 ? ' now' : ''}">
+          <div class="wd-l">${d.label}</div>
+          <div class="wd-i">${d.icon}</div>
+          <div class="wd-t">${d.temp}</div>
+          ${d.rain ? `<div class="wd-r">${d.rain}</div>` : `<div class="wd-r" style="visibility:hidden">—</div>`}
         </div>
       `).join('')}
     </div>
@@ -563,11 +587,12 @@ function renderWeather(t) {
 
 function setView(v, btn) {
   currentView = v;
-  ['teams', 'standings', 'field', 'teetimes'].forEach(x => {
+  ['teams', 'standings', 'field', 'teetimes', 'activity'].forEach(x => {
     document.getElementById('view-' + x).style.display = x === v ? '' : 'none';
   });
   document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
+  if (v === 'activity') loadActivityLog();
 }
 
 /* ---- Team helpers ---- */
@@ -627,8 +652,6 @@ function renderMetrics() {
   const leader = sorted[0];
   const allPicks = [...new Set(teams.flatMap(t => t.picks).filter(Boolean))];
   const surviving = allPicks.filter(p => getPlayer(p).madeCut).length;
-
-  // Overall tournament leader from full field
   const allPlayers = Object.values(scoreMap);
   const scored = allPlayers.filter(p => p.pos !== 'TBD' && p.madeCut !== false);
   const tourneyLeader = scored.length
@@ -636,24 +659,25 @@ function renderMetrics() {
     : null;
 
   document.getElementById('metrics').innerHTML = `
-    <div class="metric">
-      <div class="metric-label">Leading team</div>
-      <div class="metric-val">${leader.name}</div>
-      <div class="metric-sub">${fmtMoney(teamEarnings(leader))}</div>
+    <div class="stat">
+      <div class="stat-lbl">Leader</div>
+      <div class="stat-val">${leader.name}</div>
+      <div class="stat-sub">${fmtMoney(teamEarnings(leader))}</div>
     </div>
-    <div class="metric">
-      <div class="metric-label">2nd place</div>
-      <div class="metric-val">${sorted[1].name}</div>
-      <div class="metric-sub">${fmtMoney(teamEarnings(sorted[1]))}</div>
+    <div class="stat">
+      <div class="stat-lbl">2nd place</div>
+      <div class="stat-val">${sorted[1].name}</div>
+      <div class="stat-sub">${fmtMoney(teamEarnings(sorted[1]))}</div>
     </div>
-    <div class="metric">
-      <div class="metric-label">Picks surviving</div>
-      <div class="metric-val">${surviving}<span style="font-size:14px;color:#aaa"> / ${allPicks.length}</span></div>
+    <div class="stat">
+      <div class="stat-lbl">Picks alive</div>
+      <div class="stat-val">${surviving}<span style="font-size:11px;font-weight:500;color:#ccc"> /${allPicks.length}</span></div>
+      <div class="stat-sub">Made the cut</div>
     </div>
-    <div class="metric">
-      <div class="metric-label">Tournament leader</div>
-      <div class="metric-val" style="font-size:16px">${tourneyLeader ? tourneyLeader.name.split(' ').pop() : '—'}</div>
-      <div class="metric-sub">${tourneyLeader ? fmtScore(tourneyLeader.score) + (tourneyLeader.thru === 'F' ? ' · Final' : tourneyLeader.thru !== '—' ? ' · Thru ' + tourneyLeader.thru : '') : 'Scores pending'}</div>
+    <div class="stat accent">
+      <div class="stat-lbl">Tourn. leader</div>
+      <div class="stat-val" style="font-size:13px">${tourneyLeader ? tourneyLeader.name.split(' ').pop() : '—'}</div>
+      <div class="stat-sub">${tourneyLeader ? fmtScore(tourneyLeader.score) + (tourneyLeader.thru === 'F' ? ' · Final' : tourneyLeader.thru !== '—' ? ' · Thru ' + tourneyLeader.thru : '') : 'Scores pending'}</div>
     </div>
   `;
 }
@@ -666,7 +690,8 @@ function renderTeams() {
 
   document.getElementById('teams-grid').innerHTML = sorted.map((team, idx) => {
     const rc = RANK_COLORS[idx] || '#888';
-    const rows = team.picks.filter(Boolean).map((p, i) => {
+    const picks = team.picks.filter(Boolean);
+    const rows = picks.map((p, i) => {
       const pl = getPlayer(p);
       const mc = !pl.madeCut;
       return `<div class="pick-row">
@@ -678,10 +703,18 @@ function renderTeams() {
       </div>`;
     }).join('');
 
+    // Card footer — best pick + alive count
+    const scoredPicks = picks.map(p => getPlayer(p)).filter(pl => pl.pos !== 'TBD' && pl.madeCut);
+    const bestPick = scoredPicks.length ? scoredPicks.reduce((b, p) => (parseInt(p.score)||999) < (parseInt(b.score)||999) ? p : b, scoredPicks[0]) : null;
+    const alive = picks.filter(p => getPlayer(p).madeCut).length;
+    const aliveColor = alive === picks.length ? '#22c55e' : alive > 0 ? '#f59e0b' : '#dc2626';
+    const aliveText = alive === picks.length ? 'All alive ✓' : `${alive}/${picks.length} alive`;
+    const footer = picks.length > 0 ? `<div class="card-footer"><span>${bestPick ? 'Best: ' + bestPick.name.split(' ').pop() : '—'}</span><span style="color:${aliveColor}">${aliveText}</span></div>` : '';
+
     return `<div class="card">
-      <div class="card-head" style="background:${team.color}12;border-bottom:1px solid ${team.color}25">
+      <div class="card-head" style="background:${team.color}08">
         <div class="card-left">
-          <div class="avatar" style="background:${team.color}22;color:${team.color}">${initials(team.name)}</div>
+          <div class="avatar" style="background:${team.color}18;color:${team.color}">${initials(team.name)}</div>
           <div>
             <div class="owner-name">${team.name}</div>
             <div class="owner-earn">${team.total ? fmtMoney(team.total) + ' earned' : 'No earnings yet'}</div>
@@ -693,6 +726,7 @@ function renderTeams() {
         </div>
       </div>
       ${rows}
+      ${footer}
     </div>`;
   }).join('');
 }
@@ -805,8 +839,26 @@ async function loadActivityLog() {
     if (json.data && json.data.length > 0) {
       feedItems = json.data.reverse().slice(0, 50);
       renderFeed();
+      renderActivityTab();
     }
   } catch(e) {}
+}
+
+function renderActivityTab() {
+  const container = document.getElementById('activity-items');
+  const empty = document.getElementById('activity-empty');
+  if (!container) return;
+  if (!feedItems || feedItems.length === 0) {
+    empty.style.display = '';
+    container.innerHTML = '';
+    return;
+  }
+  empty.style.display = 'none';
+  container.innerHTML = feedItems.map(function(item) {
+    const time = item['TIME'] || item.TIME || '';
+    const msg = item['EVENT'] || item.EVENT || '';
+    return '<div class="feed-item"><span class="feed-time">' + time + '</span><span class="feed-msg">' + msg + '</span></div>';
+  }).join('');
 }
 
 function detectAndLogChanges() {
@@ -856,7 +908,6 @@ function renderFeed() {
 /* ---- Boot ---- */
 setInterval(fetchData, 60000);
 renderWeather(currentT);
-fetchData();
-</script>
+fetchData();</script>
 </body>
 </html>
