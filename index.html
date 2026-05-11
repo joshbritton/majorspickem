@@ -83,8 +83,8 @@
   /* C3 Tabs */
   .tabs{display:flex;gap:0;margin-bottom:10px;background:#ccc9c4;padding:2px;border-radius:5px;width:fit-content}
   .tab{padding:3px 10px;font-size:10px;font-weight:600;color:#888;cursor:pointer;border:none;background:transparent;border-radius:4px;letter-spacing:0.2px;position:relative;transition:color 0.15s}
-  .tab.active{background:#1a5c2e;color:#f5c842}
-  .tab.active::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:10px;height:1.5px;background:#f5c842;border-radius:2px}
+  .tab.active{background:#1a2a4a;color:#c9a84c}
+  .tab.active::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:10px;height:1.5px;background:#c9a84c;border-radius:2px}
 
   /* Team cards */
   .teams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:8px}
@@ -485,6 +485,39 @@ function getPlayer(name) {
   return scoreMap[name] || { name, pos: 'TBD', score: 0, today: 0, thru: '—', earnings: 0, madeCut: true };
 }
 
+const ESPN_EVENT_IDS = {
+  pga2026: '401811947',
+  masters2026: '401811941'
+};
+
+async function fetchFromESPN(eventId) {
+  const url = 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=' + eventId;
+  const res = await fetch(url);
+  const json = await res.json();
+  const competitors = json?.events?.[0]?.competitions?.[0]?.competitors;
+  if (!competitors || competitors.length === 0) return null;
+  const players = competitors.map(c => {
+    const name = c.athlete?.displayName || '';
+    const statusType = c.status?.type?.name || '';
+    const posRaw = c.status?.position?.displayName || c.status?.displayValue || '';
+    const mc = statusType === 'STATUS_MISSED_CUT' || posRaw.toUpperCase() === 'MC';
+    const wd = statusType === 'STATUS_WITHDRAWN' || posRaw.toUpperCase() === 'WD';
+    let score = 'E', today = '-';
+    if (c.statistics) {
+      for (const s of c.statistics) {
+        if (s.name === 'scoreToPar' || s.abbreviation === 'TOT') score = s.displayValue;
+        if (s.name === 'currentRoundScore' || s.abbreviation === 'TOD') today = s.displayValue;
+      }
+    }
+    let thru = c.status?.thru ?? '-';
+    if (statusType === 'STATUS_SCHEDULED') thru = '-';
+    if (statusType === 'STATUS_PLAY_COMPLETE' || statusType === 'STATUS_PLAY_COMPLETE_ROUND') thru = 'F';
+    const espnEarnings = c.earnings?.value || 0;
+    return { PLAYER: name, POS: mc ? 'MC' : wd ? 'WD' : posRaw, SCORE: score, TODAY: mc ? '-' : today, THRU: mc ? 'MC' : String(thru), EARNINGS: espnEarnings };
+  });
+  return players;
+}
+
 /* ---- Data fetch ---- */
 async function fetchData() {
   const spinEl = document.getElementById('spin');
@@ -492,20 +525,43 @@ async function fetchData() {
   document.getElementById('status-dot').className = 'sl-dot warn';
   document.getElementById('status-txt').textContent = 'Fetching live data...';
   try {
-    const res = await fetch(API + '?action=read&tab=LiveScoringData&t=' + Date.now());
-    const json = await res.json();
-    rawData = json.data || [];
-    dataMode = detectMode(rawData);
-    if (dataMode === 'scores') {
-      scoreMap = parseScores(rawData);
-      detectAndLogChanges();
-      if (feedOpen) loadActivityLog();
-    }
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    let source = 'sheet';
+
+    // Try ESPN directly first
+    const eventId = ESPN_EVENT_IDS[currentT];
+    if (eventId) {
+      try {
+        const espnData = await fetchFromESPN(eventId);
+        if (espnData && espnData.length > 0) {
+          rawData = espnData;
+          dataMode = 'scores';
+          scoreMap = parseScores(rawData);
+          source = 'espn';
+        }
+      } catch(espnErr) {
+        // ESPN failed, fall through to sheet
+      }
+    }
+
+    // Fall back to sheet if ESPN didn't work
+    if (source === 'sheet') {
+      const res = await fetch(API + '?action=read&tab=LiveScoringData&t=' + Date.now());
+      const json = await res.json();
+      rawData = json.data || [];
+      dataMode = detectMode(rawData);
+      if (dataMode === 'scores') scoreMap = parseScores(rawData);
+    }
+
+    if (dataMode === 'scores') {
+      detectAndLogChanges();
+      if (feedOpen || currentView === 'activity') loadActivityLog();
+    }
+
     const scoreCount = Object.keys(scoreMap).length;
     document.getElementById('status-dot').className = 'sl-dot live';
     document.getElementById('status-txt').textContent =
-      T_NAMES[currentT] + ' · ' + (dataMode === 'scores' ? 'Live scores · ' + scoreCount + ' players' : dataMode === 'teetimes' ? 'Tee times loaded' : 'Data loaded') + ' · Updated ' + now;
+      T_NAMES[currentT] + ' · ' + (dataMode === 'scores' ? 'Live · ' + scoreCount + ' players' : dataMode === 'teetimes' ? 'Tee times' : 'Loaded') + ' · Updated ' + now;
   } catch(e) {
     document.getElementById('status-dot').className = 'sl-dot warn';
     document.getElementById('status-txt').textContent = 'Could not reach live data — check your connection';
@@ -532,7 +588,7 @@ function switchTournament(t) {
     tickerLabel.style.color = '#c9a84c';
     badge.style.background = '#c9a84c';
     badge.innerHTML = '<span style="font-size:9px;font-weight:800;color:#1a2a4a;letter-spacing:0.5px;line-height:1.1">PGA</span><span style="font-size:7px;font-weight:700;color:#1a2a4a;letter-spacing:0.3px;line-height:1.1">2026</span>';
-    document.querySelectorAll('.tab.active').forEach(t => t.style.background = '#1a2a4a');
+    document.querySelectorAll('.tab.active').forEach(t => { t.style.background = '#1a2a4a'; t.style.color = '#c9a84c'; });
   } else {
     header.style.background = '#1a5c2e';
     ticker.style.background = '#143f22';
@@ -541,7 +597,7 @@ function switchTournament(t) {
     tickerLabel.style.color = '#f5c842';
     badge.style.background = '#f5c842';
     badge.innerHTML = '<img src="https://joshbritton.github.io/majorspickem/masters-logo.png" style="width:34px;height:34px;object-fit:contain" alt="Masters" />';
-    document.querySelectorAll('.tab.active').forEach(t => t.style.background = '#1a5c2e');
+    document.querySelectorAll('.tab.active').forEach(t => { t.style.background = '#1a5c2e'; t.style.color = '#f5c842'; });
   }
   renderWeather(t);
   renderAll();
