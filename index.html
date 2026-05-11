@@ -191,8 +191,8 @@
     <div class="masters-header-right">
       <select id="t-select" class="masters-select" onchange="switchTournament(this.value)">
         <option value="masters2026" selected>Masters 2026</option>
+        <option value="pga2026">PGA Championship 2026</option>
         <option disabled>── Coming soon ──</option>
-        <option disabled>PGA Championship 2026</option>
         <option disabled>US Open 2026</option>
         <option disabled>The Open 2026</option>
       </select>
@@ -216,6 +216,8 @@
     <span class="dot off" id="status-dot"></span>
     <span id="status-txt">Connecting to live data...</span>
   </div>
+
+  <div id="weather-bar" style="display:none;margin-bottom:14px;padding:10px 14px;background:#fff;border-radius:8px;border:1px solid #eee"></div>
 
   <div class="metrics" id="metrics"></div>
 
@@ -277,7 +279,17 @@
 const API = 'https://script.google.com/macros/s/AKfycbwWjVx6EKKThZ5VoA09f72hc1aI-T8GMySq8Fvun4MedRVz36m0lnURhO-dNL4obTNT/exec';
 
 const TEAMS = {
-  masters2026:[
+  pga2026:[
+    {name:'Steve',   color:'#7a1a7a', picks:['','','']},
+    {name:'Austin',  color:'#1a5c4a', picks:['','','']},
+    {name:'Noah',    color:'#1a4a7a', picks:['','','']},
+    {name:'Tom',     color:'#1a3a5c', picks:['','','']},
+    {name:'Brian',   color:'#5a3a7a', picks:['','','']},
+    {name:'Jeremiah',color:'#8b2020', picks:['','','']},
+    {name:'Josh',    color:'#2d6a2d', picks:['','','']},
+    {name:'Bobby',   color:'#7a4a1a', picks:['','','']},
+    {name:'Ben',     color:'#7a6a1a', picks:['','','']},
+  ],
     {name:'Steve',   color:'#7a1a7a', picks:['Scottie Scheffler','Jordan Spieth','Jake Knapp']},
     {name:'Austin',  color:'#1a5c4a', picks:['Rory McIlroy','Patrick Cantlay','Tyrrell Hatton']},
     {name:'Noah',    color:'#1a4a7a', picks:['Xander Schauffele','Si Woo Kim','Akshay Bhatia']},
@@ -336,6 +348,7 @@ const TEAMS = {
 
 const T_NAMES = {
   masters2026:'Masters 2026',
+  pga2026:'PGA Championship 2026',
   masters:'Masters 2025',
   pga:'PGA Championship 2025',
   usopen:'US Open 2025',
@@ -497,8 +510,55 @@ function refresh() { fetchData(); }
 
 function switchTournament(t) {
   currentT = t;
-  document.getElementById('tagline').textContent = T_NAMES[t];
+  const isPGA = t === 'pga2026';
+  // Update header color scheme
+  const header = document.querySelector('.masters-header');
+  const ticker = document.getElementById('ticker-wrap');
+  if (isPGA) {
+    header.style.background = '#1a2a4a';
+    ticker.style.background = '#1a2a4a';
+    document.querySelector('.ticker-label').style.background = '#0f1a30';
+    document.querySelector('.ticker-label').style.color = '#c9a84c';
+  } else {
+    header.style.background = '#1a5c2e';
+    ticker.style.background = '#1a5c2e';
+    document.querySelector('.ticker-label').style.background = '#143f22';
+    document.querySelector('.ticker-label').style.color = '#f5c842';
+  }
+  // Update weather
+  renderWeather(t);
   renderAll();
+}
+
+const WEATHER = {
+  masters2026: null,
+  pga2026: [
+    {day:'Thu', high:62, rain:45, icon:'🌧'},
+    {day:'Fri', high:65, rain:25, icon:'⛅'},
+    {day:'Sat', high:68, rain:15, icon:'☀️'},
+    {day:'Sun', high:70, rain:10, icon:'☀️'},
+  ]
+};
+
+function renderWeather(t) {
+  const data = WEATHER[t];
+  const el = document.getElementById('weather-bar');
+  if (!el) return;
+  if (!data) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+      <span style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;margin-right:4px">Aronimink forecast</span>
+      ${data.map(d => `
+        <div style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#f9f9f7;border-radius:20px;font-size:12px">
+          <span>${d.icon}</span>
+          <span style="font-weight:500">${d.day}</span>
+          <span style="color:#888">${d.high}°F</span>
+          ${d.rain > 20 ? `<span style="color:#3498db">${d.rain}% 🌧</span>` : ''}
+        </div>
+      `).join('')}
+    </div>
+  `;
 }
 
 function setView(v, btn) {
@@ -795,6 +855,7 @@ function renderFeed() {
 
 /* ---- Boot ---- */
 setInterval(fetchData, 60000);
+renderWeather(currentT);
 fetchData();
 </script>
 </body>
