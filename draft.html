@@ -4,133 +4,166 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2026 Draft Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f3;color:#1a1a1a;min-height:100vh}
-  .page{max-width:1100px;margin:0 auto;padding:20px 16px}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
+  body{background:#eeecea;color:#1a1a1a;min-height:100vh}
 
   /* Header */
-  .header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
-  .title{font-size:24px;font-weight:600;color:#1a1a1a}
-  .title span{color:#1a5c2e}
-  .subtitle{font-size:13px;color:#888;margin-top:3px}
-  .header-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .btn{padding:8px 16px;border:1px solid #ddd;border-radius:8px;font-size:13px;background:#fff;color:#555;cursor:pointer;transition:all 0.15s}
-  .btn:hover{background:#f0f0ee;border-color:#aaa}
-  .btn-green{background:#1a5c2e;color:#fff;border-color:#1a5c2e}
-  .btn-green:hover{background:#174f27}
-  .btn-red{background:#c0392b;color:#fff;border-color:#c0392b}
-  .btn-red:hover{background:#a93226}
+  .main-header{background:#1a2a4a;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  .logo-wrap{display:flex;align-items:center;gap:10px}
+  .logo-badge{width:34px;height:34px;background:#c9a84c;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+  .logo-badge span:first-child{font-size:9px;font-weight:800;color:#1a2a4a;letter-spacing:0.5px;line-height:1.1}
+  .logo-badge span:last-child{font-size:7px;font-weight:700;color:#1a2a4a;letter-spacing:0.3px;line-height:1.1}
+  .logo-title{font-size:15px;font-weight:600;color:#fff;letter-spacing:-0.2px}
+  .logo-sub{font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px}
+  .hcontrols{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .hsel{padding:5px 10px;border:1px solid rgba(255,255,255,0.25);border-radius:6px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.12);color:#fff;outline:none;cursor:pointer}
+  .hsel option{background:#1a2a4a;color:#fff}
+  .hbtn{padding:5px 12px;border:1px solid rgba(255,255,255,0.25);border-radius:6px;font-size:11px;font-weight:500;background:transparent;color:rgba(255,255,255,0.8);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+  .hbtn-accent{background:#c9a84c;color:#1a2a4a;border-color:#c9a84c;font-weight:700}
+  .hbtn-red{background:rgba(220,38,38,0.15);color:#fca5a5;border-color:rgba(220,38,38,0.3)}
+
+  /* Content */
+  .content{max-width:1100px;margin:0 auto;padding:12px 20px}
+
+  /* Weather strip */
+  .wx-strip{background:#0d1828;border-radius:7px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+  .wx-now{display:flex;align-items:center;gap:7px;flex-shrink:0}
+  .wx-icon{font-size:18px;line-height:1}
+  .wx-loc{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:1px;color:#c9a84c}
+  .wx-temp{font-size:16px;font-weight:700;color:#fff;line-height:1}
+  .wx-cond{font-size:9px;color:rgba(255,255,255,0.4);margin-top:1px}
+  .wx-div{width:1px;height:28px;background:rgba(255,255,255,0.08);flex-shrink:0}
+  .wx-days{display:flex;flex:1;justify-content:space-around}
+  .wx-day{text-align:center;padding:2px 6px;border-radius:5px}
+  .wx-day.now{background:rgba(201,168,76,0.12)}
+  .wd-l{font-size:9px;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:1px}
+  .wd-i{font-size:11px;line-height:1;margin-bottom:1px}
+  .wd-t{font-size:10px;font-weight:600;color:#fff}
+  .wd-r{font-size:9px;font-weight:500;color:#60a5fa}
 
   /* Status */
-  .status-bar{display:flex;align-items:center;gap:8px;font-size:12px;color:#888;margin-bottom:16px;padding:9px 14px;background:#fff;border-radius:8px;border:1px solid #eee}
-  .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-  .dot.live{background:#27ae60}
-  .dot.warn{background:#e67e22}
-  .dot.off{background:#ccc}
+  .status-line{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .sl-left{display:flex;align-items:center;gap:5px;font-size:11px;color:#888}
+  .sl-dot{width:6px;height:6px;border-radius:50%;background:#ccc;flex-shrink:0}
+  .sl-dot.live{background:#22c55e}
+  .sl-dot.warn{background:#f59e0b}
 
   /* Clock banner */
-  .clock{background:#1a5c2e;color:#fff;border-radius:10px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-  .clock-name{font-size:20px;font-weight:600}
-  .clock-meta{font-size:13px;opacity:0.8;margin-top:2px}
-  .clock-next{font-size:13px;background:rgba(255,255,255,0.15);padding:5px 14px;border-radius:20px}
-  .clock.done{background:#2c7873}
+  .clock{background:#1a2a4a;border-radius:8px;padding:12px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-left:4px solid #c9a84c}
+  .clock-name{font-size:17px;font-weight:700;color:#fff;line-height:1}
+  .clock-meta{font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px}
+  .clock-next{font-size:11px;font-weight:500;background:rgba(201,168,76,0.15);color:#c9a84c;padding:4px 12px;border-radius:20px;border:1px solid rgba(201,168,76,0.25)}
+  .clock.done{border-left-color:#22c55e}
+
+  /* Complete box */
+  .complete-box{background:#0d1828;border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:16px;text-align:center;margin-bottom:10px}
+  .complete-box h2{font-size:16px;font-weight:700;color:#22c55e;margin-bottom:4px}
+  .complete-box p{font-size:12px;color:rgba(255,255,255,0.5)}
 
   /* Layout */
-  .layout{display:grid;grid-template-columns:1fr 300px;gap:16px}
+  .layout{display:grid;grid-template-columns:1fr 290px;gap:12px}
   @media(max-width:720px){.layout{grid-template-columns:1fr}}
 
-  /* Board */
-  .board{background:#fff;border-radius:12px;border:1px solid #eee;overflow:hidden}
-  .board-head{display:grid;grid-template-columns:22px 110px 1fr 1fr 1fr;gap:6px;padding:10px 14px;background:#f9f9f7;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #eee}
-  .board-row{display:grid;grid-template-columns:22px 110px 1fr 1fr 1fr;gap:6px;padding:10px 14px;border-top:1px solid #f5f5f3;align-items:center;font-size:13px;transition:background 0.1s}
-  .board-row.on-clock{background:#f0f8f3}
+  /* Draft board */
+  .board{background:#fff;border-radius:8px;border:1px solid #e4e2de;overflow:hidden}
+  .board-head{display:grid;grid-template-columns:20px 100px 1fr 1fr 1fr;gap:6px;padding:8px 12px;background:#f9f9f7;font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid #eee}
+  .board-row{display:grid;grid-template-columns:20px 100px 1fr 1fr 1fr;gap:6px;padding:8px 12px;border-top:1px solid #f5f5f3;align-items:center;font-size:12px;transition:background 0.1s}
+  .board-row.on-clock{background:rgba(201,168,76,0.06);border-left:3px solid #c9a84c;padding-left:9px}
   .board-row:hover{background:#fafaf8}
-  .pick-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-  .player-name{font-weight:600}
-  .pick-cell{color:#1a1a1a}
-  .pick-empty{color:#ccc;font-style:italic;font-size:12px}
-  .pick-clock{color:#1a5c2e;font-weight:600;font-size:12px}
+  .pick-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .player-name{font-size:12px;font-weight:600;color:#1a1a1a}
+  .pick-cell{color:#1a1a1a;font-weight:500}
+  .pick-empty{color:#d1d5db;font-size:11px}
+  .pick-clock{color:#c9a84c;font-weight:600;font-size:11px;font-style:italic}
 
-  /* Right column */
-  .right{display:flex;flex-direction:column;gap:14px}
-  .card{background:#fff;border-radius:12px;border:1px solid #eee;overflow:hidden}
-  .card-head{padding:10px 14px;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;background:#f9f9f7;border-bottom:1px solid #eee}
-  .search{width:100%;padding:9px 14px;border:none;border-bottom:1px solid #eee;font-size:13px;background:#fff;color:#1a1a1a;outline:none}
+  /* Right panel */
+  .right{display:flex;flex-direction:column;gap:10px}
+  .panel{background:#fff;border-radius:8px;border:1px solid #e4e2de;overflow:hidden}
+  .panel-head{padding:8px 12px;font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;background:#f9f9f7;border-bottom:1px solid #eee}
+  .search{width:100%;padding:8px 12px;border:none;border-bottom:1px solid #eee;font-size:12px;background:#fff;color:#1a1a1a;outline:none;font-family:'Inter',sans-serif}
   .search:focus{background:#fafaf8}
-  .selected-bar{padding:10px 14px;font-size:13px;border-bottom:1px solid #eee;min-height:40px;display:flex;align-items:center}
-  .selected-bar.has-pick{color:#1a5c2e;font-weight:600}
-  .selected-bar.no-pick{color:#bbb}
-  .golfer-list{max-height:260px;overflow-y:auto}
-  .golfer-row{padding:8px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f5f5f3;transition:background 0.1s}
+  .selected-bar{padding:8px 12px;font-size:12px;border-bottom:1px solid #eee;min-height:36px;display:flex;align-items:center}
+  .selected-bar.has-pick{color:#c9a84c;font-weight:600}
+  .selected-bar.no-pick{color:#d1d5db;font-style:italic}
+  .golfer-list{max-height:240px;overflow-y:auto}
+  .golfer-row{padding:7px 12px;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f5f5f3;transition:background 0.1s}
   .golfer-row:first-child{border-top:none}
-  .golfer-row:hover:not(.taken){background:#f0f8f3}
-  .golfer-row.taken{color:#ccc;cursor:default}
-  .golfer-row.selected-row{background:#e8f5ee}
-  .golfer-odds{font-size:11px;color:#bbb}
-  .draft-btn{width:100%;padding:11px;font-size:13px;font-weight:600;cursor:pointer;border:none;border-top:1px solid #eee;transition:all 0.15s}
-  .draft-btn.ready{background:#1a5c2e;color:#fff}
-  .draft-btn.ready:hover{background:#174f27}
-  .draft-btn.disabled{background:#f5f5f3;color:#bbb;cursor:default}
+  .golfer-row:hover:not(.taken){background:#f0f4ff}
+  .golfer-row.taken{color:#d1d5db;cursor:default;font-weight:400}
+  .golfer-row.selected-row{background:rgba(201,168,76,0.08)}
+  .golfer-odds{font-size:10px;color:#bbb;font-weight:400}
+  .draft-btn{width:100%;padding:10px;font-size:12px;font-weight:700;cursor:pointer;border:none;border-top:1px solid #eee;transition:all 0.15s;letter-spacing:0.2px;font-family:'Inter',sans-serif}
+  .draft-btn.ready{background:#1a2a4a;color:#c9a84c}
+  .draft-btn.ready:hover{background:#0f1a30}
+  .draft-btn.disabled{background:#f5f5f3;color:#d1d5db;cursor:default}
 
   /* Rosters */
-  .roster-row{padding:9px 14px;border-top:1px solid #f5f5f3;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .roster-row{padding:7px 12px;border-top:1px solid #f5f5f3;display:flex;align-items:center;justify-content:space-between;gap:8px}
   .roster-row:first-child{border-top:none}
-  .roster-name{font-size:13px;font-weight:600;min-width:70px}
-  .roster-picks{font-size:11px;color:#888;flex:1}
-  .roster-count{font-size:11px;color:#bbb;white-space:nowrap}
+  .roster-name{font-size:12px;font-weight:700;min-width:65px}
+  .roster-picks{font-size:10px;color:#888;flex:1;line-height:1.4}
+  .roster-count{font-size:10px;color:#bbb;white-space:nowrap;font-weight:500}
 
-  /* Complete */
-  .complete-box{background:#f0f8f3;border:1px solid #a8d5b5;border-radius:10px;padding:20px;text-align:center;margin-bottom:20px}
-  .complete-box h2{font-size:18px;color:#1a5c2e;margin-bottom:6px}
-  .complete-box p{font-size:13px;color:#555}
-
-  /* Sync indicator */
+  /* Spinner */
   .spin{display:inline-block}
   .spin.go{animation:spin 1s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-
-  /* Admin bar */
-  .admin-bar{display:flex;gap:8px;margin-bottom:16px;padding:12px 14px;background:#fff;border-radius:10px;border:1px solid #eee;align-items:center;flex-wrap:wrap}
-  .admin-label{font-size:12px;color:#888;margin-right:4px}
 </style>
 </head>
 <body>
-<div class="page">
 
-  <div style="background:#1a5c2e;padding:10px 16px;margin:-20px -16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-    <div style="display:flex;align-items:center;gap:12px">
-      <a href="index.html" style="color:rgba(255,255,255,0.8);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:5px">← Back to tracker</a>
-      <span style="color:rgba(255,255,255,0.3)">|</span>
-      <span style="color:#fff;font-size:15px;font-weight:600">2026 Draft Board</span>
+<div class="main-header">
+  <div class="logo-wrap">
+    <div class="logo-badge">
+      <span>PGA</span>
+      <span>2026</span>
     </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <select id="tournament-select" onchange="switchTournament(this.value)" style="padding:6px 10px;border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-size:13px;background:rgba(255,255,255,0.15);color:#fff;cursor:pointer;outline:none">
-        <option value="pga26">PGA Championship 2026</option>
-        <option value="masters26">Masters 2026 (Archive)</option>
-      </select>
-      <span class="spin" id="sync-spin" style="display:inline-block;color:rgba(255,255,255,0.7);font-size:16px">↻</span>
-      <button class="btn" onclick="loadPicks()" style="background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.3)">Refresh</button>
-      <button class="btn btn-red" id="reset-btn" onclick="confirmClear()">Reset draft</button>
+    <div>
+      <div class="logo-title">2026 Draft Board</div>
+      <div class="logo-sub">Snake draft · 3 rounds · 9 players · Live sync</div>
+    </div>
+  </div>
+  <div class="hcontrols">
+    <select id="tournament-select" class="hsel" onchange="switchTournament(this.value)">
+      <option value="pga26">PGA Championship 2026</option>
+      <option value="masters26">Masters 2026 (Archive)</option>
+    </select>
+    <span class="spin" id="sync-spin" style="color:rgba(255,255,255,0.5);font-size:15px">↻</span>
+    <button class="hbtn" onclick="loadPicks()">Refresh</button>
+    <button class="hbtn hbtn-red" id="reset-btn" onclick="confirmClear()">Reset</button>
+    <a href="index.html" class="hbtn hbtn-accent">← Tracker</a>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="wx-strip">
+    <div class="wx-now">
+      <div class="wx-icon">⛅</div>
+      <div>
+        <div class="wx-loc">Aronimink GC · Newtown Square PA</div>
+        <div class="wx-temp">62°F</div>
+        <div class="wx-cond">Partly cloudy · 45% rain · WNW 8mph</div>
+      </div>
+    </div>
+    <div class="wx-div"></div>
+    <div class="wx-days">
+      <div class="wx-day now"><div class="wd-l">Thu R1</div><div class="wd-i">🌧</div><div class="wd-t">62°</div><div class="wd-r">45%</div></div>
+      <div class="wx-day"><div class="wd-l">Fri R2</div><div class="wd-i">⛅</div><div class="wd-t">65°</div><div class="wd-r">25%</div></div>
+      <div class="wx-day"><div class="wd-l">Sat R3</div><div class="wd-i">🌤</div><div class="wd-t">68°</div><div class="wd-r" style="visibility:hidden">—</div></div>
+      <div class="wx-day"><div class="wd-l">Sun R4</div><div class="wd-i">☀️</div><div class="wd-t">70°</div><div class="wd-r" style="visibility:hidden">—</div></div>
     </div>
   </div>
 
-  <div class="status-bar">
-    <span class="dot off" id="status-dot"></span>
-    <span id="status-txt">Connecting to live sheet...</span>
-  </div>
-
-  <div style="padding:10px 14px;background:#fff;border-radius:8px;border:1px solid #eee;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-    <span style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px">Aronimink forecast</span>
-    <div style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#f0f4ff;border-radius:20px;font-size:12px"><span>🌧</span><span style="font-weight:500">Thu</span><span style="color:#888">62°F</span><span style="color:#3498db">45%</span></div>
-    <div style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#f9f9f7;border-radius:20px;font-size:12px"><span>⛅</span><span style="font-weight:500">Fri</span><span style="color:#888">65°F</span><span style="color:#3498db">25%</span></div>
-    <div style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#f9f9f7;border-radius:20px;font-size:12px"><span>☀️</span><span style="font-weight:500">Sat</span><span style="color:#888">68°F</span></div>
-    <div style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#f9f9f7;border-radius:20px;font-size:12px"><span>☀️</span><span style="font-weight:500">Sun</span><span style="color:#888">70°F</span></div>
+  <div class="status-line">
+    <div class="sl-left"><span class="sl-dot" id="status-dot"></span><span id="status-txt">Connecting to live sheet...</span></div>
   </div>
 
   <div id="complete-box" class="complete-box" style="display:none">
-    <h2>Draft complete!</h2>
-    <p id="complete-msg">All 27 picks have been made. Good luck!</p>
+    <h2>Draft complete! 🏆</h2>
+    <p id="complete-msg">All 27 picks have been made. Good luck at Aronimink!</p>
   </div>
 
   <div id="clock-banner" class="clock">
@@ -150,16 +183,16 @@
     </div>
 
     <div class="right">
-      <div class="card">
-        <div class="card-head" id="pick-label">Make a pick</div>
+      <div class="panel">
+        <div class="panel-head" id="pick-label">Make a pick</div>
         <input class="search" id="search" type="text" placeholder="Search golfer..." oninput="filterGolfers()" />
         <div class="selected-bar no-pick" id="selected-bar">No golfer selected</div>
         <div class="golfer-list" id="golfer-list"></div>
         <button class="draft-btn disabled" id="draft-btn" onclick="confirmPick()">Select a golfer to draft</button>
       </div>
 
-      <div class="card">
-        <div class="card-head">Rosters</div>
+      <div class="panel">
+        <div class="panel-head">Current rosters</div>
         <div id="roster-rows"></div>
       </div>
     </div>
@@ -179,15 +212,15 @@ let currentTournament = 'pga26';
 let TAB = TOURNAMENTS[currentTournament].tab;
 
 const PLAYERS = [
-  {name:'Steve',   color:'#7a1a7a'},
-  {name:'Austin',  color:'#1a5c4a'},
-  {name:'Noah',    color:'#1a4a7a'},
-  {name:'Tom',     color:'#1a3a5c'},
-  {name:'Brian',   color:'#5a3a7a'},
-  {name:'Jeremiah',color:'#8b2020'},
   {name:'Josh',    color:'#2d6a2d'},
   {name:'Bobby',   color:'#7a4a1a'},
+  {name:'Jeremiah',color:'#8b2020'},
+  {name:'Steve',   color:'#7a1a7a'},
+  {name:'Noah',    color:'#1a4a7a'},
+  {name:'Brian',   color:'#5a3a7a'},
+  {name:'Austin',  color:'#1a5c4a'},
   {name:'Ben',     color:'#7a6a1a'},
+  {name:'Tom',     color:'#1a3a5c'},
 ];
 
 const GOLFERS_BY_TOURNAMENT = {
@@ -307,10 +340,10 @@ async function loadPicks() {
       if (serverPicks.length >= picks.length) picks = serverPicks;
     }
     const now = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-    document.getElementById('status-dot').className = 'dot live';
+    document.getElementById('status-dot').className = 'sl-dot live';
     document.getElementById('status-txt').textContent = 'Live · ' + picks.length + ' picks made · Updated ' + now;
   } catch(e) {
-    document.getElementById('status-dot').className = 'dot off';
+    document.getElementById('status-dot').className = 'sl-dot';
     document.getElementById('status-txt').textContent = 'Connection error — retrying...';
   }
   spin.classList.remove('go');
@@ -345,13 +378,13 @@ async function confirmPick() {
       golfer: draftedName
     });
     if (result.error) throw new Error(result.error);
-    document.getElementById('status-dot').className = 'dot live';
+    document.getElementById('status-dot').className = 'sl-dot live';
     document.getElementById('status-txt').textContent = 'Saved · ' + picks.length + ' picks made';
     setTimeout(loadPicksSilent, 8000);
   } catch(e) {
     picks = picks.filter(p => !(p.overall === slot.overall && p.golfer === draftedName));
     draftingLock = false;
-    document.getElementById('status-dot').className = 'dot warn';
+    document.getElementById('status-dot').className = 'sl-dot warn';
     document.getElementById('status-txt').textContent = 'Save failed — try again.';
     render();
   }
@@ -375,7 +408,7 @@ async function loadPicksSilent() {
       }
     }
     const now = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-    document.getElementById('status-dot').className = 'dot live';
+    document.getElementById('status-dot').className = 'sl-dot live';
     document.getElementById('status-txt').textContent = 'Live · ' + picks.length + ' picks made · Updated ' + now;
   } catch(e) {}
 }
@@ -430,7 +463,7 @@ function renderClock() {
   document.getElementById('clock-meta').textContent = 'Pick ' + slot.overall + ' of ' + SNAKE.length + ' · Round ' + slot.round;
   document.getElementById('clock-next').textContent = next ? 'Up next: ' + next.player : 'Last pick!';
   document.getElementById('pick-label').textContent = 'Pick for ' + slot.player;
-  if (player) banner.style.background = player.color;
+  if (player) { banner.style.borderLeftColor = player.color; }
 }
 
 function renderBoard() {
