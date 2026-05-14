@@ -287,15 +287,15 @@ const API = 'https://script.google.com/macros/s/AKfycbwWjVx6EKKThZ5VoA09f72hc1aI
 
 const TEAMS = {
   pga2026:[
-    {name:'Steve',   color:'#7a1a7a', picks:['','','']},
-    {name:'Austin',  color:'#1a5c4a', picks:['','','']},
-    {name:'Noah',    color:'#1a4a7a', picks:['','','']},
-    {name:'Tom',     color:'#1a3a5c', picks:['','','']},
-    {name:'Brian',   color:'#5a3a7a', picks:['','','']},
-    {name:'Jeremiah',color:'#8b2020', picks:['','','']},
-    {name:'Josh',    color:'#2d6a2d', picks:['','','']},
-    {name:'Bobby',   color:'#7a4a1a', picks:['','','']},
-    {name:'Ben',     color:'#7a6a1a', picks:['','','']},
+    {name:'Josh',    color:'#2d6a2d', picks:['Scottie Scheffler','Russell Henley','Sam Burns']},
+    {name:'Bobby',   color:'#7a4a1a', picks:['Rory McIlroy','Jordan Spieth','Wyndham Clark']},
+    {name:'Jeremiah',color:'#8b2020', picks:['Cameron Young','Justin Rose','Patrick Cantlay']},
+    {name:'Steve',   color:'#7a1a7a', picks:['Xander Schauffele','Jon Rahm','Kristoffer Reitan']},
+    {name:'Noah',    color:'#1a4a7a', picks:['Tommy Fleetwood','Justin Thomas','Patrick Reed']},
+    {name:'Brian',   color:'#5a3a7a', picks:['Matt Fitzpatrick','Nicolai Højgaard','Chris Gotterup']},
+    {name:'Austin',  color:'#1a5c4a', picks:['Bryson DeChambeau','Brooks Koepka','Viktor Hovland']},
+    {name:'Ben',     color:'#7a6a1a', picks:['Ludvig Åberg','Gary Woodland','Jacob Bridgeman']},
+    {name:'Tom',     color:'#1a3a5c', picks:['Collin Morikawa','Hideki Matsuyama','Jason Day']},
   ],
   masters2026:[
     {name:'Steve',   color:'#7a1a7a', picks:['Scottie Scheffler','Jordan Spieth','Jake Knapp']},
@@ -748,8 +748,8 @@ function renderMetrics() {
 function renderTeams() {
   const teams = TEAMS[currentT];
   const sorted = [...teams]
-    .map(t => ({ ...t, total: teamEarnings(t), score: teamScore(t) }))
-    .sort((a, b) => b.total - a.total);
+    .map((t, idx) => ({ ...t, total: teamEarnings(t), score: teamScore(t), draftIdx: idx }))
+    .sort((a, b) => b.total !== a.total ? b.total - a.total : a.draftIdx - b.draftIdx);
 
   document.getElementById('teams-grid').innerHTML = sorted.map((team, idx) => {
     const rc = RANK_COLORS[idx] || '#888';
@@ -797,8 +797,8 @@ function renderTeams() {
 function renderStandings() {
   const teams = TEAMS[currentT];
   const sorted = [...teams]
-    .map(t => ({ ...t, total: teamEarnings(t), score: teamScore(t) }))
-    .sort((a, b) => b.total - a.total);
+    .map((t, idx) => ({ ...t, total: teamEarnings(t), score: teamScore(t), draftIdx: idx }))
+    .sort((a, b) => b.total !== a.total ? b.total - a.total : a.draftIdx - b.draftIdx);
 
   document.getElementById('standings-rows').innerHTML = sorted.map((t, i) => {
     const rc = RANK_COLORS[i] || '#888';
@@ -820,29 +820,25 @@ function renderField() {
     ownerMap[p].push(t.name);
   }));
 
-  if (dataMode !== 'scores') {
+  const allPlayers = Object.values(scoreMap);
+  if (allPlayers.length === 0) {
     document.getElementById('field-rows').innerHTML =
       '<div class="empty">Live scores not available yet — check back when the tournament begins.</div>';
     return;
   }
 
-  // Show full field sorted by position
-  const allPlayers = Object.values(scoreMap).sort((a, b) => {
-    const pa = parseInt(String(a.pos).replace(/\D/g,'')) || 999;
-    const pb = parseInt(String(b.pos).replace(/\D/g,'')) || 999;
+  allPlayers.sort((a, b) => {
     if (!a.madeCut && b.madeCut) return 1;
     if (a.madeCut && !b.madeCut) return -1;
-    return pa - pb;
+    return (parseInt(String(a.pos).replace(/\D/g,'')) || 999) - (parseInt(String(b.pos).replace(/\D/g,'')) || 999);
   });
 
   document.getElementById('field-rows').innerHTML = allPlayers.map(pl => {
     const owners = ownerMap[pl.name] || [];
     const isPicked = owners.length > 0;
-    return `<div class="lb-row field-grid" style="${isPicked ? 'background:#f0f8f3' : ''}">
+    return `<div class="lb-row field-grid" style="${isPicked ? 'background:#f0f4ff' : ''}">
       <span class="lb-pos">${pl.pos || '—'}</span>
-      <span>
-        <div class="lb-name">${pl.name}${isPicked ? `<span class="pick-tag">${owners.join(', ')}</span>` : ''}</div>
-      </span>
+      <span><div class="lb-name">${pl.name}${isPicked ? `<span class="pick-tag">${owners.join(', ')}</span>` : ''}</div></span>
       <span class="ta-c" style="color:#888;font-size:12px">${pl.thru || '—'}</span>
       <span class="ta-c ${scoreClass(pl.today)}" style="font-weight:600">${fmtScore(pl.today)}</span>
       <span class="ta-r ${scoreClass(pl.score)}" style="font-weight:600">${fmtScore(pl.score)}</span>
@@ -851,34 +847,54 @@ function renderField() {
   }).join('');
 }
 
-function renderTeeTimes() {
-  if (dataMode !== 'teetimes') {
-    document.getElementById('tee-rows').innerHTML =
-      '<div class="empty">Tee time data not currently loaded in your sheet.</div>';
-    return;
-  }
-  const teams = TEAMS[currentT];
-  const ownerMap = {};
-  teams.forEach(t => t.picks.filter(Boolean).forEach(p => {
-    ownerMap[p] = ownerMap[p] || [];
-    ownerMap[p].push(t.name);
-  }));
-  const r0 = rawData[0] || {};
-  const nameKey = Object.keys(r0).find(k => /PLAYER|GOLFER/i.test(k)) || Object.keys(r0)[1] || 'PLAYER';
-  const timeKey = Object.keys(r0).find(k => /TEE|TIME/i.test(k));
+async function fetchTeeTimes() {
+  try {
+    const eventId = ESPN_EVENT_IDS[currentT];
+    if (!eventId) return;
+    const url = `https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=${eventId}`;
+    const res = await fetch(url);
+    const json = await res.json();
+    const competitors = json?.events?.[0]?.competitions?.[0]?.competitors;
+    if (!competitors) return;
+    const teams = TEAMS[currentT];
+    const ownerMap = {};
+    teams.forEach(t => t.picks.filter(Boolean).forEach(p => {
+      ownerMap[p] = ownerMap[p] || [];
+      ownerMap[p].push(t.name);
+    }));
+    // Sort by tee time
+    const withTimes = competitors
+      .map(c => ({
+        name: c.athlete?.displayName || '',
+        teeTime: c.status?.teeTime || c.teeTime || '',
+        thru: c.status?.thru ?? '',
+        statusType: c.status?.type?.name || ''
+      }))
+      .filter(c => c.name)
+      .sort((a, b) => (a.teeTime || '').localeCompare(b.teeTime || ''));
 
-  document.getElementById('tee-rows').innerHTML = rawData.map(r => {
-    const name = String(r[nameKey] || '').trim();
-    if (!name) return '';
-    const time = timeKey ? fmtTime(r[timeKey]) : '—';
-    const owners = ownerMap[name] || [];
-    const isPicked = owners.length > 0;
-    return `<div class="lb-row tee-grid${isPicked ? ' picked-row' : ''}">
-      <span class="lb-name">${name}${isPicked ? `<span class="pick-tag">picked</span>` : ''}</span>
-      <span style="color:#888;font-size:13px">${time}</span>
-      <span style="font-size:12px;color:#1a5c2e;font-weight:${isPicked ? 500 : 400}">${owners.join(', ') || '—'}</span>
-    </div>`;
-  }).join('');
+    document.getElementById('tee-rows').innerHTML = withTimes.map(c => {
+      const owners = ownerMap[c.name] || [];
+      const isPicked = owners.length > 0;
+      let timeStr = '—';
+      if (c.teeTime) {
+        try { timeStr = new Date(c.teeTime).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); } catch(e) { timeStr = c.teeTime; }
+      }
+      if (c.statusType === 'STATUS_PLAY_COMPLETE' || c.statusType === 'STATUS_PLAY_COMPLETE_ROUND') timeStr = 'F';
+      return `<div class="lb-row tee-grid${isPicked ? ' picked-row' : ''}">
+        <span class="lb-name">${c.name}${isPicked ? `<span class="pick-tag">picked</span>` : ''}</span>
+        <span style="color:#888;font-size:12px">${timeStr}</span>
+        <span style="font-size:11px;color:#2d6a2d;font-weight:${isPicked ? 600 : 400}">${owners.join(', ') || '—'}</span>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('tee-rows').innerHTML = '<div class="empty">Tee time data unavailable.</div>';
+  }
+}
+
+function renderTeeTimes() {
+  document.getElementById('tee-rows').innerHTML = '<div class="empty" style="color:#bbb">Loading tee times...</div>';
+  fetchTeeTimes();
 }
 
 /* ---- Activity Feed ---- */
