@@ -434,12 +434,18 @@ async function callAPI(params) {
   const p = {...params, tab: TAB, t: Date.now()};
   const parts = Object.entries(p).map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(String(v)));
   const url = API + '?' + parts.join('&');
-  const res = await fetch(url);
-  const text = await res.text();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
   try {
+    const res = await fetch(url, {signal: controller.signal});
+    clearTimeout(timeout);
+    const text = await res.text();
     const clean = text.replace(/^\)\]\}\'/, '');
     return JSON.parse(clean);
-  } catch(e) { return {error: text}; }
+  } catch(e) {
+    clearTimeout(timeout);
+    throw e;
+  }
 }
 
 async function loadPicks() {
@@ -447,6 +453,11 @@ async function loadPicks() {
   spin.classList.add('go');
   try {
     const d = await callAPI({action: 'read'});
+    if (d.error) {
+      document.getElementById('clock-name').textContent = 'API error: ' + d.error;
+      spin.classList.remove('go');
+      return;
+    }
     if (d.data) {
       const serverPicks = d.data
         .filter(r => r.overall && r.player && r.golfer)
@@ -458,6 +469,7 @@ async function loadPicks() {
     document.getElementById('status-dot').className = 'sl-dot live';
     document.getElementById('status-txt').textContent = 'Live · ' + picks.length + ' picks made · Updated ' + now;
   } catch(e) {
+    document.getElementById('clock-name').textContent = 'Load error: ' + e.message;
     document.getElementById('status-dot').className = 'sl-dot';
     document.getElementById('status-txt').textContent = 'Connection error — retrying...';
   }
@@ -758,6 +770,7 @@ function switchTournament(t) {
 pollTimer = setInterval(() => {
   if (!draftingLock) loadPicks();
 }, 10000);
+document.getElementById('clock-name').textContent = 'Connecting... (tab: ' + TAB + ')';
 loadPicks();
 </script>
 </body>
