@@ -253,11 +253,6 @@ const TOURNAMENTS = {
   masters26:{ tab: 'Masters 26',label: 'Masters 2026',          rounds: 3, archived: true }
 };
 
-let currentTournament = 'usopen26';
-let TAB = TOURNAMENTS[currentTournament].tab;
-let PLAYERS = PLAYERS_BY_TOURNAMENT[currentTournament];
-let GOLFERS = GOLFERS_BY_TOURNAMENT[currentTournament];
-
 const PLAYERS_BY_TOURNAMENT = {
   pga26: [
     {name:'Josh',    color:'#2d6a2d'},
@@ -404,6 +399,11 @@ const GOLFERS_BY_TOURNAMENT = {
     {name:'Sungjae Im',odds:'6500'},{name:'Sam Burns',odds:'7000'},
   ]
 };
+
+let currentTournament = 'usopen26';
+let TAB = TOURNAMENTS[currentTournament].tab;
+let PLAYERS = PLAYERS_BY_TOURNAMENT[currentTournament];
+let GOLFERS = GOLFERS_BY_TOURNAMENT[currentTournament];
 
 function buildSnake(players, rounds) {
   const order = [];
