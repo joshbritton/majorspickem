@@ -551,12 +551,17 @@ async function confirmClear() {
 }
 
 function render() {
-  renderClock();
-  renderBoard();
-  renderGolferList();
-  renderRosters();
-  renderGrades();
-  renderQueue();
+  try {
+    renderClock();
+    renderBoard();
+    renderGolferList();
+    renderRosters();
+    renderGrades();
+    renderQueue();
+  } catch(e) {
+    console.error('Render error:', e);
+    document.getElementById('clock-name').textContent = 'Render error: ' + e.message;
+  }
 }
 
 // Grade roster based on average odds of picks
