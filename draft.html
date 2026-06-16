@@ -149,7 +149,7 @@
     </div>
     <div>
       <div class="logo-title">2026 Draft Board</div>
-      <div class="logo-sub">Snake draft · 3 rounds · 9 players · Live sync</div>
+      <div class="logo-sub">Snake draft · 3 rounds · 8 players · Live sync</div>
     </div>
   </div>
   <div class="hcontrols">
@@ -169,19 +169,19 @@
 
   <div class="wx-strip">
     <div class="wx-now">
-      <div class="wx-icon">⛅</div>
+      <div class="wx-icon">🌬️</div>
       <div>
-        <div class="wx-loc">Aronimink GC · Newtown Square PA</div>
-        <div class="wx-temp">62°F</div>
-        <div class="wx-cond">Partly cloudy · 45% rain · WNW 8mph</div>
+        <div class="wx-loc">Shinnecock Hills · Southampton NY</div>
+        <div class="wx-temp">84°F</div>
+        <div class="wx-cond">Windy · gusts 29mph · 48% rain chance Thu</div>
       </div>
     </div>
     <div class="wx-div"></div>
     <div class="wx-days">
-      <div class="wx-day now"><div class="wd-l">Thu R1</div><div class="wd-i">🌧</div><div class="wd-t">62°</div><div class="wd-r">45%</div></div>
-      <div class="wx-day"><div class="wd-l">Fri R2</div><div class="wd-i">⛅</div><div class="wd-t">65°</div><div class="wd-r">25%</div></div>
-      <div class="wx-day"><div class="wd-l">Sat R3</div><div class="wd-i">🌤</div><div class="wd-t">68°</div><div class="wd-r" style="visibility:hidden">—</div></div>
-      <div class="wx-day"><div class="wd-l">Sun R4</div><div class="wd-i">☀️</div><div class="wd-t">70°</div><div class="wd-r" style="visibility:hidden">—</div></div>
+      <div class="wx-day now"><div class="wd-l">Thu R1</div><div class="wd-i">🌧</div><div class="wd-t">84°</div><div class="wd-r">48%</div></div>
+      <div class="wx-day"><div class="wd-l">Fri R2</div><div class="wd-i">🌤</div><div class="wd-t">80°</div><div class="wd-r">10%</div></div>
+      <div class="wx-day"><div class="wd-l">Sat R3</div><div class="wd-i">💨</div><div class="wd-t">78°</div><div class="wd-r" style="visibility:hidden">—</div></div>
+      <div class="wx-day"><div class="wd-l">Sun R4</div><div class="wd-i">☀️</div><div class="wd-t">80°</div><div class="wd-r" style="visibility:hidden">—</div></div>
     </div>
   </div>
 
@@ -191,7 +191,7 @@
 
   <div id="complete-box" class="complete-box" style="display:none">
     <h2>Draft complete! 🏆</h2>
-    <p id="complete-msg">All 27 picks have been made. Good luck at Aronimink!</p>
+    <p id="complete-msg">All 24 picks have been made. Good luck at Shinnecock!</p>
   </div>
 
   <div id="clock-banner" class="clock">
@@ -418,7 +418,7 @@ function buildSnake(players, rounds) {
   return order;
 }
 
-const SNAKE = buildSnake(PLAYERS, 3);
+let SNAKE = buildSnake(PLAYERS, 3);
 let picks = [];
 let selectedGolfer = null;
 let pollTimer = null;
@@ -720,6 +720,7 @@ function switchTournament(t) {
   TAB = TOURNAMENTS[t].tab;
   GOLFERS = GOLFERS_BY_TOURNAMENT[t];
   PLAYERS = PLAYERS_BY_TOURNAMENT[t];
+  SNAKE = buildSnake(PLAYERS, 3);
   picks = [];
   selectedGolfer = null;
   queue = [];
