@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
-  body{background:#eeecea;color:#1a1a1a;min-height:100vh}
+  body{background:#f0eeeb;color:#1a1a1a;min-height:100vh}
   a{color:inherit;text-decoration:none}
 
   /* Page */
@@ -16,143 +16,146 @@
   /* Header */
   .main-header{background:#1a5c2e;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;transition:background 0.3s}
   .logo-wrap{display:flex;align-items:center;gap:10px}
-  .logo-badge{width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#1a1a1a;text-align:center;line-height:1.2;letter-spacing:0.5px;background:#f5c842;flex-shrink:0;overflow:hidden}
+  .logo-badge{width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#1a1a1a;text-align:center;line-height:1.2;letter-spacing:0.5px;background:#f5c842;flex-shrink:0;overflow:hidden;transition:background 0.3s}
   .logo-badge img{width:34px;height:34px;object-fit:contain}
-  .logo-title{font-size:15px;font-weight:600;color:#fff;letter-spacing:-0.2px}
+  .logo-title{font-size:15px;font-weight:600;color:#fff;letter-spacing:-0.3px}
   .logo-sub{display:flex;align-items:center;gap:5px;margin-top:3px}
-  .badge-on{font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.25);color:#fff;font-weight:700}
-  .badge-off{font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-weight:500}
+  .badge-on{font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.22);color:#fff;font-weight:700;letter-spacing:0.2px}
+  .badge-off{font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.45);font-weight:500}
   .hcontrols{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-  .hsel{padding:5px 10px;border:1px solid rgba(255,255,255,0.25);border-radius:6px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.12);color:#fff;outline:none;cursor:pointer;font-family:'Inter',sans-serif}
-  .hsel option{background:#1a5c2e;color:#fff}
-  .hbtn{padding:5px 12px;border:1px solid rgba(255,255,255,0.25);border-radius:6px;font-size:11px;font-weight:500;background:transparent;color:rgba(255,255,255,0.8);cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
-  .hbtn-accent{background:rgba(255,255,255,0.9);color:#1a5c2e;border-color:transparent;font-weight:700}
+  .hsel{padding:5px 10px;border:1px solid rgba(255,255,255,0.22);border-radius:6px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.1);color:#fff;outline:none;cursor:pointer;font-family:'Inter',sans-serif}
+  .hsel option{background:#1a2a4a;color:#fff}
+  .hbtn{padding:5px 12px;border:1px solid rgba(255,255,255,0.22);border-radius:6px;font-size:11px;font-weight:500;background:transparent;color:rgba(255,255,255,0.78);cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:background 0.15s}
+  .hbtn:hover{background:rgba(255,255,255,0.1)}
+  .hbtn-accent{background:rgba(255,255,255,0.92);color:#1a2a4a;border-color:transparent;font-weight:700}
+  .hbtn-accent:hover{background:#fff}
 
   /* Ticker */
-  .ticker-wrap{background:#143f22;overflow:hidden;display:flex;align-items:center;height:27px;border-top:1px solid rgba(245,200,66,0.15);transition:background 0.3s}
-  .ticker-label{font-size:9px;font-weight:800;padding:0 12px;height:100%;display:flex;align-items:center;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;background:rgba(0,0,0,0.2);color:#f5c842}
+  .ticker-wrap{background:#143f22;overflow:hidden;display:flex;align-items:center;height:27px;border-top:1px solid rgba(245,200,66,0.12);transition:background 0.3s}
+  .ticker-label{font-size:9px;font-weight:800;padding:0 12px;height:100%;display:flex;align-items:center;letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;background:rgba(0,0,0,0.18);color:#f5c842;transition:color 0.3s}
   .ticker-scroll{overflow:hidden;flex:1;height:100%}
   .ticker-track{display:flex;align-items:center;height:100%;white-space:nowrap;animation:ticker-move 9s linear infinite}
   .ticker-track:hover{animation-play-state:paused}
   @keyframes ticker-move{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
   .ticker-item{display:inline-flex;align-items:center;gap:4px;padding:0 12px;font-size:11px}
   .ticker-pos{font-weight:700;font-size:10px;min-width:20px;color:#f5c842}
-  .ticker-name{color:#e2e8f0;font-weight:400}
+  .ticker-name{color:#dde3ee;font-weight:400}
   .ticker-score{font-weight:700}
   .ticker-score.red{color:#f87171}
   .ticker-score.over{color:#e5e7eb}
   .ticker-score.even{color:#6b7280}
-  .ticker-sep{color:#374151;font-size:5px;padding:0 2px}
+  .ticker-sep{color:#2d3748;font-size:5px;padding:0 2px}
 
   /* Body content */
   .content{padding:12px 20px}
 
   /* Weather */
   .wx-strip{border-radius:7px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:12px;transition:background 0.3s;background:#143f22}
-  .wx-now{display:flex;align-items:center;gap:7px;flex-shrink:0}
-  .wx-icon{font-size:18px;line-height:1}
-  .wx-loc{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:1px;color:#f5c842}
-  .wx-temp{font-size:16px;font-weight:700;color:#fff;line-height:1}
-  .wx-cond{font-size:9px;font-weight:400;color:rgba(255,255,255,0.4);margin-top:1px}
-  .wx-div{width:1px;height:28px;background:rgba(255,255,255,0.08);flex-shrink:0}
+  .wx-now{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .wx-icon{font-size:20px;line-height:1}
+  .wx-loc{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:2px;color:#f5c842}
+  .wx-temp{font-size:17px;font-weight:700;color:#fff;line-height:1}
+  .wx-cond{font-size:9px;font-weight:400;color:rgba(255,255,255,0.38);margin-top:2px}
+  .wx-div{width:1px;height:28px;background:rgba(255,255,255,0.07);flex-shrink:0;margin:0 4px}
   .wx-days{display:flex;gap:0;flex:1;justify-content:space-around}
   .wx-day{text-align:center;padding:2px 6px;border-radius:5px}
-  .wx-day.now{background:rgba(245,200,66,0.12)}
-  .wd-l{font-size:9px;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:1px}
-  .wd-i{font-size:11px;line-height:1;margin-bottom:1px}
+  .wx-day.now{background:rgba(245,200,66,0.1)}
+  .wd-l{font-size:9px;font-weight:600;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px}
+  .wd-i{font-size:12px;line-height:1;margin-bottom:2px}
   .wd-t{font-size:10px;font-weight:600;color:#fff}
   .wd-r{font-size:9px;font-weight:500;color:#60a5fa}
 
   /* Status line */
   .status-line{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-  .sl-left{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:400;color:#888}
+  .sl-left{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:400;color:#999}
   .sl-dot{width:6px;height:6px;border-radius:50%;background:#ccc;flex-shrink:0}
   .sl-dot.live{background:#22c55e}
   .sl-dot.warn{background:#f59e0b}
-  .sl-right{font-size:10px;font-weight:400;color:#bbb}
+  .sl-right{font-size:10px;font-weight:400;color:#c0bdb9}
 
   /* Stats */
   .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
-  .stat{background:#fff;border-radius:7px;padding:8px 11px;position:relative;overflow:hidden}
-  .stat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;background:#1a5c2e}
+  .stat{background:#fff;border-radius:7px;padding:8px 12px;position:relative;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.04)}
+  .stat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;background:var(--accent,#1a5c2e)}
   .stat.accent::before{background:#c9a84c}
-  .stat-lbl{font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:2px}
-  .stat-val{font-size:16px;font-weight:700;color:#1a1a1a;line-height:1}
-  .stat-sub{font-size:10px;font-weight:400;color:#bbb;margin-top:2px}
+  .stat-lbl{font-size:9px;font-weight:700;color:#b0ada8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:3px}
+  .stat-val{font-size:16px;font-weight:700;color:#1a1a1a;line-height:1;letter-spacing:-0.3px}
+  .stat-sub{font-size:10px;font-weight:400;color:#c0bdb9;margin-top:3px}
 
   /* C3 Tabs */
-  .tabs{display:flex;gap:0;margin-bottom:10px;background:#ccc9c4;padding:2px;border-radius:5px;width:fit-content}
-  .tab{padding:3px 10px;font-size:10px;font-weight:600;color:#888;cursor:pointer;border:none;background:transparent;border-radius:4px;letter-spacing:0.2px;position:relative;transition:color 0.15s}
+  .tabs{display:flex;gap:0;margin-bottom:10px;background:#d8d5d0;padding:2px;border-radius:5px;width:fit-content}
+  .tab{padding:3px 10px;font-size:10px;font-weight:600;color:#999;cursor:pointer;border:none;background:transparent;border-radius:4px;letter-spacing:0.2px;position:relative;transition:all 0.15s}
   .tab.active{background:#1a2a4a;color:#c9a84c}
   .tab.active::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:10px;height:1.5px;background:#c9a84c;border-radius:2px}
 
   /* Team cards */
   .teams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:8px}
-  .card{background:#fff;border-radius:8px;border:1px solid #e4e2de;overflow:hidden}
+  .card{background:#fff;border-radius:8px;border:1px solid #e8e5e1;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:box-shadow 0.15s}
+  .card:hover{box-shadow:0 3px 10px rgba(0,0,0,0.08)}
   .card-head{padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0eeea}
   .card-left{display:flex;align-items:center;gap:8px}
   .avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
-  .owner-name{font-size:13px;font-weight:700;color:#1a1a1a;line-height:1}
-  .owner-earn{font-size:10px;font-weight:400;color:#bbb;margin-top:1px}
+  .owner-name{font-size:13px;font-weight:700;color:#1a1a1a;line-height:1;letter-spacing:-0.1px}
+  .owner-earn{font-size:10px;font-weight:400;color:#c0bdb9;margin-top:1px}
   .card-right{display:flex;align-items:center;gap:5px}
   .rank-badge{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0}
   .team-total{font-size:13px;font-weight:700}
 
   /* Pick rows */
   .pick-row{display:grid;grid-template-columns:12px 1fr 28px 34px 58px;align-items:center;gap:2px;padding:5px 12px;font-size:12px}
-  .pick-row+.pick-row{border-top:1px solid #f8f7f5}
-  .pick-num{font-size:9px;color:#d1d5db;font-weight:400}
+  .pick-row+.pick-row{border-top:1px solid #f5f3f0}
+  .pick-num{font-size:9px;color:#d8d5d0;font-weight:400}
   .pick-name{color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
-  .pick-name.mc{text-decoration:line-through;color:#ccc}
-  .pick-pos{font-size:10px;color:#9ca3af;text-align:right;font-weight:400}
+  .pick-name.mc{text-decoration:line-through;color:#d0cdc8}
+  .pick-pos{font-size:10px;color:#b0ada8;text-align:right;font-weight:400}
   .pick-score{font-size:12px;font-weight:700;text-align:right}
-  .pick-earn{font-size:10px;color:#bbb;text-align:right;font-weight:400}
-  .card-footer{padding:5px 12px;background:#fafaf9;border-top:1px solid #f0eeea;display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:500;color:#bbb}
+  .pick-earn{font-size:10px;color:#c0bdb9;text-align:right;font-weight:400}
+  .card-footer{padding:5px 12px;background:#fafaf8;border-top:1px solid #f0eeea;display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:500;color:#c0bdb9}
 
   /* Score colors */
   .red{color:#dc2626}
   .over{color:#1a1a1a}
-  .even{color:#9ca3af}
+  .even{color:#a8a5a0}
 
   /* Leaderboard */
-  .table-wrap{background:#fff;border-radius:8px;border:1px solid #e4e2de;overflow:hidden}
-  .lb-head{display:grid;gap:4px;padding:9px 14px;background:#f9f9f7;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #eee}
-  .lb-row{display:grid;gap:4px;padding:9px 14px;border-top:1px solid #f5f5f3;font-size:12px;align-items:center}
+  .table-wrap{background:#fff;border-radius:8px;border:1px solid #e8e5e1;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+  .lb-head{display:grid;gap:4px;padding:8px 14px;background:#fafaf8;font-size:9px;font-weight:700;color:#b0ada8;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid #eee}
+  .lb-row{display:grid;gap:4px;padding:8px 14px;border-top:1px solid #f5f3f0;font-size:12px;align-items:center;transition:background 0.1s}
   .lb-row:hover{background:#fafaf8}
   .lb-name{font-weight:500;color:#1a1a1a}
-  .lb-sub{font-size:10px;color:#bbb;margin-top:1px}
-  .lb-pos{color:#888;font-size:11px}
+  .lb-sub{font-size:10px;color:#c0bdb9;margin-top:1px}
+  .lb-pos{color:#a8a5a0;font-size:11px;font-weight:500}
   .field-grid{grid-template-columns:36px 1fr 50px 55px 60px 90px}
   .standings-grid{grid-template-columns:36px 160px 1fr 70px 100px}
   .tee-grid{grid-template-columns:1fr 110px 160px}
   .ta-c{text-align:center}
   .ta-r{text-align:right}
-  .picked-row{background:#f0f8f3}
-  .pick-tag{display:inline-flex;align-items:center;padding:2px 7px;background:#e0f0e8;color:#1a5c2e;border-radius:20px;font-size:10px;font-weight:600;margin-left:5px}
-  .empty{padding:28px 14px;text-align:center;color:#aaa;font-size:13px}
+  .picked-row{background:#f5f8ff}
+  .pick-tag{display:inline-flex;align-items:center;padding:2px 7px;background:#e8eef8;color:#1a2a4a;border-radius:20px;font-size:10px;font-weight:600;margin-left:5px;letter-spacing:0.1px}
+  .empty{padding:28px 14px;text-align:center;color:#b0ada8;font-size:12px}
 
   /* Activity feed */
-  .feed-wrap{background:#fff;border-radius:8px;border:1px solid #e4e2de;margin-bottom:10px;overflow:hidden}
-  .feed-header{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+  .feed-wrap{background:#fff;border-radius:8px;border:1px solid #e8e5e1;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.03)}
+  .feed-header{padding:9px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background 0.1s}
   .feed-header:hover{background:#fafaf8}
-  .feed-title{font-size:11px;font-weight:600;color:#1a1a1a;display:flex;align-items:center;gap:7px}
+  .feed-title{font-size:11px;font-weight:600;color:#333;display:flex;align-items:center;gap:7px}
   .feed-live-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-  .feed-toggle{font-size:11px;color:#aaa;transition:transform 0.2s}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+  .feed-toggle{font-size:11px;color:#c0bdb9;transition:transform 0.2s}
   .feed-toggle.open{transform:rotate(180deg)}
   .feed-body{max-height:0;overflow:hidden;transition:max-height 0.3s ease}
   .feed-body.open{max-height:280px;overflow-y:auto}
-  .feed-item{padding:9px 14px;border-top:1px solid #f5f5f3;font-size:12px;display:flex;align-items:flex-start;gap:10px}
-  .feed-time{font-size:10px;color:#bbb;white-space:nowrap;margin-top:1px;min-width:44px}
-  .feed-msg{color:#1a1a1a;flex:1;line-height:1.4;font-weight:400}
-  .feed-empty{padding:14px;text-align:center;color:#bbb;font-size:12px}
+  .feed-item{padding:8px 14px;border-top:1px solid #f5f3f0;font-size:12px;display:flex;align-items:flex-start;gap:10px}
+  .feed-time{font-size:10px;color:#c0bdb9;white-space:nowrap;margin-top:1px;min-width:44px}
+  .feed-msg{color:#333;flex:1;line-height:1.45;font-weight:400}
+  .feed-empty{padding:14px;text-align:center;color:#c0bdb9;font-size:12px}
 
   /* Spinner */
   .spinning{animation:spin 1s linear infinite;display:inline-block}
   @keyframes spin{to{transform:rotate(360deg)}}
 
   /* Footer */
-  .footer{margin-top:24px;text-align:center;font-size:11px;color:#bbb;padding-bottom:20px}
+  .footer{margin-top:20px;text-align:center;font-size:11px;color:#c0bdb9;padding-bottom:20px;letter-spacing:0.1px}
 
   @media(max-width:600px){
     .content{padding:10px 12px}
@@ -162,6 +165,7 @@
     .field-grid{grid-template-columns:30px 1fr 38px 42px 48px 65px}
     .wx-days{gap:0}
     .main-header{padding:10px 12px}
+    .hcontrols{gap:4px}
   }
 </style>
 </head>
@@ -185,9 +189,9 @@
     <div class="hcontrols">
       <select id="t-select" class="hsel" onchange="switchTournament(this.value)">
         <option value="masters2026">Masters 2026</option>
-        <option value="pga2026" selected>PGA Championship 2026</option>
+        <option value="pga2026">PGA Championship 2026</option>
+        <option value="usopen2026" selected>US Open 2026</option>
         <option disabled>── Coming soon ──</option>
-        <option disabled>US Open 2026</option>
         <option disabled>The Open 2026</option>
       </select>
       <a href="draft.html" class="hbtn">Draft board</a>
@@ -278,7 +282,7 @@
     </div>
   </div>
 
-  <div class="footer">Updated automatically every 60 seconds &middot; Data from your Google Sheet</div>
+  <div class="footer">Live scores via ESPN · Pool data synced every 60s</div>
   </div><!-- end content -->
 </div><!-- end page -->
 
@@ -307,6 +311,16 @@ const TEAMS = {
     {name:'Josh',    color:'#2d6a2d', picks:['Collin Morikawa','Justin Rose','Patrick Reed']},
     {name:'Bobby',   color:'#7a4a1a', picks:['Justin Thomas','Viktor Hovland','Wyndham Clark']},
     {name:'Ben',     color:'#7a6a1a', picks:['Tommy Fleetwood','Matt Fitzpatrick','Adam Scott']},
+  ],
+  usopen2026:[
+    {name:'Ben',     color:'#7a6a1a', picks:['Rory McIlroy','','']},
+    {name:'Bobby',   color:'#7a4a1a', picks:['Cameron Young','Sam Burns','']},
+    {name:'Josh',    color:'#2d6a2d', picks:['Ludvig Åberg','Wyndham Clark','']},
+    {name:'Jeremiah',color:'#8b2020', picks:['Tommy Fleetwood','J.J. Spaun','']},
+    {name:'Noah',    color:'#1a4a7a', picks:['Jon Rahm','','']},
+    {name:'Tom',     color:'#1a3a5c', picks:['Scottie Scheffler','','']},
+    {name:'Austin',  color:'#1a5c4a', picks:['Xander Schauffele','','']},
+    {name:'Steve',   color:'#7a1a7a', picks:['Matt Fitzpatrick','Brooks Koepka','']},
   ],
   usopen:[
     {name:'Tom',   color:'#1a3a5c', picks:['Scottie Scheffler','Harris English','Tony Finau','Tom Kim']},
@@ -357,6 +371,7 @@ const TEAMS = {
 const T_NAMES = {
   masters2026:'Masters 2026',
   pga2026:'PGA Championship 2026',
+  usopen2026:'US Open 2026',
   masters:'Masters 2025',
   pga:'PGA Championship 2025',
   usopen:'US Open 2025',
@@ -365,7 +380,7 @@ const T_NAMES = {
 
 const RANK_COLORS = ['#b8860b','#888','#7a5c2e','#4a7a9b','#6a4a8a','#4a8a6a','#8a6a4a','#4a4a8a','#8a4a4a'];
 
-let currentT = 'pga2026';
+let currentT = 'usopen2026';
 let scoreMap = {};
 let rawData = [];
 let dataMode = 'none';
@@ -413,8 +428,7 @@ function detectMode(rows) {
   return 'unknown';
 }
 
-/* ---- Payout table (2025 Masters percentages, $21M purse) ---- */
-const TOTAL_PURSE = 19000000; // 2025 PGA Championship — 2026 figure TBD, released tournament week
+const TOTAL_PURSE = 20500000; // 2026 PGA Championship
 const PAYOUT_PCT = [
   0.180, 0.109, 0.069, 0.049, 0.040, 0.035, 0.0325, 0.030, 0.028, 0.026,
   0.024, 0.022, 0.020, 0.018, 0.017, 0.0158, 0.0147, 0.0137, 0.0128, 0.0119,
@@ -487,7 +501,8 @@ function getPlayer(name) {
 
 const ESPN_EVENT_IDS = {
   pga2026: '401811947',
-  masters2026: '401811941'
+  masters2026: '401811941',
+  usopen2026: '401811952'
 };
 
 async function fetchFromESPN(eventId) {
@@ -575,30 +590,47 @@ function refresh() { fetchData(); }
 function switchTournament(t) {
   currentT = t;
   const isPGA = t === 'pga2026';
+  const isUSOpen = t === 'usopen2026';
   const header = document.getElementById('main-header');
   const ticker = document.getElementById('ticker-wrap');
-  const wxStrip = document.getElementById('wx-strip');
   const tickerLabel = document.getElementById('ticker-label');
   const badge = document.getElementById('logo-badge');
+
+  let accent, tabBg, tabColor;
   if (isPGA) {
     header.style.background = '#1a2a4a';
     ticker.style.background = '#0d1828';
     ticker.style.borderTopColor = 'rgba(201,168,76,0.15)';
     tickerLabel.style.background = 'rgba(0,0,0,0.3)';
     tickerLabel.style.color = '#c9a84c';
+    document.querySelectorAll('.ticker-pos').forEach(el => el.style.color = '#c9a84c');
     badge.style.background = '#c9a84c';
     badge.innerHTML = '<span style="font-size:9px;font-weight:800;color:#1a2a4a;letter-spacing:0.5px;line-height:1.1">PGA</span><span style="font-size:7px;font-weight:700;color:#1a2a4a;letter-spacing:0.3px;line-height:1.1">2026</span>';
-    document.querySelectorAll('.tab.active').forEach(t => { t.style.background = '#1a2a4a'; t.style.color = '#c9a84c'; });
+    tabBg = '#1a2a4a'; tabColor = '#c9a84c'; accent = '#1a2a4a';
+  } else if (isUSOpen) {
+    header.style.background = '#0a1628';
+    ticker.style.background = '#060e1a';
+    ticker.style.borderTopColor = 'rgba(200,160,60,0.3)';
+    tickerLabel.style.background = '#c8a03c';
+    tickerLabel.style.color = '#0a1628';
+    document.querySelectorAll('.ticker-pos').forEach(el => el.style.color = '#c8a03c');
+    badge.style.background = '#c8a03c';
+    badge.innerHTML = '<span style="font-size:8px;font-weight:800;color:#0a1628;letter-spacing:0.3px;line-height:1.1">U.S.</span><span style="font-size:7px;font-weight:800;color:#0a1628;letter-spacing:0.2px;line-height:1.1">OPEN</span>';
+    tabBg = '#0a1628'; tabColor = '#c8a03c'; accent = '#0a1628';
   } else {
     header.style.background = '#1a5c2e';
     ticker.style.background = '#143f22';
-    ticker.style.borderTopColor = 'rgba(245,200,66,0.15)';
-    tickerLabel.style.background = 'rgba(0,0,0,0.2)';
+    ticker.style.borderTopColor = 'rgba(245,200,66,0.12)';
+    tickerLabel.style.background = 'rgba(0,0,0,0.18)';
     tickerLabel.style.color = '#f5c842';
+    document.querySelectorAll('.ticker-pos').forEach(el => el.style.color = '#f5c842');
     badge.style.background = '#f5c842';
     badge.innerHTML = '<img src="https://joshbritton.github.io/majorspickem/masters-logo.png" style="width:34px;height:34px;object-fit:contain" alt="Masters" />';
-    document.querySelectorAll('.tab.active').forEach(t => { t.style.background = '#1a5c2e'; t.style.color = '#f5c842'; });
+    tabBg = '#1a5c2e'; tabColor = '#f5c842'; accent = '#1a5c2e';
   }
+  document.querySelectorAll('.tab.active').forEach(el => { el.style.background = tabBg; el.style.color = tabColor; });
+  document.querySelectorAll('.tab.active::after').forEach(el => { el.style.background = tabColor; });
+  document.documentElement.style.setProperty('--accent', accent);
   renderWeather(t);
   renderAll();
 }
@@ -614,6 +646,16 @@ const WEATHER = {
       {label:'Sat R3', icon:'🌤', temp:'68°', rain:''},
       {label:'Sun R4', icon:'☀️', temp:'70°', rain:''},
     ]
+  },
+  usopen2026: {
+    icon: '🌬️', location: 'Shinnecock Hills · Southampton NY',
+    temp: '84°F', cond: 'Windy · gusts 29mph · 48% rain chance',
+    days: [
+      {label:'Thu R1', icon:'🌧', temp:'84°', rain:'48%'},
+      {label:'Fri R2', icon:'🌤', temp:'80°', rain:'10%'},
+      {label:'Sat R3', icon:'💨', temp:'78°', rain:''},
+      {label:'Sun R4', icon:'☀️', temp:'80°', rain:''},
+    ]
   }
 };
 
@@ -623,13 +665,14 @@ function renderWeather(t) {
   const data = WEATHER[t];
   if (!data) { el.style.display = 'none'; return; }
   el.style.display = 'flex';
-  const isPGA = t === 'pga2026';
-  el.style.background = isPGA ? '#0d1828' : '#143f22';
+  const bgColor = t === 'pga2026' ? '#0d1828' : t === 'usopen2026' ? '#060e1a' : '#143f22';
+  const accentColor = t === 'usopen2026' ? '#c8a03c' : t === 'pga2026' ? '#c9a84c' : '#f5c842';
+  el.style.background = bgColor;
   el.innerHTML = `
     <div class="wx-now">
       <div class="wx-icon">${data.icon}</div>
       <div>
-        <div class="wx-loc">${data.location}</div>
+        <div class="wx-loc" style="color:${accentColor}">${data.location}</div>
         <div class="wx-temp">${data.temp}</div>
         <div class="wx-cond">${data.cond}</div>
       </div>
