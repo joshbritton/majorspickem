@@ -7,104 +7,108 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
-  body{background:#eeecea;color:#1a1a1a;min-height:100vh}
+  body{background:#f0eeeb;color:#1a1a1a;min-height:100vh}
 
   /* Header */
-  .main-header{background:#1a2a4a;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  .main-header{background:#0a1628;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;transition:background 0.3s}
   .logo-wrap{display:flex;align-items:center;gap:10px}
-  .logo-badge{width:34px;height:34px;background:#c9a84c;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
-  .logo-badge span:first-child{font-size:9px;font-weight:800;color:#1a2a4a;letter-spacing:0.5px;line-height:1.1}
-  .logo-badge span:last-child{font-size:7px;font-weight:700;color:#1a2a4a;letter-spacing:0.3px;line-height:1.1}
-  .logo-title{font-size:15px;font-weight:600;color:#fff;letter-spacing:-0.2px}
-  .logo-sub{font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px}
+  .logo-badge{width:34px;height:34px;background:#c8a03c;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.3s}
+  .logo-badge span:first-child{font-size:8px;font-weight:800;color:#0a1628;letter-spacing:0.3px;line-height:1.1}
+  .logo-badge span:last-child{font-size:7px;font-weight:800;color:#0a1628;letter-spacing:0.2px;line-height:1.1}
+  .logo-title{font-size:15px;font-weight:600;color:#fff;letter-spacing:-0.3px}
+  .logo-sub{font-size:10px;color:rgba(255,255,255,0.45);margin-top:2px}
   .hcontrols{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-  .hsel{padding:5px 10px;border:1px solid rgba(255,255,255,0.25);border-radius:6px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.12);color:#fff;outline:none;cursor:pointer}
+  .hsel{padding:5px 10px;border:1px solid rgba(255,255,255,0.22);border-radius:6px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.1);color:#fff;outline:none;cursor:pointer}
   .hsel option{background:#1a2a4a;color:#fff}
-  .hbtn{padding:5px 12px;border:1px solid rgba(255,255,255,0.25);border-radius:6px;font-size:11px;font-weight:500;background:transparent;color:rgba(255,255,255,0.8);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+  .hbtn{padding:5px 12px;border:1px solid rgba(255,255,255,0.22);border-radius:6px;font-size:11px;font-weight:500;background:transparent;color:rgba(255,255,255,0.78);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:background 0.15s}
+  .hbtn:hover{background:rgba(255,255,255,0.1)}
   .hbtn-accent{background:#c9a84c;color:#1a2a4a;border-color:#c9a84c;font-weight:700}
-  .hbtn-red{background:rgba(220,38,38,0.15);color:#fca5a5;border-color:rgba(220,38,38,0.3)}
+  .hbtn-accent:hover{background:#d4b45a}
+  .hbtn-red{background:rgba(220,38,38,0.12);color:#fca5a5;border-color:rgba(220,38,38,0.25)}
+  .hbtn-red:hover{background:rgba(220,38,38,0.2)}
 
   /* Content */
   .content{max-width:1100px;margin:0 auto;padding:12px 20px}
 
   /* Weather strip */
   .wx-strip{background:#0d1828;border-radius:7px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
-  .wx-now{display:flex;align-items:center;gap:7px;flex-shrink:0}
-  .wx-icon{font-size:18px;line-height:1}
-  .wx-loc{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:1px;color:#c9a84c}
-  .wx-temp{font-size:16px;font-weight:700;color:#fff;line-height:1}
-  .wx-cond{font-size:9px;color:rgba(255,255,255,0.4);margin-top:1px}
-  .wx-div{width:1px;height:28px;background:rgba(255,255,255,0.08);flex-shrink:0}
+  .wx-now{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .wx-icon{font-size:20px;line-height:1}
+  .wx-loc{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:2px;color:#c9a84c}
+  .wx-temp{font-size:17px;font-weight:700;color:#fff;line-height:1}
+  .wx-cond{font-size:9px;color:rgba(255,255,255,0.38);margin-top:2px}
+  .wx-div{width:1px;height:28px;background:rgba(255,255,255,0.07);flex-shrink:0;margin:0 4px}
   .wx-days{display:flex;flex:1;justify-content:space-around}
   .wx-day{text-align:center;padding:2px 6px;border-radius:5px}
-  .wx-day.now{background:rgba(201,168,76,0.12)}
-  .wd-l{font-size:9px;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:1px}
-  .wd-i{font-size:11px;line-height:1;margin-bottom:1px}
+  .wx-day.now{background:rgba(201,168,76,0.1)}
+  .wd-l{font-size:9px;font-weight:600;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px}
+  .wd-i{font-size:12px;line-height:1;margin-bottom:2px}
   .wd-t{font-size:10px;font-weight:600;color:#fff}
   .wd-r{font-size:9px;font-weight:500;color:#60a5fa}
 
   /* Status */
   .status-line{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-  .sl-left{display:flex;align-items:center;gap:5px;font-size:11px;color:#888}
+  .sl-left{display:flex;align-items:center;gap:6px;font-size:11px;color:#999}
   .sl-dot{width:6px;height:6px;border-radius:50%;background:#ccc;flex-shrink:0}
   .sl-dot.live{background:#22c55e}
   .sl-dot.warn{background:#f59e0b}
 
   /* Clock banner */
-  .clock{background:#1a2a4a;border-radius:8px;padding:12px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-left:4px solid #c9a84c}
-  .clock-name{font-size:17px;font-weight:700;color:#fff;line-height:1}
-  .clock-meta{font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px}
-  .clock-next{font-size:11px;font-weight:500;background:rgba(201,168,76,0.15);color:#c9a84c;padding:4px 12px;border-radius:20px;border:1px solid rgba(201,168,76,0.25)}
+  .clock{background:#1a2a4a;border-radius:8px;padding:11px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-left:4px solid #c9a84c;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+  .clock-name{font-size:16px;font-weight:700;color:#fff;line-height:1;letter-spacing:-0.2px}
+  .clock-meta{font-size:11px;color:rgba(255,255,255,0.45);margin-top:3px}
+  .clock-next{font-size:11px;font-weight:500;background:rgba(201,168,76,0.12);color:#c9a84c;padding:4px 12px;border-radius:20px;border:1px solid rgba(201,168,76,0.2)}
   .clock.done{border-left-color:#22c55e}
 
   /* Complete box */
-  .complete-box{background:#0d1828;border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:16px;text-align:center;margin-bottom:10px}
-  .complete-box h2{font-size:16px;font-weight:700;color:#22c55e;margin-bottom:4px}
-  .complete-box p{font-size:12px;color:rgba(255,255,255,0.5)}
+  .complete-box{background:#0d1828;border:1px solid rgba(34,197,94,0.25);border-radius:8px;padding:16px;text-align:center;margin-bottom:10px}
+  .complete-box h2{font-size:15px;font-weight:700;color:#22c55e;margin-bottom:4px}
+  .complete-box p{font-size:12px;color:rgba(255,255,255,0.45)}
 
   /* Layout */
   .layout{display:grid;grid-template-columns:1fr 290px;gap:12px}
   @media(max-width:720px){.layout{grid-template-columns:1fr}}
 
   /* Draft board */
-  .board{background:#fff;border-radius:8px;border:1px solid #e4e2de;overflow:hidden}
-  .board-head{display:grid;grid-template-columns:20px 100px 1fr 1fr 1fr;gap:6px;padding:8px 12px;background:#f9f9f7;font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid #eee}
-  .board-row{display:grid;grid-template-columns:20px 100px 1fr 1fr 1fr;gap:6px;padding:8px 12px;border-top:1px solid #f5f5f3;align-items:center;font-size:12px;transition:background 0.1s}
-  .board-row.on-clock{background:rgba(201,168,76,0.06);border-left:3px solid #c9a84c;padding-left:9px}
+  .board{background:#fff;border-radius:8px;border:1px solid #e8e5e1;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+  .board-head{display:grid;grid-template-columns:20px 100px 1fr 1fr 1fr;gap:6px;padding:8px 12px;background:#fafaf8;font-size:9px;font-weight:700;color:#b0ada8;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid #eee}
+  .board-row{display:grid;grid-template-columns:20px 100px 1fr 1fr 1fr;gap:6px;padding:8px 12px;border-top:1px solid #f5f3f0;align-items:center;font-size:12px;transition:background 0.1s}
+  .board-row.on-clock{background:rgba(201,168,76,0.05);border-left:3px solid #c9a84c;padding-left:9px}
   .board-row:hover{background:#fafaf8}
   .pick-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-  .player-name{font-size:12px;font-weight:600;color:#1a1a1a}
+  .player-name{font-size:12px;font-weight:600;color:#1a1a1a;letter-spacing:-0.1px}
   .pick-cell{color:#1a1a1a;font-weight:500}
-  .pick-empty{color:#d1d5db;font-size:11px}
+  .pick-empty{color:#d8d5d0;font-size:11px}
   .pick-clock{color:#c9a84c;font-weight:600;font-size:11px;font-style:italic}
 
   /* Right panel */
   .right{display:flex;flex-direction:column;gap:10px}
-  .panel{background:#fff;border-radius:8px;border:1px solid #e4e2de;overflow:hidden}
-  .panel-head{padding:8px 12px;font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;background:#f9f9f7;border-bottom:1px solid #eee}
+  .panel{background:#fff;border-radius:8px;border:1px solid #e8e5e1;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.03)}
+  .panel-head{padding:8px 12px;font-size:9px;font-weight:700;color:#b0ada8;text-transform:uppercase;letter-spacing:0.5px;background:#fafaf8;border-bottom:1px solid #eee}
   .search{width:100%;padding:8px 12px;border:none;border-bottom:1px solid #eee;font-size:12px;background:#fff;color:#1a1a1a;outline:none;font-family:'Inter',sans-serif}
+  .search::placeholder{color:#c0bdb9}
   .search:focus{background:#fafaf8}
   .selected-bar{padding:8px 12px;font-size:12px;border-bottom:1px solid #eee;min-height:36px;display:flex;align-items:center}
   .selected-bar.has-pick{color:#c9a84c;font-weight:600}
-  .selected-bar.no-pick{color:#d1d5db;font-style:italic}
+  .selected-bar.no-pick{color:#d8d5d0;font-style:italic}
   .golfer-list{max-height:240px;overflow-y:auto}
-  .golfer-row{padding:7px 12px;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f5f5f3;transition:background 0.1s}
+  .golfer-row{padding:7px 12px;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f5f3f0;transition:background 0.1s}
   .golfer-row:first-child{border-top:none}
-  .golfer-row:hover:not(.taken){background:#f0f4ff}
-  .golfer-row.taken{color:#d1d5db;cursor:default;font-weight:400}
-  .golfer-row.selected-row{background:rgba(201,168,76,0.08)}
-  .golfer-odds{font-size:10px;color:#bbb;font-weight:400}
+  .golfer-row:hover:not(.taken){background:#f5f7ff}
+  .golfer-row.taken{color:#d8d5d0;cursor:default;font-weight:400}
+  .golfer-row.selected-row{background:rgba(201,168,76,0.07)}
+  .golfer-odds{font-size:10px;color:#c0bdb9;font-weight:400}
   .draft-btn{width:100%;padding:10px;font-size:12px;font-weight:700;cursor:pointer;border:none;border-top:1px solid #eee;transition:all 0.15s;letter-spacing:0.2px;font-family:'Inter',sans-serif}
   .draft-btn.ready{background:#1a2a4a;color:#c9a84c}
   .draft-btn.ready:hover{background:#0f1a30}
-  .draft-btn.disabled{background:#f5f5f3;color:#d1d5db;cursor:default}
+  .draft-btn.disabled{background:#f5f3f0;color:#d8d5d0;cursor:default}
 
   /* Rosters */
-  .roster-row{padding:7px 12px;border-top:1px solid #f5f5f3;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .roster-row{padding:7px 12px;border-top:1px solid #f5f3f0;display:flex;align-items:center;justify-content:space-between;gap:8px}
   .roster-row:first-child{border-top:none}
   .roster-name{font-size:12px;font-weight:700;min-width:65px}
-  .roster-picks{font-size:10px;color:#888;flex:1;line-height:1.4}
-  .roster-count{font-size:10px;color:#bbb;white-space:nowrap;font-weight:500}
+  .roster-picks{font-size:10px;color:#a8a5a0;flex:1;line-height:1.4}
+  .roster-count{font-size:10px;color:#c0bdb9;white-space:nowrap;font-weight:500}
 
   /* Spinner */
   .spin{display:inline-block}
@@ -112,16 +116,27 @@
   @keyframes spin{to{transform:rotate(360deg)}}
 
   /* Grades */
-  .grade-row{padding:7px 12px;border-top:1px solid #f5f5f3;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .grade-row{padding:7px 12px;border-top:1px solid #f5f3f0;display:flex;align-items:center;justify-content:space-between;gap:8px}
   .grade-row:first-child{border-top:none}
   .grade-name{font-size:12px;font-weight:700;min-width:65px}
-  .grade-badge{font-size:11px;font-weight:800;width:32px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .grade-badge{font-size:11px;font-weight:800;width:32px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:-0.3px}
   .grade-a-plus{background:#166534;color:#fff}
   .grade-a{background:#15803d;color:#fff}
   .grade-b{background:#1d4ed8;color:#fff}
   .grade-c{background:#b45309;color:#fff}
   .grade-d{background:#9f1239;color:#fff}
-  .grade-blank{background:#e5e7eb;color:#9ca3af}
+  .grade-blank{background:#e8e5e1;color:#c0bdb9}
+
+  /* Queue */
+  .queue-item{padding:6px 12px;border-top:1px solid #f5f3f0;font-size:11px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+  .queue-item:first-child{border-top:none}
+  .queue-item.drafted{color:#d8d5d0;text-decoration:line-through}
+  .queue-name{flex:1;font-weight:500;color:#333}
+  .queue-remove{background:none;border:none;color:#d8d5d0;cursor:pointer;font-size:13px;padding:0;line-height:1;transition:color 0.1s}
+  .queue-remove:hover{color:#ef4444}
+  .golfer-row .queue-star{background:none;border:none;color:#d8d5d0;cursor:pointer;font-size:12px;padding:0 4px;line-height:1;flex-shrink:0;transition:color 0.1s}
+  .golfer-row .queue-star:hover{color:#f59e0b}
+  .golfer-row .queue-star.starred{color:#f59e0b}
 </style>
 </head>
 <body>
@@ -129,8 +144,8 @@
 <div class="main-header">
   <div class="logo-wrap">
     <div class="logo-badge">
-      <span>PGA</span>
-      <span>2026</span>
+      <span>U.S.</span>
+      <span>OPEN</span>
     </div>
     <div>
       <div class="logo-title">2026 Draft Board</div>
@@ -139,7 +154,8 @@
   </div>
   <div class="hcontrols">
     <select id="tournament-select" class="hsel" onchange="switchTournament(this.value)">
-      <option value="pga26">PGA Championship 2026</option>
+      <option value="usopen26" selected>US Open 2026</option>
+      <option value="pga26">PGA Championship 2026 (Archive)</option>
       <option value="masters26">Masters 2026 (Archive)</option>
     </select>
     <span class="spin" id="sync-spin" style="color:rgba(255,255,255,0.5);font-size:15px">↻</span>
@@ -213,6 +229,16 @@
         <div class="panel-head">Roster grades</div>
         <div id="grade-rows"></div>
       </div>
+
+      <div class="panel" id="queue-panel">
+        <div class="panel-head" style="display:flex;align-items:center;justify-content:space-between">
+          <span>My queue</span>
+          <button onclick="clearQueue()" style="font-size:9px;color:#bbb;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif">Clear</button>
+        </div>
+        <div id="queue-list" style="max-height:180px;overflow-y:auto">
+          <div style="padding:10px 12px;font-size:11px;color:#bbb;font-style:italic">Search and ★ a golfer to add to queue</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -222,24 +248,50 @@
 const API = 'https://script.google.com/macros/s/AKfycbwWjVx6EKKThZ5VoA09f72hc1aI-T8GMySq8Fvun4MedRVz36m0lnURhO-dNL4obTNT/exec';
 
 const TOURNAMENTS = {
-  pga26: { tab: 'PGA 26', label: 'PGA Championship 2026', rounds: 3 },
-  masters26: { tab: 'Masters 26', label: 'Masters 2026', rounds: 3, archived: true }
+  usopen26: { tab: 'USOpen 26', label: 'US Open 2026',          rounds: 3 },
+  pga26:    { tab: 'PGA 26',    label: 'PGA Championship 2026', rounds: 3, archived: true },
+  masters26:{ tab: 'Masters 26',label: 'Masters 2026',          rounds: 3, archived: true }
 };
 
-let currentTournament = 'pga26';
+let currentTournament = 'usopen26';
 let TAB = TOURNAMENTS[currentTournament].tab;
+let PLAYERS = PLAYERS_BY_TOURNAMENT[currentTournament];
+let GOLFERS = GOLFERS_BY_TOURNAMENT[currentTournament];
 
-const PLAYERS = [
-  {name:'Josh',    color:'#2d6a2d'},
-  {name:'Bobby',   color:'#7a4a1a'},
-  {name:'Jeremiah',color:'#8b2020'},
-  {name:'Steve',   color:'#7a1a7a'},
-  {name:'Noah',    color:'#1a4a7a'},
-  {name:'Brian',   color:'#5a3a7a'},
-  {name:'Austin',  color:'#1a5c4a'},
-  {name:'Ben',     color:'#7a6a1a'},
-  {name:'Tom',     color:'#1a3a5c'},
-];
+const PLAYERS_BY_TOURNAMENT = {
+  pga26: [
+    {name:'Josh',    color:'#2d6a2d'},
+    {name:'Bobby',   color:'#7a4a1a'},
+    {name:'Jeremiah',color:'#8b2020'},
+    {name:'Steve',   color:'#7a1a7a'},
+    {name:'Noah',    color:'#1a4a7a'},
+    {name:'Brian',   color:'#5a3a7a'},
+    {name:'Austin',  color:'#1a5c4a'},
+    {name:'Ben',     color:'#7a6a1a'},
+    {name:'Tom',     color:'#1a3a5c'},
+  ],
+  usopen26: [
+    {name:'Tom',     color:'#1a3a5c'},
+    {name:'Ben',     color:'#7a6a1a'},
+    {name:'Austin',  color:'#1a5c4a'},
+    {name:'Noah',    color:'#1a4a7a'},
+    {name:'Steve',   color:'#7a1a7a'},
+    {name:'Jeremiah',color:'#8b2020'},
+    {name:'Bobby',   color:'#7a4a1a'},
+    {name:'Josh',    color:'#2d6a2d'},
+  ],
+  masters26: [
+    {name:'Steve',   color:'#7a1a7a'},
+    {name:'Austin',  color:'#1a5c4a'},
+    {name:'Noah',    color:'#1a4a7a'},
+    {name:'Tom',     color:'#1a3a5c'},
+    {name:'Brian',   color:'#5a3a7a'},
+    {name:'Jeremiah',color:'#8b2020'},
+    {name:'Josh',    color:'#2d6a2d'},
+    {name:'Bobby',   color:'#7a4a1a'},
+    {name:'Ben',     color:'#7a6a1a'},
+  ]
+};
 
 const GOLFERS_BY_TOURNAMENT = {
   pga26: [
@@ -300,7 +352,42 @@ const GOLFERS_BY_TOURNAMENT = {
     {name:'Steve Elkington',odds:'40000'},{name:'Rory Sabbatini',odds:'40000'},
     {name:'Wayne Grady',odds:'50000'},
   ],
-  masters26: [
+  usopen26: [
+    {name:'Scottie Scheffler',odds:'300'},{name:'Rory McIlroy',odds:'500'},
+    {name:'Cameron Young',odds:'600'},{name:'Ludvig Åberg',odds:'800'},
+    {name:'Xander Schauffele',odds:'900'},{name:'Collin Morikawa',odds:'1000'},
+    {name:'Tommy Fleetwood',odds:'1100'},{name:'Jon Rahm',odds:'1200'},
+    {name:'Bryson DeChambeau',odds:'1400'},{name:'Brooks Koepka',odds:'1600'},
+    {name:'Matt Fitzpatrick',odds:'1800'},{name:'Jordan Spieth',odds:'2000'},
+    {name:'Justin Thomas',odds:'2000'},{name:'Viktor Hovland',odds:'2200'},
+    {name:'Min Woo Lee',odds:'2500'},{name:'Tyrrell Hatton',odds:'2500'},
+    {name:'Hideki Matsuyama',odds:'2800'},{name:'Patrick Cantlay',odds:'3000'},
+    {name:'Shane Lowry',odds:'3000'},{name:'Sam Burns',odds:'3200'},
+    {name:'Russell Henley',odds:'3500'},{name:'Cameron Smith',odds:'3500'},
+    {name:'Wyndham Clark',odds:'4000'},{name:'Keegan Bradley',odds:'4000'},
+    {name:'J.J. Spaun',odds:'4000'},{name:'Tony Finau',odds:'4500'},
+    {name:'Sepp Straka',odds:'4500'},{name:'Robert MacIntyre',odds:'5000'},
+    {name:'Corey Conners',odds:'5000'},{name:'Harris English',odds:'5000'},
+    {name:'Justin Rose',odds:'5000'},{name:'Jason Day',odds:'5500'},
+    {name:'Adam Scott',odds:'5500'},{name:'Sungjae Im',odds:'6000'},
+    {name:'Akshay Bhatia',odds:'6000'},{name:'Nick Taylor',odds:'6000'},
+    {name:'Kurt Kitayama',odds:'6500'},{name:'Ben Griffin',odds:'6500'},
+    {name:'Tom Kim',odds:'7000'},{name:'Joaquin Niemann',odds:'7000'},
+    {name:'Patrick Reed',odds:'7000'},{name:'Dustin Johnson',odds:'7500'},
+    {name:'Maverick McNealy',odds:'7500'},{name:'Sam Stevens',odds:'8000'},
+    {name:'Nick Dunlap',odds:'8000'},{name:'Brian Harman',odds:'8000'},
+    {name:'Nicolai Højgaard',odds:'8500'},{name:'Rasmus Højgaard',odds:'8500'},
+    {name:'Max Homa',odds:'9000'},{name:'Chris Gotterup',odds:'9000'},
+    {name:'Jacob Bridgeman',odds:'9000'},{name:'Ryan Fox',odds:'9500'},
+    {name:'Haotong Li',odds:'10000'},{name:'Alex Noren',odds:'10000'},
+    {name:'Matt McCarty',odds:'10000'},{name:'Daniel Berger',odds:'10000'},
+    {name:'Tom McKibbin',odds:'10000'},{name:'Danny Willett',odds:'12000'},
+    {name:'Kristoffer Reitan',odds:'12000'},{name:'Andrew Novak',odds:'12000'},
+    {name:'Nico Echavarria',odds:'15000'},{name:'Davis Riley',odds:'15000'},
+    {name:'Michael Kim',odds:'15000'},{name:'Zach Johnson',odds:'20000'},
+    {name:'Padraig Harrington',odds:'20000'},{name:'Retief Goosen',odds:'25000'},
+    {name:'Corey Pavin',odds:'30000'},{name:'Michael Block',odds:'30000'},
+  ],
     {name:'Scottie Scheffler',odds:'400'},{name:'Rory McIlroy',odds:'600'},
     {name:'Jon Rahm',odds:'800'},{name:'Ludvig Åberg',odds:'900'},
     {name:'Xander Schauffele',odds:'1000'},{name:'Collin Morikawa',odds:'1200'},
@@ -317,8 +404,6 @@ const GOLFERS_BY_TOURNAMENT = {
     {name:'Sungjae Im',odds:'6500'},{name:'Sam Burns',odds:'7000'},
   ]
 };
-
-let GOLFERS = GOLFERS_BY_TOURNAMENT[currentTournament];
 
 function buildSnake(players, rounds) {
   const order = [];
@@ -471,6 +556,7 @@ function render() {
   renderGolferList();
   renderRosters();
   renderGrades();
+  renderQueue();
 }
 
 // Grade roster based on average odds of picks
@@ -555,6 +641,38 @@ function renderBoard() {
 
 function filterGolfers() { renderGolferList(); }
 
+let queue = [];
+
+function toggleQueue(name, e) {
+  e.stopPropagation();
+  const idx = queue.indexOf(name);
+  if (idx === -1) queue.push(name);
+  else queue.splice(idx, 1);
+  renderGolferList();
+  renderQueue();
+}
+
+function clearQueue() {
+  queue = [];
+  renderQueue();
+}
+
+function renderQueue() {
+  const tk = taken();
+  const el = document.getElementById('queue-list');
+  if (queue.length === 0) {
+    el.innerHTML = '<div style="padding:10px 12px;font-size:11px;color:#bbb;font-style:italic">Search and ★ a golfer to add to queue</div>';
+    return;
+  }
+  el.innerHTML = queue.map(name => {
+    const isDrafted = tk.has(name);
+    return `<div class="queue-item${isDrafted ? ' drafted' : ''}">
+      <span class="queue-name">${name}${isDrafted ? ' ✓' : ''}</span>
+      <button class="queue-remove" onclick="queue.splice(queue.indexOf('${name.replace(/'/g,"\\'")}'),1);renderQueue();renderGolferList()">×</button>
+    </div>`;
+  }).join('');
+}
+
 function renderGolferList() {
   const tk = taken();
   const q = document.getElementById('search').value.toLowerCase();
@@ -562,9 +680,13 @@ function renderGolferList() {
   document.getElementById('golfer-list').innerHTML = list.map(g => {
     const isTaken = tk.has(g.name);
     const isSel = selectedGolfer === g.name;
-    return `<div class="golfer-row${isTaken?' taken':''}${isSel?' selected-row':''}" onclick="${isTaken?'':'selectGolfer(\''+g.name.replace(/'/g,"\\'")+'\')'} ">
-      <span>${g.name}</span>
-      <span class="golfer-odds">${isTaken ? 'taken' : g.odds}</span>
+    const isQueued = queue.includes(g.name);
+    return `<div class="golfer-row${isTaken ? ' taken' : ''}${isSel ? ' selected-row' : ''}" onclick="${isTaken ? '' : 'selectGolfer(\'' + g.name.replace(/'/g, "\\'") + '\')'}">
+      <span style="${isTaken ? 'text-decoration:line-through' : ''}">${g.name}</span>
+      <span style="display:flex;align-items:center;gap:4px">
+        <span class="golfer-odds">${isTaken ? 'drafted' : g.odds}</span>
+        ${!isTaken ? `<button class="queue-star${isQueued ? ' starred' : ''}" onclick="toggleQueue('${g.name.replace(/'/g, "\\'")}',event)" title="Add to queue">★</button>` : ''}
+      </span>
     </div>`;
   }).join('');
 }
@@ -597,17 +719,32 @@ function switchTournament(t) {
   currentTournament = t;
   TAB = TOURNAMENTS[t].tab;
   GOLFERS = GOLFERS_BY_TOURNAMENT[t];
+  PLAYERS = PLAYERS_BY_TOURNAMENT[t];
   picks = [];
   selectedGolfer = null;
+  queue = [];
+  renderQueue();
   const isArchived = TOURNAMENTS[t].archived;
+  const isUSOpen = t === 'usopen26';
+  const isPGA = t === 'pga26';
+  const headerBg = isUSOpen ? '#0a1628' : isPGA ? '#1a2a4a' : '#1a5c2e';
+  const badgeBg = isUSOpen ? '#c8a03c' : isPGA ? '#c9a84c' : '#f5c842';
+  const badgeHTML = isUSOpen
+    ? '<span style="font-size:8px;font-weight:800;color:#0a1628;line-height:1.1">U.S.</span><span style="font-size:7px;font-weight:800;color:#0a1628;line-height:1.1">OPEN</span>'
+    : isPGA
+    ? '<span style="font-size:9px;font-weight:800;color:#1a2a4a;line-height:1.1">PGA</span><span style="font-size:7px;font-weight:700;color:#1a2a4a;line-height:1.1">2026</span>'
+    : '<span style="font-size:9px;font-weight:800;color:#1a5c2e;line-height:1.1">MST</span><span style="font-size:7px;font-weight:700;color:#1a5c2e;line-height:1.1">2026</span>';
+  document.querySelector('.main-header').style.background = headerBg;
+  document.querySelector('.logo-badge').style.background = badgeBg;
+  document.querySelector('.logo-badge').innerHTML = badgeHTML;
   document.getElementById('reset-btn').style.display = isArchived ? 'none' : '';
   document.getElementById('pick-label').textContent = isArchived ? 'Archive — read only' : 'Make a pick';
-  document.getElementById('draft-btn').className = isArchived ? 'draft-btn disabled' : 'draft-btn disabled';
+  document.getElementById('draft-btn').className = 'draft-btn disabled';
   document.getElementById('draft-btn').textContent = isArchived ? 'Archived draft' : 'Select a golfer to draft';
   document.getElementById('search').disabled = isArchived;
-  document.getElementById('complete-msg').textContent = isArchived ? 
-    'Masters 2026 draft is complete. View picks below.' : 
-    'All 27 picks have been made. Good luck!';
+  document.getElementById('complete-msg').textContent = isArchived ?
+    'Masters 2026 draft is complete. View picks below.' :
+    'All picks have been made. Good luck!';
   loadPicks();
 }
 
