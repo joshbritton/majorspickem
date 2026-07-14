@@ -190,9 +190,8 @@
       <select id="t-select" class="hsel" onchange="switchTournament(this.value)">
         <option value="masters2026">Masters 2026</option>
         <option value="pga2026">PGA Championship 2026</option>
-        <option value="usopen2026" selected>US Open 2026</option>
-        <option disabled>── Coming soon ──</option>
-        <option disabled>The Open 2026</option>
+        <option value="usopen2026">US Open 2026</option>
+        <option value="theopen2026" selected>The Open 2026</option>
       </select>
       <a href="draft.html" class="hbtn">Draft board</a>
       <button class="hbtn hbtn-accent" onclick="refresh()">
@@ -312,6 +311,17 @@ const TEAMS = {
     {name:'Bobby',   color:'#7a4a1a', picks:['Justin Thomas','Viktor Hovland','Wyndham Clark']},
     {name:'Ben',     color:'#7a6a1a', picks:['Tommy Fleetwood','Matt Fitzpatrick','Adam Scott']},
   ],
+  theopen2026:[
+    {name:'Tom',     color:'#1a3a5c', picks:['','','']},
+    {name:'Ben',     color:'#7a6a1a', picks:['','','']},
+    {name:'Austin',  color:'#1a5c4a', picks:['','','']},
+    {name:'Noah',    color:'#1a4a7a', picks:['','','']},
+    {name:'Steve',   color:'#7a1a7a', picks:['','','']},
+    {name:'Jeremiah',color:'#8b2020', picks:['','','']},
+    {name:'Bobby',   color:'#7a4a1a', picks:['','','']},
+    {name:'Josh',    color:'#2d6a2d', picks:['','','']},
+    {name:'Brian',   color:'#5a3a7a', picks:['','','']},
+  ],
   usopen2026:[
     {name:'Tom',     color:'#1a3a5c', picks:['Scottie Scheffler','Collin Morikawa','Si Woo Kim']},
     {name:'Ben',     color:'#7a6a1a', picks:['Rory McIlroy','Bryson DeChambeau','Justin Thomas']},
@@ -372,6 +382,7 @@ const T_NAMES = {
   masters2026:'Masters 2026',
   pga2026:'PGA Championship 2026',
   usopen2026:'US Open 2026',
+  theopen2026:'The Open 2026',
   masters:'Masters 2025',
   pga:'PGA Championship 2025',
   usopen:'US Open 2025',
@@ -380,7 +391,7 @@ const T_NAMES = {
 
 const RANK_COLORS = ['#b8860b','#888','#7a5c2e','#4a7a9b','#6a4a8a','#4a8a6a','#8a6a4a','#4a4a8a','#8a4a4a'];
 
-let currentT = 'usopen2026';
+let currentT = 'theopen2026';
 let scoreMap = {};
 let rawData = [];
 let dataMode = 'none';
@@ -502,7 +513,8 @@ function getPlayer(name) {
 const ESPN_EVENT_IDS = {
   pga2026: '401811947',
   masters2026: '401811941',
-  usopen2026: '401811952'
+  usopen2026: '401811952',
+  theopen2026: '401811957'
 };
 
 async function fetchFromESPN(eventId) {
@@ -591,6 +603,7 @@ function switchTournament(t) {
   currentT = t;
   const isPGA = t === 'pga2026';
   const isUSOpen = t === 'usopen2026';
+  const isOpen = t === 'theopen2026';
   const header = document.getElementById('main-header');
   const ticker = document.getElementById('ticker-wrap');
   const tickerLabel = document.getElementById('ticker-label');
@@ -617,6 +630,16 @@ function switchTournament(t) {
     badge.style.background = '#c8a03c';
     badge.innerHTML = '<span style="font-size:8px;font-weight:800;color:#0a1628;letter-spacing:0.3px;line-height:1.1">U.S.</span><span style="font-size:7px;font-weight:800;color:#0a1628;letter-spacing:0.2px;line-height:1.1">OPEN</span>';
     tabBg = '#0a1628'; tabColor = '#c8a03c'; accent = '#0a1628';
+  } else if (isOpen) {
+    header.style.background = '#1b2b1a';
+    ticker.style.background = '#111d10';
+    ticker.style.borderTopColor = 'rgba(200,169,81,0.2)';
+    tickerLabel.style.background = '#c8a951';
+    tickerLabel.style.color = '#1b2b1a';
+    document.querySelectorAll('.ticker-pos').forEach(el => el.style.color = '#c8a951');
+    badge.style.background = '#c8a951';
+    badge.innerHTML = '<span style="font-size:7px;font-weight:800;color:#1b2b1a;letter-spacing:0.3px;line-height:1.1">THE</span><span style="font-size:7px;font-weight:800;color:#1b2b1a;letter-spacing:0.2px;line-height:1.1">OPEN</span>';
+    tabBg = '#1b2b1a'; tabColor = '#c8a951'; accent = '#1b2b1a';
   } else {
     header.style.background = '#1a5c2e';
     ticker.style.background = '#143f22';
@@ -647,6 +670,16 @@ const WEATHER = {
       {label:'Sun R4', icon:'☀️', temp:'70°', rain:''},
     ]
   },
+  theopen2026: {
+    icon: '💨', location: 'Royal Birkdale · Southport, England',
+    temp: '63°F', cond: 'Links wind · partly cloudy · classic Birkdale',
+    days: [
+      {label:'Thu R1', icon:'⛅', temp:'63°', rain:'20%'},
+      {label:'Fri R2', icon:'🌬️', temp:'61°', rain:''},
+      {label:'Sat R3', icon:'⛅', temp:'62°', rain:'25%'},
+      {label:'Sun R4', icon:'🌤', temp:'64°', rain:''},
+    ]
+  },
   usopen2026: {
     icon: '🌬️', location: 'Shinnecock Hills · Southampton NY',
     temp: '84°F', cond: 'Windy · gusts 29mph · 48% rain chance',
@@ -665,8 +698,8 @@ function renderWeather(t) {
   const data = WEATHER[t];
   if (!data) { el.style.display = 'none'; return; }
   el.style.display = 'flex';
-  const bgColor = t === 'pga2026' ? '#0d1828' : t === 'usopen2026' ? '#060e1a' : '#143f22';
-  const accentColor = t === 'usopen2026' ? '#c8a03c' : t === 'pga2026' ? '#c9a84c' : '#f5c842';
+  const bgColor = t === 'pga2026' ? '#0d1828' : t === 'usopen2026' ? '#060e1a' : t === 'theopen2026' ? '#111d10' : '#143f22';
+  const accentColor = t === 'usopen2026' ? '#c8a03c' : t === 'theopen2026' ? '#c8a951' : t === 'pga2026' ? '#c9a84c' : '#f5c842';
   el.style.background = bgColor;
   el.innerHTML = `
     <div class="wx-now">
