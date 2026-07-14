@@ -10,11 +10,11 @@
   body{background:#f0eeeb;color:#1a1a1a;min-height:100vh}
 
   /* Header */
-  .main-header{background:#0a1628;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;transition:background 0.3s}
+  .main-header{background:#1b2b1a;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;transition:background 0.3s}
   .logo-wrap{display:flex;align-items:center;gap:10px}
-  .logo-badge{width:34px;height:34px;background:#c8a03c;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.3s}
-  .logo-badge span:first-child{font-size:8px;font-weight:800;color:#0a1628;letter-spacing:0.3px;line-height:1.1}
-  .logo-badge span:last-child{font-size:7px;font-weight:800;color:#0a1628;letter-spacing:0.2px;line-height:1.1}
+  .logo-badge{width:34px;height:34px;background:#c8a951;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.3s}
+  .logo-badge span:first-child{font-size:8px;font-weight:800;color:#1b2b1a;letter-spacing:0.3px;line-height:1.1}
+  .logo-badge span:last-child{font-size:7px;font-weight:800;color:#1b2b1a;letter-spacing:0.2px;line-height:1.1}
   .logo-title{font-size:15px;font-weight:600;color:#fff;letter-spacing:-0.3px}
   .logo-sub{font-size:10px;color:rgba(255,255,255,0.45);margin-top:2px}
   .hcontrols{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -144,17 +144,18 @@
 <div class="main-header">
   <div class="logo-wrap">
     <div class="logo-badge">
-      <span>U.S.</span>
+      <span>THE</span>
       <span>OPEN</span>
     </div>
     <div>
       <div class="logo-title">2026 Draft Board</div>
-      <div class="logo-sub">Snake draft · 3 rounds · 8 players · Live sync</div>
+      <div class="logo-sub">Snake draft · 3 rounds · 9 players · Live sync</div>
     </div>
   </div>
   <div class="hcontrols">
     <select id="tournament-select" class="hsel" onchange="switchTournament(this.value)">
-      <option value="usopen26" selected>US Open 2026</option>
+      <option value="theopen26" selected>The Open 2026</option>
+      <option value="usopen26">US Open 2026 (Archive)</option>
       <option value="pga26">PGA Championship 2026 (Archive)</option>
       <option value="masters26">Masters 2026 (Archive)</option>
     </select>
@@ -169,19 +170,19 @@
 
   <div class="wx-strip">
     <div class="wx-now">
-      <div class="wx-icon">🌬️</div>
+      <div class="wx-icon">💨</div>
       <div>
-        <div class="wx-loc">Shinnecock Hills · Southampton NY</div>
-        <div class="wx-temp">84°F</div>
-        <div class="wx-cond">Windy · gusts 29mph · 48% rain chance Thu</div>
+        <div class="wx-loc">Royal Birkdale · Southport, England</div>
+        <div class="wx-temp">63°F</div>
+        <div class="wx-cond">Links wind · partly cloudy · classic Birkdale</div>
       </div>
     </div>
     <div class="wx-div"></div>
     <div class="wx-days">
-      <div class="wx-day now"><div class="wd-l">Thu R1</div><div class="wd-i">🌧</div><div class="wd-t">84°</div><div class="wd-r">48%</div></div>
-      <div class="wx-day"><div class="wd-l">Fri R2</div><div class="wd-i">🌤</div><div class="wd-t">80°</div><div class="wd-r">10%</div></div>
-      <div class="wx-day"><div class="wd-l">Sat R3</div><div class="wd-i">💨</div><div class="wd-t">78°</div><div class="wd-r" style="visibility:hidden">—</div></div>
-      <div class="wx-day"><div class="wd-l">Sun R4</div><div class="wd-i">☀️</div><div class="wd-t">80°</div><div class="wd-r" style="visibility:hidden">—</div></div>
+      <div class="wx-day now"><div class="wd-l">Thu R1</div><div class="wd-i">⛅</div><div class="wd-t">63°</div><div class="wd-r">20%</div></div>
+      <div class="wx-day"><div class="wd-l">Fri R2</div><div class="wd-i">🌬️</div><div class="wd-t">61°</div><div class="wd-r" style="visibility:hidden">—</div></div>
+      <div class="wx-day"><div class="wd-l">Sat R3</div><div class="wd-i">⛅</div><div class="wd-t">62°</div><div class="wd-r">25%</div></div>
+      <div class="wx-day"><div class="wd-l">Sun R4</div><div class="wd-i">🌤</div><div class="wd-t">64°</div><div class="wd-r" style="visibility:hidden">—</div></div>
     </div>
   </div>
 
@@ -191,7 +192,7 @@
 
   <div id="complete-box" class="complete-box" style="display:none">
     <h2>Draft complete! 🏆</h2>
-    <p id="complete-msg">All 24 picks have been made. Good luck at Shinnecock!</p>
+    <p id="complete-msg">All 27 picks have been made. Good luck at Royal Birkdale!</p>
   </div>
 
   <div id="clock-banner" class="clock">
@@ -248,12 +249,24 @@
 const API = 'https://script.google.com/macros/s/AKfycbwWjVx6EKKThZ5VoA09f72hc1aI-T8GMySq8Fvun4MedRVz36m0lnURhO-dNL4obTNT/exec';
 
 const TOURNAMENTS = {
-  usopen26: { tab: 'USOpen 26', label: 'US Open 2026',          rounds: 3 },
-  pga26:    { tab: 'PGA 26',    label: 'PGA Championship 2026', rounds: 3, archived: true },
-  masters26:{ tab: 'Masters 26',label: 'Masters 2026',          rounds: 3, archived: true }
+  theopen26: { tab: 'TheOpen 26', label: 'The Open 2026',         rounds: 3 },
+  usopen26:  { tab: 'USOpen 26',  label: 'US Open 2026',          rounds: 3, archived: true },
+  pga26:     { tab: 'PGA 26',     label: 'PGA Championship 2026', rounds: 3, archived: true },
+  masters26: { tab: 'Masters 26', label: 'Masters 2026',          rounds: 3, archived: true }
 };
 
 const PLAYERS_BY_TOURNAMENT = {
+  theopen26: [
+    {name:'Tom',     color:'#1a3a5c'},
+    {name:'Ben',     color:'#7a6a1a'},
+    {name:'Austin',  color:'#1a5c4a'},
+    {name:'Noah',    color:'#1a4a7a'},
+    {name:'Steve',   color:'#7a1a7a'},
+    {name:'Jeremiah',color:'#8b2020'},
+    {name:'Bobby',   color:'#7a4a1a'},
+    {name:'Josh',    color:'#2d6a2d'},
+    {name:'Brian',   color:'#5a3a7a'},
+  ],
   pga26: [
     {name:'Josh',    color:'#2d6a2d'},
     {name:'Bobby',   color:'#7a4a1a'},
@@ -347,6 +360,39 @@ const GOLFERS_BY_TOURNAMENT = {
     {name:'Steve Elkington',odds:'40000'},{name:'Rory Sabbatini',odds:'40000'},
     {name:'Wayne Grady',odds:'50000'},
   ],
+  theopen26: [
+    {name:'Scottie Scheffler',odds:'700'},{name:'Rory McIlroy',odds:'850'},
+    {name:'Tommy Fleetwood',odds:'1500'},{name:'Matt Fitzpatrick',odds:'1500'},
+    {name:'Jon Rahm',odds:'2000'},{name:'Xander Schauffele',odds:'2700'},
+    {name:'Ludvig Åberg',odds:'3000'},{name:'Chris Gotterup',odds:'3200'},
+    {name:'Wyndham Clark',odds:'3300'},{name:'Justin Rose',odds:'3500'},
+    {name:'Collin Morikawa',odds:'3500'},{name:'Viktor Hovland',odds:'4000'},
+    {name:'Cameron Young',odds:'4000'},{name:'Jordan Spieth',odds:'4500'},
+    {name:'Robert MacIntyre',odds:'4500'},{name:'Tyrrell Hatton',odds:'5000'},
+    {name:'Shane Lowry',odds:'5000'},{name:'Min Woo Lee',odds:'5000'},
+    {name:'Sam Burns',odds:'5500'},{name:'Brooks Koepka',odds:'5500'},
+    {name:'Patrick Cantlay',odds:'6000'},{name:'Justin Thomas',odds:'6000'},
+    {name:'Hideki Matsuyama',odds:'6000'},{name:'Aaron Rai',odds:'6500'},
+    {name:'Nicolai Højgaard',odds:'7000'},{name:'Rasmus Højgaard',odds:'7000'},
+    {name:'Tom McKibbin',odds:'7000'},{name:'Ryan Fox',odds:'7500'},
+    {name:'Sepp Straka',odds:'8000'},{name:'Cameron Smith',odds:'8000'},
+    {name:'Joaquin Niemann',odds:'8000'},{name:'Bryson DeChambeau',odds:'8000'},
+    {name:'Harris English',odds:'8500'},{name:'Akshay Bhatia',odds:'8500'},
+    {name:'Kurt Kitayama',odds:'9000'},{name:'J.J. Spaun',odds:'9000'},
+    {name:'Adam Scott',odds:'9000'},{name:'Tony Finau',odds:'9500'},
+    {name:'Patrick Reed',odds:'10000'},{name:'Sungjae Im',odds:'10000'},
+    {name:'Tom Kim',odds:'10000'},{name:'Si Woo Kim',odds:'10000'},
+    {name:'Russell Henley',odds:'10000'},{name:'Dustin Johnson',odds:'10000'},
+    {name:'Brian Harman',odds:'12000'},{name:'Danny Willett',odds:'12000'},
+    {name:'Corey Conners',odds:'12000'},{name:'Nick Taylor',odds:'12000'},
+    {name:'Keegan Bradley',odds:'12000'},{name:'Alex Noren',odds:'15000'},
+    {name:'Haotong Li',odds:'15000'},{name:'Eugenio Chacarra',odds:'15500'},
+    {name:'Louis Oosthuizen',odds:'18000'},{name:'Daniel Berger',odds:'20000'},
+    {name:'Dean Burmester',odds:'20000'},{name:'Thriston Lawrence',odds:'20000'},
+    {name:'Padraig Harrington',odds:'25000'},{name:'Richie Ramsay',odds:'25000'},
+    {name:'Ernie Els',odds:'50000'},{name:'Zach Johnson',odds:'50000'},
+    {name:'Phil Mickelson',odds:'75000'},{name:'Henrik Stenson',odds:'75000'},
+  ],
   usopen26: [
     {name:'Scottie Scheffler',odds:'300'},{name:'Rory McIlroy',odds:'500'},
     {name:'Cameron Young',odds:'600'},{name:'Ludvig Åberg',odds:'800'},
@@ -402,7 +448,7 @@ const GOLFERS_BY_TOURNAMENT = {
 };
 
 
-let currentTournament = 'usopen26';
+let currentTournament = 'theopen26';
 let TAB = TOURNAMENTS[currentTournament].tab;
 let PLAYERS = PLAYERS_BY_TOURNAMENT[currentTournament];
 let GOLFERS = GOLFERS_BY_TOURNAMENT[currentTournament];
@@ -745,15 +791,19 @@ function switchTournament(t) {
   queue = [];
   renderQueue();
   const isArchived = TOURNAMENTS[t].archived;
+  const isTheOpen = t === 'theopen26';
   const isUSOpen = t === 'usopen26';
   const isPGA = t === 'pga26';
-  const headerBg = isUSOpen ? '#0a1628' : isPGA ? '#1a2a4a' : '#1a5c2e';
-  const badgeBg = isUSOpen ? '#c8a03c' : isPGA ? '#c9a84c' : '#f5c842';
-  const badgeHTML = isUSOpen
-    ? '<span style="font-size:8px;font-weight:800;color:#0a1628;line-height:1.1">U.S.</span><span style="font-size:7px;font-weight:800;color:#0a1628;line-height:1.1">OPEN</span>'
+  const headerBg = isTheOpen ? '#1b2b1a' : isUSOpen ? '#0a1628' : isPGA ? '#1a2a4a' : '#1a5c2e';
+  const badgeBg = isTheOpen ? '#c8a951' : isUSOpen ? '#c8a03c' : isPGA ? '#c9a84c' : '#f5c842';
+  const badgeColor = isTheOpen ? '#1b2b1a' : isUSOpen ? '#0a1628' : '#1a2a4a';
+  const badgeHTML = isTheOpen
+    ? `<span style="font-size:8px;font-weight:800;color:${badgeColor};line-height:1.1">THE</span><span style="font-size:7px;font-weight:800;color:${badgeColor};line-height:1.1">OPEN</span>`
+    : isUSOpen
+    ? `<span style="font-size:8px;font-weight:800;color:${badgeColor};line-height:1.1">U.S.</span><span style="font-size:7px;font-weight:800;color:${badgeColor};line-height:1.1">OPEN</span>`
     : isPGA
-    ? '<span style="font-size:9px;font-weight:800;color:#1a2a4a;line-height:1.1">PGA</span><span style="font-size:7px;font-weight:700;color:#1a2a4a;line-height:1.1">2026</span>'
-    : '<span style="font-size:9px;font-weight:800;color:#1a5c2e;line-height:1.1">MST</span><span style="font-size:7px;font-weight:700;color:#1a5c2e;line-height:1.1">2026</span>';
+    ? `<span style="font-size:9px;font-weight:800;color:${badgeColor};line-height:1.1">PGA</span><span style="font-size:7px;font-weight:700;color:${badgeColor};line-height:1.1">2026</span>`
+    : `<span style="font-size:7px;font-weight:800;color:#1a5c2e;line-height:1.1">MST</span><span style="font-size:7px;font-weight:700;color:#1a5c2e;line-height:1.1">2026</span>`;
   document.querySelector('.main-header').style.background = headerBg;
   document.querySelector('.logo-badge').style.background = badgeBg;
   document.querySelector('.logo-badge').innerHTML = badgeHTML;
